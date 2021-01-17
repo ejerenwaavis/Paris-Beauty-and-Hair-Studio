@@ -36,7 +36,7 @@ body {
   /* background-image: url("/media-resources/bg1.jpg"); */
 
   /* min-height:100%; */
-  background:linear-gradient(0deg, rgba(56, 46, 21, 0.8), rgba(120, 98, 46, 0.9)), url("/media-resources/bg1.jpg");
+  background:linear-gradient(0deg, rgba(56, 46, 21, 0.8), rgba(94, 77, 36, 0.9)), url("/media-resources/bg1.jpg");
  background-size:cover;
   /* font-family: 'glamor-bold'; */
   /* font-weight: 700; */
