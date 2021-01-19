@@ -17,7 +17,7 @@ app.use(express.static("public"));
 
 app.route("/home")
   .get(function(req,res){
-    res.render("home");
+    res.render("home", {body:new Body("Home","","")});
   })
 
 
@@ -29,3 +29,11 @@ app.route("/home")
 
 
 app.listen(process.env.PORT || 3000, function(){console.log("Paris Hair and Beauty Studio is Live");});
+
+
+/************** functionalities *******************/
+function Body(title, error, message) {
+  this.title = title;
+  this.error = error;
+  this.message = message;
+}

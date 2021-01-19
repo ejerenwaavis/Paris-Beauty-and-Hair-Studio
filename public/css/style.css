@@ -1,0 +1,121 @@
+a{
+  text-decoration: none;
+}
+
+.font-rozha {
+  font-family: 'Rozha One', serif;
+
+}
+
+h1.font-rozha {
+  font-weight: bolder;
+}
+
+.header{
+  font-size: 3.5rem;
+  font-weight: bold;
+  font-family: 'Rozha One', serif;
+}
+
+
+.bg-accent {
+  background-color: #B89546;
+}
+
+.bg-compliment {
+  background-color: #382E15;
+}
+
+.bg-accent a {
+  color: black;
+}
+
+.bg-accent a:hover {
+  color: white;
+}
+
+.bg-accent-inner-shadow {
+  box-shadow: 0.8px 0.8px 20px 2px #B89546 inset;
+}
+
+.logo {
+  height: 60px;
+  width: auto;
+}
+
+.navbar-lg {
+  height: 5em;
+}
+
+.text-accent, a {
+  color: #B89546;
+}
+
+.text-accent a:hover {
+  color: #382E15;
+  transition: 0.9s;
+}
+
+.text-compliment {
+  color: #382E15;
+}
+
+.btn-outline-accent {
+  background: none;
+  border: 1px solid #B89546;
+  transition: 0.7s;
+}
+
+a.btn-outline-accent:hover {
+  background-color: #B89546;
+  /* border: 1px solid white; */
+  box-shadow: 2px 2px 7px 0px #777;
+  color: white;
+  transition: 0.7s;
+}
+
+.btn-outline-compliment {
+  background: none;
+  border: 1px solid #382E15;
+  border-radius: 55px;
+  color: #382E15;
+  padding: 10px 25px;
+  transition: 0.7s;
+  vertical-align: middle;
+}
+
+a.btn-outline-compliment:hover {
+  background-color: #382E15;
+  /* border: 1px solid white; */
+  border: none;
+  box-shadow: 2px 2px 7px 0px #777;
+  color: white;
+  transition: 0.7s;
+}
+
+.btn-compliment {
+  background: #382E15;
+  border: 1px solid #382E15;
+  border-radius: 55px;
+  color: white;
+  padding: 10px 25px;
+  transition: 0.7s;
+  vertical-align: middle;
+}
+
+a.btn-compliment:hover {
+  background-color: #B89546;
+  border: 1px solid #B89546;
+  /* border: none; */
+  box-shadow: 2px 2px 7px 0px #777;
+  color: white;
+  transition: 0.7s;
+}
+
+.image-display-container {
+  height: 34em;
+  background-image: url("/img/lady.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
