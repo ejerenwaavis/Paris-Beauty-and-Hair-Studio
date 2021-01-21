@@ -51,7 +51,7 @@ h1.font-rozha {
   color: #B89546;
 }
 
-.text-accent a:hover {
+.text-accent, a:hover {
   color: #382E15;
   transition: 0.9s;
 }
@@ -69,7 +69,7 @@ h1.font-rozha {
 a.btn-outline-accent:hover {
   background-color: #B89546;
   /* border: 1px solid white; */
-  box-shadow: 2px 2px 7px 0px #777;
+  box-shadow: 2px 2px 7px 0 #777;
   color: white;
   transition: 0.7s;
 }
@@ -88,26 +88,22 @@ a.btn-outline-compliment:hover {
   background-color: #382E15;
   /* border: 1px solid white; */
   border: none;
-  box-shadow: 2px 2px 7px 0px #777;
+  box-shadow: 2px 2px 7px 0 #777;
   color: white;
   transition: 0.7s;
 }
 
-.btn-compliment {
+ .btn-compliment {
   background: #382E15;
-  border: 1px solid #382E15;
-  border-radius: 55px;
   color: white;
-  padding: 10px 25px;
   transition: 0.7s;
-  vertical-align: middle;
-}
+  }
 
 a.btn-compliment:hover {
   background-color: #B89546;
   border: 1px solid #B89546;
   /* border: none; */
-  box-shadow: 2px 2px 7px 0px #777;
+  box-shadow: 2px 2px 7px 0 #777;
   color: white;
   transition: 0.7s;
 }
@@ -118,4 +114,14 @@ a.btn-compliment:hover {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.dotted-divider{
+  border-width: 7px;
+  border-radius: 25%;
+    border-style: dotted;
+    border-color: #d1bcad;
+    border-top: 0;
+    width: 5%;
+    margin: 3% auto;
 }
