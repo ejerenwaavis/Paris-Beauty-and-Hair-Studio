@@ -11,16 +11,38 @@ body{
 
 }
 
+
+
 h1.font-rozha {
   font-weight: bolder;
 }
 
-.header{
-  font-size: 3.5rem;
-  font-weight: bold;
+.card-title{
+  color: #777;
   font-family: 'Rozha One', serif;
+  font-size: 1.6rem;
+  font-weight: bold;
 }
 
+.header{
+  font-family: 'Rozha One', serif;
+  font-size: 3.7rem;
+  font-weight: bold;
+}
+
+.sub-header{
+  color: #777;
+  font-family: 'Rozha One', serif;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+h5.sub-header.bordered, .card-title.bordered{
+  padding-left: 10px;
+  border-color: #cb2975;
+  border-width: 8px;
+  border-left-style: solid;
+}
 
 .bg-accent {
   background-color: #cb2975;
@@ -42,8 +64,20 @@ h1.font-rozha {
   box-shadow: 0.8px 0.8px 20px 2px #cb2975 inset;
 }
 
+.bg-paris-mark{
+  /* background:  url("/img/logo/paris-mark-gray-25.png"); */
+  /* background-image: url("/img/logo/paris-mark-gray-25-x40.png"),url("/img/logo/paris-mark-gray-25-x50.png"); */
+  background: linear-gradient(0deg, rgba(246,243,243,0.9), rgba(246,243,243,0.94)), url("/img/logo/paris-mark-gray-25-x300.png");
+
+}
+
 .logo {
   height: 60px;
+  width: auto;
+}
+
+.icon {
+  height: 1.8em;
   width: auto;
 }
 
@@ -51,7 +85,9 @@ h1.font-rozha {
   height: 5em;
 }
 
-.text-accent, a {
+.text-accent,
+i.text-accent,
+a {
   color: #cb2975;
 }
 
@@ -71,8 +107,16 @@ h1.font-rozha {
   transition: 0.7s;
 }
 
+.btn-outline-accent:hover {
+  background-color: #555;
+  /* border: 1px solid white; */
+  box-shadow: 2px 2px 7px 0 #777;
+  color: white;
+  transition: 0.7s;
+}
+
 a.btn-outline-accent:hover {
-  background-color: #555555;
+  background-color: #555;
   /* border: 1px solid white; */
   box-shadow: 2px 2px 7px 0 #777;
   color: white;
@@ -117,7 +161,7 @@ a.btn-compliment:hover {
 .image-display-container {
   height: 37em;
   background-image: url("/img/cover page-1.jpg");
-  background-position: 25%;
+  background-position: 33%;
   background-repeat: no-repeat;
   background-size: cover;
   /* background: linear-gradient(30deg, rgba(227,135,178,0.9), rgba(230,75,140,0.9)); */
@@ -131,4 +175,130 @@ a.btn-compliment:hover {
     /* border-top: 0; */
     width: 5%;
     margin: 3% auto;
+}
+
+
+.line-icon {
+    text-align: center;
+}
+
+/* Joined both selectors, since were pretty much the same */
+.line-icon::before,
+.line-icon::after {
+    /* Styles kept */
+    width: 5%;
+    height: 1px;
+
+    /* Changed to border-top (instead of border) to simulate a line better */
+    border-top: 1px solid #ccc;
+
+    /* Styles added */
+    display: inline-block;
+    content: '';
+
+    /* Use padding to vertical align the line */
+    /* Use padding in em for a responsive icon height */
+    padding-top: 0.1em;
+
+    /* Use margins to give the lines some spacement around the icon */
+    /* Use margins in % for a responsive spacement */
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+
+.img-services{
+  /* height: 26.8em; */
+  /* height: 430px; */
+  width: auto;
+}
+
+.card-body{
+  padding: 3rem 2em;
+}
+
+.styles-card-image{
+  height: 15rem;
+  width: auto;
+}
+
+
+
+
+/* Testimonials CSSS */
+
+
+.testimonials {
+  overflow: hidden;
+  position: relative;
+  max-height: 300px;
+}
+
+.testimonials {
+  background: #161d25;
+}
+
+.one-slide,
+.testimonial,
+.message {
+  border: none !important;
+  outline: none !important;
+}
+
+.icon-overlay {
+  position: absolute;
+  opacity: 0.3;
+  right: 10%;
+  top: 0;
+  height: auto;
+  width: 100%;
+  max-width: 400px;
+}
+
+.carousel-controls .control {
+  position: absolute;
+  transform: translateY(-50%);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  z-index: 1;
+}
+
+.prev {
+  left: -2.25rem;
+}
+
+.next {
+  right: -2.25rem;
+}
+
+@media screen and (max-width: 768px) {
+  .testimonials {
+    max-height: 700px;
+  }
+  .icon-overlay {
+    height: 300px;
+    top: calc(50% - 150px);
+  }
+  .carousel-controls .control {
+    width: 25px;
+    height: 25px;
+    top: inherit;
+  }
+  .prev {
+    left: 0;
+  }
+  .next {
+    right: 0;
+  }
+  .control i {
+    font-size: .7rem;
+  }
+  .testimonials .message {
+    font-size: 1rem;
+  }
+  .testimonials h2 {
+    font-size: 1.5rem;
+  }
 }
