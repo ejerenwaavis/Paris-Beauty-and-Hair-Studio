@@ -2,6 +2,10 @@ a{
   text-decoration: none;
 }
 
+body{
+  color: #555;
+}
+
 .font-rozha {
   font-family: 'Rozha One', serif;
 
@@ -19,15 +23,15 @@ h1.font-rozha {
 
 
 .bg-accent {
-  background-color: #B89546;
+  background-color: #cb2975;
 }
 
 .bg-compliment {
-  background-color: #382E15;
+  background-color: #555555;
 }
 
 .bg-accent a {
-  color: black;
+  color: #555555;
 }
 
 .bg-accent a:hover {
@@ -35,7 +39,7 @@ h1.font-rozha {
 }
 
 .bg-accent-inner-shadow {
-  box-shadow: 0.8px 0.8px 20px 2px #B89546 inset;
+  box-shadow: 0.8px 0.8px 20px 2px #cb2975 inset;
 }
 
 .logo {
@@ -48,26 +52,27 @@ h1.font-rozha {
 }
 
 .text-accent, a {
-  color: #B89546;
+  color: #cb2975;
 }
 
 .text-accent, a:hover {
-  color: #382E15;
+  color: #555555;
   transition: 0.9s;
 }
 
 .text-compliment {
-  color: #382E15;
+  color: #555555;
 }
 
 .btn-outline-accent {
   background: none;
-  border: 1px solid #B89546;
+  border: 1px solid #cb2975;
+  padding: 0.6em 2.3em;
   transition: 0.7s;
 }
 
 a.btn-outline-accent:hover {
-  background-color: #B89546;
+  background-color: #555555;
   /* border: 1px solid white; */
   box-shadow: 2px 2px 7px 0 #777;
   color: white;
@@ -76,32 +81,33 @@ a.btn-outline-accent:hover {
 
 .btn-outline-compliment {
   background: none;
-  border: 1px solid #382E15;
+  border: 1px solid #555555;
   border-radius: 55px;
-  color: #382E15;
-  padding: 10px 25px;
+  color: #FFF;
+  padding: 0.6em 2.3em;
   transition: 0.7s;
   vertical-align: middle;
 }
 
 a.btn-outline-compliment:hover {
-  background-color: #382E15;
+  background-color: #cb2975;
   /* border: 1px solid white; */
-  border: none;
+  /* border: none; */
   box-shadow: 2px 2px 7px 0 #777;
   color: white;
   transition: 0.7s;
 }
 
  .btn-compliment {
-  background: #382E15;
+  background: #555555;
   color: white;
   transition: 0.7s;
+  padding: 0.6em 2.3em;
   }
 
 a.btn-compliment:hover {
-  background-color: #B89546;
-  border: 1px solid #B89546;
+  background-color: #cb2975;
+  /* border: 1px solid #B89546; */
   /* border: none; */
   box-shadow: 2px 2px 7px 0 #777;
   color: white;
@@ -109,19 +115,20 @@ a.btn-compliment:hover {
 }
 
 .image-display-container {
-  height: 34em;
-  background-image: url("/img/lady.jpg");
-  background-position: center;
+  height: 37em;
+  background-image: url("/img/cover page-1.jpg");
+  background-position: 25%;
   background-repeat: no-repeat;
   background-size: cover;
+  /* background: linear-gradient(30deg, rgba(227,135,178,0.9), rgba(230,75,140,0.9)); */
 }
 
 .dotted-divider{
-  border-width: 7px;
-  border-radius: 25%;
+  /* border-width: 7px; */
+  /* border-radius: 25%; */
     border-style: dotted;
     border-color: #d1bcad;
-    border-top: 0;
+    /* border-top: 0; */
     width: 5%;
     margin: 3% auto;
 }
