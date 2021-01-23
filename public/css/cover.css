@@ -36,7 +36,7 @@ body {
   /* background-image: url("/media-resources/bg1.jpg"); */
 
   /* min-height:100%; */
-  background:linear-gradient(180deg, rgba(158, 129, 60, 0.9), rgba(74, 60, 28, 0.9)), url("/img/bg1.jpg");
+  background:linear-gradient(180deg, rgba(203, 41, 117, 0.9), rgba(110, 110, 110, 0.9)), url("/img/cover page-temp.jpg");
  background-size:cover;
  background-position: center;
 background-repeat: no-repeat;
