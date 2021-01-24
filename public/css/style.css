@@ -4,6 +4,7 @@ a{
 
 body{
   color: #555;
+  font-size: 1.2rem;
 }
 
 .font-rozha {
@@ -38,10 +39,10 @@ h1.font-rozha {
 }
 
 h5.sub-header.bordered, .card-title.bordered{
-  padding-left: 10px;
   border-color: #cb2975;
-  border-width: 8px;
   border-left-style: solid;
+  border-width: 8px;
+  padding-left: 10px;
 }
 
 .bg-accent {
@@ -301,4 +302,44 @@ a.btn-compliment:hover {
   .testimonials h2 {
     font-size: 1.5rem;
   }
+}
+
+.testimonial-pane{
+  height: 20em;
+  overflow-y:auto;
+}
+
+.img-circle-container{
+  height: 5rem;
+  width: 5rem;
+  border-radius: 50%;
+  overflow: hidden;
+
+}
+
+.img-circle{
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+}
+
+.text-instagram{
+  color: brown;
+}
+.text-facebook{
+  color: #1457a3;
+}
+.text-twitter{
+  color: #5192dd;
+}
+
+.abs-center-x {
+     position: sticky;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+.vw100{
+  width:100vw;
 }
