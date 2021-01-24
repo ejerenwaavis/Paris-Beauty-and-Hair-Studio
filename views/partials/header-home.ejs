@@ -9,7 +9,7 @@
   <title> <%=(body)?body.title + " ·":"" %> Paris Beauty and Hair Studio</title>
 
   <!-- Icon -->
-  <link rel='icon' href='img/logo/favicon-alt.png' type='image/x-icon'/ >
+  <link rel='icon' href='img/logo/favicon-alt.png' type='image/x-icon' />
 
 
   <!-- font -->
@@ -38,27 +38,22 @@
   </div>
 
 
-  <nav class="nav sticky-top justify-content-center bg-light text-center py-2">
+  <!-- Original Code -->
+  <nav class="nav sticky-top justify-content-center bg-light text-center py-3">
     <div class="navbar-expand-md">
-      <a class=" d-md-none btn btn-outline-accent rounded-pill py-1" href="#"> BOOK A SERVICE</a>
-      <button class="navbar-toggler align-middle" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav2" aria-controls="navbarNav2" aria-expanded="false" aria-label="Toggle navigation">
-        <i class="fas fa-bars float-end"></i>
+      <a class=" d-md-none btn btn-outline-accent rounded-pill py-2" href="#"> BOOK A SERVICE</a>
+      <a class="d-md-none align-middle" href="#" ><i class="fas fa-shopping-cart ms-3"></i></a>
+      <a class="d-md-none align-middle" href="#" ><i class="fas fa-user ms-3"></i></a>
+      <button class="navbar-toggler align-middle ms-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav2" aria-controls="navbarNav2" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars "></i>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav2">
-        <a class="nav-link" href="#services"><i class="fas fa-cut"></i> Services </a>
+      <div class="collapse navbar-collapse " id="navbarNav2">
+        <a class="nav-link"  href="#services"><i class="fas fa-cut"></i> Services </a>
         <a class="nav-link" href="#styles"><i class="fas fa-gift"> </i> Hair Styles</a>
-        <!-- <div class="dropdownd-none" hidden>
-          <a class="nav-link " role="button" id="moreMenu" data-bs-toggle="dropdown" aria-expanded="false" href="#">More <i class="fas fa-xs fa-chevron-down"> </i> </a>
-          <ul class="dropdown-menu " aria-labelledby="moreMenu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </div> -->
+        <a class="nav-link btn btn-outline-accent rounded-pill d-none d-md-block" href="#">BOOK A SERVICE</a>
+        <a class="nav-link d-none d-md-block" href="#" ><i class="fas fa-shopping-cart ms-2 d-none d-md-block"></i></a>
+        <a class="nav-link d-none d-md-block" href="#"><i class="fas fa-user "></i></a>
 
-        <a class="nav-link btn btn-outline-accent  rounded-pill d-none d-md-block" href="#">
-          BOOK A SERVICE
-        </a>
       </div>
     </div>
   </nav>
