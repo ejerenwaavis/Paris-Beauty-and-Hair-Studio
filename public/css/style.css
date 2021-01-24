@@ -187,11 +187,11 @@ a.btn-compliment:hover {
 .line-icon::before,
 .line-icon::after {
     /* Styles kept */
-    width: 5%;
-    height: 1px;
+    width: 4rem;
+    height: 0rem;
 
     /* Changed to border-top (instead of border) to simulate a line better */
-    border-top: 1px solid #ccc;
+    border-top: 0.1rem solid #ccc;
 
     /* Styles added */
     display: inline-block;
