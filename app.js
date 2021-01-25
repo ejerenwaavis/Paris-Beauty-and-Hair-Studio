@@ -16,19 +16,31 @@ app.use(bodyParser.urlencoded({
 app.use(express.static("public"));
 
 app.route("/home")
-  .get(function(req,res){
-    res.render("home", {body:new Body("Home","","")});
-  })
+  .get(function(req, res) {
+    res.render("home", {
+      body: new Body("Home", "", "")
+    });
+  });
+
+app.route("/cart")
+  .get(function(req, res) {
+    res.render("cart", {
+      body: new Body("Cart", "", "")
+    });
+  });
+
+app.route("/")
+  .get(function(req, res) {
+    res.render("cover");
+  });
 
 
-  app.route("/")
-    .get(function(req,res){
-      res.render("cover.ejs");
-    })
 
 
 
-app.listen(process.env.PORT || 3000, function(){console.log("Paris Hair and Beauty Studio is Live");});
+app.listen(process.env.PORT || 3000, function() {
+  console.log("Paris Hair and Beauty Studio is Live");
+});
 
 
 /************** functionalities *******************/

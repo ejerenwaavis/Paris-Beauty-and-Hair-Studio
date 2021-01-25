@@ -27,7 +27,7 @@ h1.font-rozha {
 
 .header{
   font-family: 'Rozha One', serif;
-  font-size: 3.7rem;
+  font-size: 3.0rem;
   font-weight: bold;
 }
 
@@ -36,6 +36,20 @@ h1.font-rozha {
   font-family: 'Rozha One', serif;
   font-size: 1.8rem;
   font-weight: bold;
+}
+
+.cart-item-title{
+  color: #777;
+  /* font-family: 'Rozha One', serif; */
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.cart-sub-header{
+  color: #777;
+  /* font-family: 'Rozha One', serif; */
+  font-size: 1.2rem;
+  font-weight: 700;
 }
 
 h5.sub-header.bordered, .card-title.bordered{
@@ -88,6 +102,9 @@ h5.sub-header.bordered, .card-title.bordered{
 
 .text-accent,
 i.text-accent,
+button .text-accent,
+a.text-accent,
+span.a,
 a {
   color: #cb2975;
 }
@@ -109,7 +126,7 @@ a {
 }
 
 .btn-outline-accent:hover {
-  background-color: #555;
+  background-color: #cb2975;
   /* border: 1px solid white; */
   box-shadow: 2px 2px 7px 0 #777;
   color: white;
@@ -117,7 +134,7 @@ a {
 }
 
 a.btn-outline-accent:hover {
-  background-color: #555;
+  background-color: #cb2975;
   /* border: 1px solid white; */
   box-shadow: 2px 2px 7px 0 #777;
   color: white;
@@ -342,4 +359,28 @@ a.btn-compliment:hover {
 
 .vw100{
   width:100vw;
+}
+
+.accordion-body{
+  overflow-x: hidden;
+}
+
+.accordion-border{
+  border-bottom-style: solid;
+  border-bottom-width: thin;
+  border-bottom-color: #e4e4e4;
+
+}
+
+
+.row.accordion-border{
+  margin-bottom: 1rem;
+}
+
+.details-pane-heading{
+  font-size: 1.1rem;
+}
+
+.payment-options{
+  font-size:1.7rem;
 }

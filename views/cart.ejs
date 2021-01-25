@@ -1,0 +1,171 @@
+<%- include ("partials/header-home.ejs")  %>
+
+
+
+<section class="" id="cart">
+  <div class="container mt-5 ">
+    <h1 class="header bordered">
+      <!-- <i class="text-accent fa-xs fas fa-grip-lines-vertical"></i> -->
+      Review Your Cart
+    </h1>
+  </div>
+
+  <%# include ("partials/emptyCart.ejs") #%>
+
+
+  <!-- Item 1 -->
+  <div class=" cart-items-wrapper py-3">
+    <div class="container py-1 mt-2">
+      <hr>
+      <div class="row ">
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+          <img src="img/placeholder.png" class="img-fluid img-thumbnail" alt="...">
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 py-3 ps-4">
+          <div class="row align-items-center">
+            <div class="col-8">
+              <h5 class="d-inline cart-item-title">
+                Bone Straight Braids
+              </h5>
+            </div>
+            <div class="col-4 text-end">
+              <h5 class="cart-item-title">
+                $577.00
+              </h5>
+            </div>
+          </div>
+
+
+
+
+          <a class="text-accent d-block" href="" data-bs-toggle="collapse" data-bs-target="#booking-summary" aria-expanded="false" aria-controls="booking-summary">
+            Booking Summary
+          </a>
+          <hr />
+          <div class="collapse mb-3" id="booking-summary">
+            <div class="row accordion-border">
+              <div class="col-9">
+                Date
+              </div>
+              <div class="col-3 text-end">
+                01 April 2021
+              </div>
+            </div>
+            <div class="row accordion-border">
+              <div class="col-9 ">
+                Time
+              </div>
+              <div class="col-3 text-end">
+                12:00PM
+              </div>
+            </div>
+            <div class="row ">
+              <div class="col-9">
+                Estimated Duration
+              </div>
+              <div class="col-3 text-end">
+                3Hrs
+              </div>
+            </div>
+          </div>
+
+
+
+          <a class="text-accent d-block" href="" data-bs-toggle="collapse" data-bs-target="#price-summary" aria-expanded="false" aria-controls="price-summary">
+            Pricing Summary
+          </a>
+          <hr />
+          <div class="collapse mb-3" id="price-summary">
+            <div class="row accordion-border">
+              <div class="col-9">
+                Base Fee
+              </div>
+              <div class="col-3 text-end">
+                $420.00
+              </div>
+            </div>
+            <div class="row accordion-border">
+              <div class="col-9 ">
+                Product Charges
+              </div>
+              <div class="col-3 text-end">
+                $120.00
+              </div>
+            </div>
+            <div class="row ">
+              <div class="col-9">
+                Tax
+              </div>
+              <div class="col-3 text-end">
+                $4.99
+              </div>
+            </div>
+          </div>
+
+          <div class="row accordion-border border-success">
+            <div class="row align-items-center pe-0 ">
+              <div class="col-9">
+                <span class="cart-sub-header">
+                  Deposit Payable Now
+                </span>
+              </div>
+              <div class="col-3 text-end pe-0">
+                <h5 class="cart-item-title">
+                  $120.00
+                </h5>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="row align-items-center pe-0 ">
+              <div class="col-9">
+                <span class="">
+                  Balance Due on day of appointement
+                </span>
+              </div>
+              <div class="col-3 text-end pe-0">
+                <span class="">
+                  $457
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row pt-3 justify-content-center">
+            <div class="col-12 text-end">
+              <a href="" class="text-primary">remove item
+                <i class="far fa-times-circle"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End  of Itemm Row -->
+
+    </div>
+  </div>
+
+  <div class="container my-5">
+    <div class="row justify-content-end">
+      <div class="col-12 col-md-9 col-lg-9 text-center">
+        <a href="#" class="btn d-block mb-3 py-3 rounded-pill text-uppercase btn-outline-accent">
+          CHECKOUT
+          <i class="fas ps-2 fa-lock"></i>
+        </a>
+        <span class="text-muted">
+          payment options:
+          <span class="payment-options">
+            <i class="fab ps-2 fa-cc-mastercard"></i>
+            <i class="fab ps-2 fa-cc-visa"></i>
+            <i class="fab ps-2 fa-google-pay"></i>
+          </span>
+        </span>
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <%- include ("partials/footer.ejs") %>
