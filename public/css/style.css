@@ -52,12 +52,15 @@ h1.font-rozha {
   font-weight: 700;
 }
 
-h5.sub-header.bordered, .card-title.bordered{
+h5.sub-header.bordered,
+.card-title.bordered, 
+.bordered{
   border-color: #cb2975;
   border-left-style: solid;
   border-width: 8px;
   padding-left: 10px;
 }
+
 
 .bg-accent {
   background-color: #cb2975;
