@@ -90,7 +90,7 @@ h5.sub-header.bordered,
 .bg-paris-mark{
   /* background:  url("/img/logo/paris-mark-gray-25.png"); */
   /* background-image: url("/img/logo/paris-mark-gray-25-x40.png"),url("/img/logo/paris-mark-gray-25-x50.png"); */
-  background: linear-gradient(0deg, rgba(246,243,243,0.9), rgba(246,243,243,0.94)), url("/img/logo/paris-mark-gray-25-x300.png");
+  background: linear-gradient(0deg, rgba(246,243,243,0.8), rgba(246,243,243,0.94)), url("/img/logo/paris-mark-gray-25-x300.png");
 
 }
 
