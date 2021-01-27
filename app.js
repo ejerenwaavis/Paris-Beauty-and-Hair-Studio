@@ -29,12 +29,19 @@ app.route("/cart")
     });
   });
 
-  app.route("/account")
-    .get(function(req, res) {
-      res.render("account", {
-        body: new Body("Account", "", "")
-      });
+app.route("/account")
+  .get(function(req, res) {
+    res.render("account", {
+      body: new Body("Account", "", "")
     });
+  });
+
+app.route("/book")
+  .get(function(req, res) {
+    res.render("booking", {
+      body: new Body("Bookt", "", "")
+    });
+  });
 
 app.route("/")
   .get(function(req, res) {
