@@ -13,70 +13,101 @@ add to cart or book now
 
  -->
 
+<div class="container">
 
-<form class=" py-5" action="index.html" method="post">
-  <div class="row mb-3 justify-content-center">
-    <div class="col-4">
-      <select class="form-select ">
-        <option selected>Select Base Style</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
-      </select>
+  <form class=" py-5" action="/book" method="post">
+    <div class="row mb-3 justify-content-center">
+      <div class="col">
+        <select class="form-select ">
+          <option selected>Select Base Style</option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+        </select>
+      </div>
     </div>
-  </div>
-  <div class="row mb-3 justify-content-center">
-    <div class="col-4">
-      <select class="form-select " disabled>
-        <option selected>Select Style Option</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
-      </select>
+    <div class="row mb-3 justify-content-center">
+      <div class="col">
+        <select class="form-select " disabled>
+          <option selected>Select Style Option</option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+        </select>
+      </div>
     </div>
-  </div>
 
-  <div class="row mb-3 justify-content-center">
-    <div class="col-4">
-      <div class="row">
-        <div class="col">
-          <div class="py-5 img-thumbnail">
+    <div class="row mb-3 text-center justify-content-center">
+      <div class="col">
+        <div class="row mt-0">
+          <div class="col-8">
+            <input type="text" class="form-control bg-transparent py-2 " name="" value="Click to select a Stylist ====>" aria-label="readonly input example" readonly />
+
           </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="exampleRadios" id="stylist1" value="option1" checked>
-            <label class="form-check-label" for="stylist1">
-              Name of Stylist
-            </label>
+          <div class="col-4 text-start">
+            <a class="btn btn-outline-accent d-block px-4 py-2" href="" data-bs-toggle="collapse" data-bs-target="#stylists" aria-expanded="false" aria-controls="stylists">
+              Show Stylists
+            </a>
           </div>
+
         </div>
 
-        <div class="col">
-          <div class="py-5 img-thumbnail">
+        <div class="collapse mt-3" id="stylists">
+          <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4">
+            <div class="col mb-3">
+              <a href="" class="btn btn-primary stylist img-thumbnail">Placeholder</a>
+            </div>
+            <div class="col mb-3">
+              <a href="" class="btn btn-warning stylist img-thumbnail">Placeholder</a>
+            </div>
+            <div class="col mb-3">
+              <a href="" class="btn btn-success stylist img-thumbnail">Placeholder</a>
+            </div>
+            <div class="col mb-3">
+              <a href="" class="btn bg-accent stylist img-thumbnail">Placeholder</a>
+            </div>
           </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="exampleRadios" id="stylist1" value="option1" checked>
-            <label class="form-check-label" for="stylist1">
-              Name of Stylist
-            </label>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="py-5 img-thumbnail">
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="exampleRadios" id="stylist1" value="option1" checked>
-            <label class="form-check-label" for="stylist1">
-              Name of Stylist
-            </label>
-          </div>
-        </div>
-
-        <div class="col">
-          <input type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" max="2018-12-31">
         </div>
       </div>
+    </div>
+
+    <div class="row mb-3 justify-content-center">
+      <div class="col">
+        <input type="date" class="form-control" id="start" name="trip-start" value="2021-01-27" min="2021-01-28" max="2021-02-14">
+      </div>
+    </div>
+
+    <div class="row mb-3 justify-content-center">
+      <div class="col">
+        <label for="time" class="ps-1">Available Times</label>
+        <select class="form-control" name="time">
+          <option value="">12PM</option>
+          <option value="">3PM</option>
+          <option value="">5PM</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row g-3 mt-3">
+      <!-- Button trigger modal -->
+      <div class="col-10 col-sm-8 col-md-8">
+        <a type="" class="btn btn-outline-accent rounded-pill d-block" data-bs-toggle="modal" data-bs-target="#review">
+          Review Booking
+        </a>
+      </div>
+      <div class="col-2 col-sm-2 col-md-2 mt-3">
+        <a type="" onclick="clearForm()" class="btn btn-outline-danger py-2 d-block" name="" value=""><span class="d-none d-md-inline">Clear</span> <i class="far fa-trash-alt"></i> </a>
+      </div>
+      <div class="col-12 col-sm-2 col-md-2 mt-3">
+        <a type="" role="submit" onclick="addToCart()" class="btn btn-warning py-2 d-block" name="" value=""> <span class="d-sm-none ">Add to Cart</span> <i class="fas fa-cart-plus"></i> </a>
+      </div>
+
+
 
     </div>
-  </div>
-</form>
+
+    <%- include ("reviewBooking.ejs")  %>
+
+
+  </form>
+</div>

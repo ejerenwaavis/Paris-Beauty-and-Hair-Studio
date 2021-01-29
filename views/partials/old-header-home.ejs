@@ -39,22 +39,21 @@
 
 
   <!-- Original Code -->
-  <nav class="navbar navbar-bg-dark py-0 sticky-top navbar-expand">
-    <div class="container d-flex justify-content-center">
+  <nav class="nav sticky-top justify-content-center bg-light text-center py-3">
+    <div class="navbar-expand-md">
+      <a class=" d-md-none btn btn-outline-accent rounded-pill py-2" href="/book"> BOOK A SERVICE</a>
+      <a class="d-md-none align-middle" href="/cart" ><i class="fas fa-shopping-cart ms-3"></i></a>
+      <a class="d-md-none align-middle" href="/account" ><i class="fas fa-user ms-3"></i></a>
+      <button class="navbar-toggler align-middle ms-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav2" aria-controls="navbarNav2" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars "></i>
+      </button>
+      <div class="collapse navbar-collapse " id="navbarNav2">
+        <a class="nav-link"  href="/home#services"><i class="fas fa-cut"></i> Services </a>
+        <a class="nav-link" href="/home#styles"><i class="fas fa-gift"> </i> Hair Styles</a>
+        <a class="nav-link btn btn-outline-accent rounded-pill d-none d-md-block" href="/book">BOOK A SERVICE</a>
+        <a class="nav-link d-none d-md-block" href="/cart" ><i class="fas fa-shopping-cart ms-2 d-none d-md-block"></i></a>
+        <a class="nav-link d-none d-md-block" href="/account"><i class="fas fa-user "></i></a>
 
-      <a href="#" class="nav-link nav-bl nav-br active">
-        <i class="fas fa-md fa-calendar-alt me-1"></i>
-        BOOK
-      </a>
-      <a href="#" class="nav-link nav-br">
-        <i class="fas fa-md fa-shopping-cart me-1"></i>
-        SHOP
-      </a>
-        <a href="#" class="nav-link nav-br">
-          <i class="fas fa-md fa-user me-1"></i>
-          <span class="d-none d-lg-inline">
-            SIGNIN
-          </span>
-        </a>
+      </div>
     </div>
-</nav>
+  </nav>
