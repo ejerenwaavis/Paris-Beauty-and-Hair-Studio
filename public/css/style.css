@@ -15,7 +15,7 @@ body{
 
 
 h1.font-rozha {
-  font-weight: bolder;
+  font-weight: bold;
 }
 
 .card-title{
@@ -105,6 +105,11 @@ h5.sub-header.bordered,
   background: linear-gradient(0deg, rgba(255,255,255,0.7), rgba(230,230,230,0.94)), url("/img/logo/paris-mark-gray-7-x300.png");
 }
 
+.bg-overlay-dark{
+  background: linear-gradient(180deg, rgba(255,255,255,0.0), rgba(255,255,255,0.3), rgba(120,120,120,0.94));
+  transition: 0.6s;
+}
+
 .logo {
   height: 40px;
   width: auto;
@@ -119,13 +124,13 @@ h5.sub-header.bordered,
   height: 5em;
 }
 .navbar-bg-dark {
-  background-color: #dedede;
+  background-color: #f5f5f5;
 }
 
 .navbar a.nav-link{
   padding-left: 2rem;
   padding-right: 2rem;
-  background-color: #dedede;
+  background-color: #f5f5f5;
 
 }
 
@@ -245,7 +250,7 @@ a.btn-compliment:hover {
 
 .image-display-container {
   height: 37em;
-  background-image: url("/img/cover page-1.jpg");
+  background-image: url("/img/main-2-lg.jpg");
   background-position: 33%;
   background-repeat: no-repeat;
   background-size: cover;
@@ -298,13 +303,17 @@ a.btn-compliment:hover {
   width: auto;
 }
 
+.card-body.card-img-overlay{
+  color: white;
+}
+
 .card-body{
   padding: 3rem 2em;
 }
 
 .styles-card-image{
-  height: 15rem;
-  width: auto;
+  /* object-fit: cover; */
+  /* width: ; */
 }
 
 
@@ -456,4 +465,65 @@ a.btn-compliment:hover {
 .footer-logo{
   height: 80px;
   width: auto;
+}
+
+
+
+.product-img-container{
+  height: 35em;
+  background-color: grey;
+  overflow: hidden;
+  padding: 0;
+  object-position: 50% 50%;
+}
+
+img.cover{
+  object-fit: cover;
+}
+
+.product-display-img{
+  /* object-position: center; */
+  height: 35em;
+  /* background-color: grey; */
+}
+
+.products-home-image{
+  /* background: url("/img/main-lg.jpg"); */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #ffeaf4;
+}
+
+
+.mt-n1 {
+  margin-top: -0.25rem !important;
+}
+
+
+.mt-n2 {
+  margin-top: -0.50rem !important;
+}
+
+
+.mt-n3 {
+  margin-top: -0.75rem !important;
+}
+
+
+.mt-n4 {
+  margin-top: -1rem !important;
+}
+
+
+
+.mt-n5 {
+  margin-top: -1.25rem !important;
+}
+
+.mt-n10 {
+  margin-top: -3rem !important;
+}
+
+.mt-n20 {
+  margin-top: -6rem !important;
 }

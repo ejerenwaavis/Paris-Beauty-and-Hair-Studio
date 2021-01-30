@@ -25,9 +25,17 @@ app.route("/home")
 app.route("/cart")
   .get(function(req, res) {
     res.render("cart", {
-      body: new Body("Cart", "", "")
+      body: new Body("Bag", "", "")
     });
   });
+
+  app.route("/shop")
+    .get(function(req, res) {
+      res.render("products", {
+        body: new Body("Shop", "", "")
+      });
+    });
+
 
 app.route("/account")
   .get(function(req, res) {

@@ -41,20 +41,44 @@
   <!-- Original Code -->
   <nav class="navbar navbar-bg-dark py-0 sticky-top navbar-expand">
     <div class="container d-flex justify-content-center">
-
-      <a href="#" class="nav-link nav-bl nav-br active">
+      <a href="/home" class="nav-link nav-bl <%=(body.title === 'Home')? 'active':''  %> d-none d-sm-inline-block">
+        <i class="fas fa-md fa-home me-1 "></i>
+        <span class="d-none ">
+          HOME
+        </span>
+      </a>
+      <a href="/shop" class="nav-link <%=(body.title === 'Shop')? 'active':'' %> nav-bl nav-br">
+        <i class="fas fa-md fa-shopping-cart me-1 "></i>
+        SHOP
+      </a>
+      <a href="#" class="nav-link  nav-br " data-bs-toggle="modal" data-bs-target="#booking-form-modal">
         <i class="fas fa-md fa-calendar-alt me-1"></i>
         BOOK
       </a>
-      <a href="#" class="nav-link nav-br">
-        <i class="fas fa-md fa-shopping-cart me-1"></i>
-        SHOP
+      <a href="/signin" class="nav-link <%=(body.title === 'SignIn')? 'active':'' %> nav-br">
+        <i class="fas fa-md fa-user me-1"></i>
+        <span class="d-none d-lg-inline">
+          SIGNIN
+        </span>
       </a>
-        <a href="#" class="nav-link nav-br">
-          <i class="fas fa-md fa-user me-1"></i>
-          <span class="d-none d-lg-inline">
-            SIGNIN
-          </span>
-        </a>
+      <a href="/cart" class=" <%=(body.title === 'Bag')? 'active':'' %> nav-link nav-br">
+        <i class="fas fa-md fa-shopping-bag me-1"></i>
+      </a>
     </div>
-</nav>
+  </nav>
+
+  <!-- Booking Form -->
+  <div class="modal fade" id="booking-form-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="booking-form" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bordered-accent">
+        <div class="modal-header bg-accent text-white">
+          <h5 class="modal-title d-block m-auto" id="reviewLabel">Booking</h5>
+          <a type="button" class="text-white" data-bs-dismiss="modal" aria-label="Close"><i class="far fa-lg fa-times-circle"></i></a>
+        </div>
+        <div class="modal-body">
+          <%- include ("modal-bookingForm.ejs")  %>
+        </div>
+
+      </div>
+    </div>
+  </div>
