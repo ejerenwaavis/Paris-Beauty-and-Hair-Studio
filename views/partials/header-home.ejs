@@ -41,18 +41,18 @@
   <!-- Original Code -->
   <nav class="navbar navbar-bg-dark py-0 sticky-top navbar-expand">
     <div class="container d-flex justify-content-center">
-      <a href="/home" class="nav-link nav-bl <%=(body.title === 'Home')? 'active':''  %> d-none d-sm-inline-block">
+      <a href="/home" class="nav-link nav-bl <%=(body.title === 'Home')? 'active':''  %> ">
         <i class="fas fa-md fa-home me-1 "></i>
         <span class="d-none ">
           HOME
         </span>
       </a>
       <a href="/shop" class="nav-link <%=(body.title === 'Shop')? 'active':'' %> nav-bl nav-br">
-        <i class="fas fa-md fa-shopping-cart me-1 "></i>
+        <i class="fas fa-md fa-shopping-cart me-1 d-none d-md-inline-block"></i>
         SHOP
       </a>
       <a href="#" class="nav-link  nav-br " data-bs-toggle="modal" data-bs-target="#booking-form-modal">
-        <i class="fas fa-md fa-calendar-alt me-1"></i>
+        <i class="fas fa-md fa-calendar-alt me-1 d-none d-md-inline-block"></i>
         BOOK
       </a>
       <a href="/signin" class="nav-link <%=(body.title === 'SignIn')? 'active':'' %> nav-br">
