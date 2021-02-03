@@ -41,7 +41,7 @@
   <!-- Original Code -->
   <nav class="navbar navbar-bg-dark py-0 sticky-top navbar-expand">
     <div class="container d-flex justify-content-center">
-      <a href="/home" class="nav-link nav-bl <%=(body.title === 'Home')? 'active':''  %> ">
+      <a href="/home" class="nav-link nav-bl <%=(body.title === 'Home')? 'active':''  %> d-none d-sm-inline-block">
         <i class="fas fa-md fa-home me-1 "></i>
         <span class="d-none ">
           HOME
@@ -56,8 +56,8 @@
         BOOK
       </a>
       <a href="/signin" class="nav-link <%=(body.title === 'SignIn')? 'active':'' %> nav-br">
-        <i class="fas fa-md fa-user me-1"></i>
-        <span class="d-none d-lg-inline">
+        <i class="fas fa-md fa-user me-1 d-none d-md-inline-block"></i>
+        <span class="">
           SIGNIN
         </span>
       </a>
