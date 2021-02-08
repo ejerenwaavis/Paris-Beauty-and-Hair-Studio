@@ -15,99 +15,147 @@ add to cart or book now
 
 <div class="container">
 
-  <form class=" py-5" action="/book" method="post">
-    <div class="row mb-3 justify-content-center">
-      <div class="col">
-        <select class="form-select ">
-          <option selected>Select Base Style</option>
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
-        </select>
-      </div>
-    </div>
-    <div class="row mb-3 justify-content-center">
-      <div class="col">
-        <select class="form-select " disabled>
-          <option selected>Select Style Option</option>
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
-        </select>
-      </div>
-    </div>
+  <ul class="nav  justify-content-center" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <a class="nav-link active" id="stage1" data-bs-toggle="tab" href="#stage1-pane" role="tab" aria-controls="style" aria-selected="true">Step 1</a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link disabled" id="stage2" data-bs-toggle="tab" href="#stage2-pane" role="tab" aria-controls="date" aria-selected="false">Step 2</a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link disabled" id="stage3" data-bs-toggle="tab" href="#stage3-pane" role="tab" aria-controls="review" aria-selected="false">Step 3</a>
+    </li>
+  </ul>
+  <div class="progress" style="height: 1px;">
+    <div class="progress-bar bg-accent" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+  </div>
 
-    <div class="row mb-3 text-center justify-content-center">
-      <div class="col">
-        <div class="row mt-0">
-          <div class="col-8">
-            <input type="text" class="form-control bg-transparent py-2 " name="" value="Click to select a Stylist ====>" aria-label="readonly input example" readonly />
+  <div class="container loadingSign my-5 py-4 text-center" id="loadingSign">
+    <i class="fas fa-spinner fa-5x fa-spin"></i>
+  </div>
 
+  <form class=" pt-3 pb-5" id="bookingForm" action="/book" method="post">
+    <div class="tab-content " id="myTabContent ">
+
+      <div class="tab-pane fade show active" id="stage1-pane" role="tabpanel" aria-labelledby="stage1">
+        <p class="card-title mb-2 bordered">
+          Select Base Style
+        </p>
+        <div class="row mb-3 justify-content-center">
+          <div class="col">
+            <select id="styleSelect" class="form-select ">
+              <option selected>Select Base Style</option>
+            </select>
           </div>
-          <div class="col-4 text-start">
-            <a class="btn btn-outline-accent d-block px-4 py-2" href="" data-bs-toggle="collapse" data-bs-target="#stylists" aria-expanded="false" aria-controls="stylists">
-              Show Stylists
-            </a>
-          </div>
-
         </div>
-
-        <div class="collapse mt-3" id="stylists">
-          <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4">
-            <div class="col mb-3">
-              <a href="" class="btn btn-primary stylist img-thumbnail">Placeholder</a>
-            </div>
-            <div class="col mb-3">
-              <a href="" class="btn btn-warning stylist img-thumbnail">Placeholder</a>
-            </div>
-            <div class="col mb-3">
-              <a href="" class="btn btn-success stylist img-thumbnail">Placeholder</a>
-            </div>
-            <div class="col mb-3">
-              <a href="" class="btn bg-accent stylist img-thumbnail">Placeholder</a>
+        <div class="row mb-3 justify-content-center">
+          <div class="col">
+            <select id="selectOption" class="form-select" disabled>
+              <option selected>Select Style Option</option>
+            </select>
+          </div>
+        </div>
+        <div class="" id="chooseStylistSection">
+          <p class="card-title mt-4 bordered">
+            Choose Stylist
+          </p>
+          <div class="row mb-2  justify-content-center" id="stylistContainer">
+            <div class="col text-center"  >
+              ...
             </div>
           </div>
         </div>
+
+
+      </div>
+
+      <input type="text" hidden name="stylist" id="stylist" value="">
+
+      <div class="tab-pane fade " id="stage2-pane" role="tabpanel" aria-labelledby="stage2">
+        <div class="row mb-3 justify-content-center">
+          <p>Custome Date Picker Here:</p>
+          <div class="col">
+          </div>
+        </div>
+
+        <div class="row mb-3 justify-content-center">
+          <div class="col">
+            <label for="time" class="ps-1">Available Times</label>
+            <select class="form-control" name="time">
+              <option value="">12PM</option>
+              <option value="">3PM</option>
+              <option value="">5PM</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane fade " id="stage3-pane" role="tabpanel" aria-labelledby="stage3">
+        <div class="container px-5 " id="booking-summary">
+          <div class="row accordion-border">
+            <div class="col-4">
+              Base Style
+            </div>
+            <div class="col-8 text-end">
+              <strong>
+                Knotless Braids
+              </strong>
+            </div>
+          </div>
+          <div class="row accordion-border">
+            <div class="col-4">
+              Option
+            </div>
+            <div class="col-8 text-end">
+              <strong>
+                Large Knotless Waist Length
+              </strong>
+            </div>
+          </div>
+          <div class="row accordion-border">
+            <div class="col-4">
+              Date
+            </div>
+            <div class="col-8 text-end">
+              <strong> 01 April 2021</strong>
+            </div>
+          </div>
+          <div class="row accordion-border">
+            <div class="col-4 ">
+              Time
+            </div>
+            <div class="col-8 text-end">
+              <strong>12:00PM</strong>
+            </div>
+          </div>
+          <div class="row ">
+            <div class="col-4">
+              Stylist
+            </div>
+            <div class="col-8 text-end">
+              <strong>Stylist Name</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="row g-3 mt-3">
+        <!-- Button trigger modal -->
+        <!-- <input type="submit" name="" value="Subit"> -->
+        <div class="col-10 col-sm-8 col-md-8">
+          <a type="" role="submit" onclick="showNextTab()" class="btn btn-outline-accent rounded-pill d-block">
+            Confirm Booking
+          </a>
+        </div>
+        <div class="col-2 col-sm-2 col-md-2 mt-3">
+          <a type="" onclick="clearForm()" class="btn btn-outline-danger py-2 d-block" name="" value=""><i class="far fa-trash-alt"></i> </a>
+        </div>
+        <div class="col-12 col-sm-2 col-md-2 mt-3">
+          <a type="" role="submit" onclick="addToCart()" class="btn btn-warning py-2 d-block" name="" value=""> <span class="d-sm-none ">Add to Cart</span> <i class="fas fa-cart-plus"></i> </a>
+        </div>
       </div>
     </div>
-
-    <div class="row mb-3 justify-content-center">
-      <div class="col">
-        <input type="date" class="form-control" id="start" name="trip-start" value="2021-01-27" min="2021-01-28" max="2021-02-14">
-      </div>
-    </div>
-
-    <div class="row mb-3 justify-content-center">
-      <div class="col">
-        <label for="time" class="ps-1">Available Times</label>
-        <select class="form-control" name="time">
-          <option value="">12PM</option>
-          <option value="">3PM</option>
-          <option value="">5PM</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row g-3 mt-4">
-      <!-- Button trigger modal -->
-      <div class="col-10">
-        <a type="" class="btn btn-outline-accent rounded-pill d-block" data-bs-toggle="modal" data-bs-target="#review">
-          Review Booking
-        </a>
-      </div>
-      <div class="col-2">
-        <a type="" onclick="clearForm()" class="btn btn-outline-danger py-2 d-block" name="" value=""> <i class="fas fa-redo-alt"></i> </a>
-      </div>
-      <div class="col-12 ">
-        <a type="" role="submit" onclick="addToCart()" class="btn btn-outline-warning py-2 d-block text-dark" name="" value=""> <span class="">Add to Cart</span> <i class="fas fa-cart-plus"></i> </a>
-      </div>
-
-
-
-    </div>
-
-    <%- include ("reviewBooking.ejs")  %>
-
-
   </form>
 </div>

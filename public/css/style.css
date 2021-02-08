@@ -1,80 +1,79 @@
-a{
+a {
   text-decoration: none;
 }
 
-body{
+body {
   color: #555;
   font-size: 1.0rem;
 }
 
 .font-rozha {
   font-family: 'Rozha One', serif;
-
 }
-
-
 
 h1.font-rozha {
   font-weight: bold;
 }
 
-.card-title{
+.card-title {
   color: #777;
   font-family: 'Rozha One', serif;
   font-size: 1.2rem;
   font-weight: bold;
 }
-.jumbo{
+
+.jumbo {
   font-family: 'Rozha One', serif;
   font-size: 3.2rem;
   font-weight: bold;
 }
 
-.header{
+.header {
   font-family: 'Rozha One', serif;
   font-size: 2.0rem;
   font-weight: bold;
 }
 
-.sub-header{
+.sub-header {
   color: #777;
   font-family: 'Rozha One', serif;
   font-size: 1.4rem;
   font-weight: bold;
 }
 
-.cart-item-title{
+.cart-item-title {
   color: #777;
   /* font-family: 'Rozha One', serif; */
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: bold;
 }
 
-.cart-sub-header{
+.cart-sub-header {
   color: #777;
   /* font-family: 'Rozha One', serif; */
   font-size: 1.1rem;
   font-weight: 700;
 }
 
-.sub-footer-text{
+.sub-footer-text {
   font-size: 0.8rem;
 }
 
 h5.sub-header.bordered,
 .card-title.bordered,
-.bordered{
+.bordered {
   border-color: #cb2975;
   border-left-style: solid;
   border-width: 8px;
   padding-left: 10px;
 }
 
-.border-accent{
+.border-accent {
   border-color: #cb2975;
   border-style: solid;
   border-width: thin;
 }
+
 .bg-accent {
   background-color: #cb2975;
 }
@@ -95,18 +94,18 @@ h5.sub-header.bordered,
   box-shadow: 0.8px 0.8px 20px 2px #cb2975 inset;
 }
 
-.bg-paris-mark{
+.bg-paris-mark {
   /* background:  url("/img/logo/paris-mark-gray-25.png"); */
   /* background-image: url("/img/logo/paris-mark-gray-25-x40.png"),url("/img/logo/paris-mark-gray-25-x50.png"); */
-  background: linear-gradient(0deg, rgba(246,243,243,0.8), rgba(246,243,243,0.94)), url("/img/logo/paris-mark-gray-25-x300.png");
-
-}
-.bg-paris-mark-dark{
-  background: linear-gradient(0deg, rgba(255,255,255,0.7), rgba(230,230,230,0.94)), url("/img/logo/paris-mark-gray-7-x300.png");
+  background: linear-gradient(0deg, rgba(246, 243, 243, 0.8), rgba(246, 243, 243, 0.94)), url("/img/logo/paris-mark-gray-25-x300.png");
 }
 
-.bg-overlay-dark{
-  background: linear-gradient(180deg, rgba(255,255,255,0.0), rgba(255,255,255,0.3), rgba(120,120,120,0.94));
+.bg-paris-mark-dark {
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.7), rgba(230, 230, 230, 0.94)), url("/img/logo/paris-mark-gray-7-x300.png");
+}
+
+.bg-overlay-dark {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 0.3), rgba(120, 120, 120, 0.94));
   transition: 0.6s;
 }
 
@@ -119,54 +118,60 @@ h5.sub-header.bordered,
   height: 1.8em;
   width: auto;
 }
+
 /* NAVBAR MANIPULATION */
 .navbar-lg {
   height: 5em;
 }
+
 .navbar-bg-dark {
   background-color: #f5f5f5;
 }
 
-.navbar a.nav-link{
+.navbar a.nav-link {
   padding-left: 1.2rem;
   padding-right: 1.2rem;
   background-color: #f5f5f5;
-
 }
 
-.navbar a.nav-link.active{
+.navbar a.nav-link.active {
   /* border-top: solid #cb2975 thick; */
   background-color: #fefefe;
-
 }
-.navbar a.nav-link:hover{
+
+.nav-tabs a.nav-link.active {
+  color: #cb2975;
+}
+
+.navbar a.nav-link:hover {
   background-color: #fff;
   /* border-top: solid thick #cb2975; */
 }
-.nav-bl{
+
+.nav-bl {
   border-left-color: #fff;
   border-left-style: solid;
   border-left-width: 4px;
 }
 
-.nav-br{
+.nav-br {
   border-right-color: #fff;
   border-right-style: solid;
   border-right-width: 4px;
 }
 
-.nav-bb{
+.nav-bb {
   border-bottom-color: #cb2975;
   border-bottom-style: solid;
   border-bottom-width: thick;
 }
-.text-bold{
+
+.text-bold {
   font-weight: bold;
 }
 
-
-.text-mid-bold{
-  font-weight:500;
+.text-mid-bold {
+  font-weight: 500;
 }
 
 .text-accent,
@@ -232,12 +237,12 @@ a.btn-outline-compliment:hover {
   transition: 0.7s;
 }
 
- .btn-compliment {
+.btn-compliment {
   background: #555555;
   color: white;
   transition: 0.7s;
   padding: 0.6em 2.3em;
-  }
+}
 
 a.btn-compliment:hover {
   background-color: #cb2975;
@@ -257,71 +262,60 @@ a.btn-compliment:hover {
   /* background: linear-gradient(30deg, rgba(227,135,178,0.9), rgba(230,75,140,0.9)); */
 }
 
-.dotted-divider{
+.dotted-divider {
   /* border-width: 7px; */
   /* border-radius: 25%; */
-    border-style: dotted;
-    border-color: #d1bcad;
-    /* border-top: 0; */
-    width: 5%;
-    margin: 3% auto;
+  border-style: dotted;
+  border-color: #d1bcad;
+  /* border-top: 0; */
+  width: 5%;
+  margin: 3% auto;
 }
 
-
 .line-icon {
-    text-align: center;
+  text-align: center;
 }
 
 /* Joined both selectors, since were pretty much the same */
 .line-icon::before,
 .line-icon::after {
-    /* Styles kept */
-    width: 2rem;
-    height: 0rem;
-
-    /* Changed to border-top (instead of border) to simulate a line better */
-    border-top: 0.1rem solid #ccc;
-
-    /* Styles added */
-    display: inline-block;
-    content: '';
-
-    /* Use padding to vertical align the line */
-    /* Use padding in em for a responsive icon height */
-    padding-top: 0.1em;
-
-    /* Use margins to give the lines some spacement around the icon */
-    /* Use margins in % for a responsive spacement */
-    margin-left: 1%;
-    margin-right: 1%;
+  /* Styles kept */
+  width: 2rem;
+  height: 0rem;
+  /* Changed to border-top (instead of border) to simulate a line better */
+  border-top: 0.1rem solid #ccc;
+  /* Styles added */
+  display: inline-block;
+  content: '';
+  /* Use padding to vertical align the line */
+  /* Use padding in em for a responsive icon height */
+  padding-top: 0.1em;
+  /* Use margins to give the lines some spacement around the icon */
+  /* Use margins in % for a responsive spacement */
+  margin-left: 1%;
+  margin-right: 1%;
 }
 
-
-.img-services{
+.img-services {
   /* height: 26.8em; */
   /* height: 430px; */
   width: auto;
 }
 
-.card-body.card-img-overlay{
+.card-body.card-img-overlay {
   color: white;
 }
 
-.card-body{
+.card-body {
   padding: 3rem 2em;
 }
 
-.styles-card-image{
+.styles-card-image {
   /* object-fit: cover; */
   /* width: ; */
 }
 
-
-
-
 /* Testimonials CSSS */
-
-
 .testimonials {
   overflow: hidden;
   position: relative;
@@ -371,105 +365,113 @@ a.btn-compliment:hover {
   .testimonials {
     max-height: 700px;
   }
+
   .icon-overlay {
     height: 300px;
     top: calc(50% - 150px);
   }
+
   .carousel-controls .control {
     width: 25px;
     height: 25px;
     top: inherit;
   }
+
   .prev {
     left: 0;
   }
+
   .next {
     right: 0;
   }
+
   .control i {
     font-size: .7rem;
   }
+
   .testimonials .message {
     font-size: 1rem;
   }
+
   .testimonials h2 {
     font-size: 1.5rem;
   }
 }
 
-.testimonial-pane{
+.testimonial-pane {
   height: 20em;
-  overflow-y:auto;
+  overflow-y: auto;
 }
 
-.img-circle-container{
-  height: 5rem;
-  width: 5rem;
+.img-circle-container {
   border-radius: 50%;
+  height: 5rem;
   overflow: hidden;
-
+  width: 5rem;
 }
 
-.img-circle{
+.img-thumbnail {
+  border-radius: 5px;
+  height: 6rem;
+  width: 6rem;
+}
+
+.img-circle {
   max-width: 100%;
   max-height: 100%;
   height: auto;
 }
 
-.text-instagram{
+.text-instagram {
   color: brown;
 }
-.text-facebook{
+
+.text-facebook {
   color: #1457a3;
 }
-.text-twitter{
+
+.text-twitter {
   color: #5192dd;
 }
 
 .abs-center-x {
-     position: sticky;
-    left: 50%;
-    transform: translateX(-50%);
+  position: sticky;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-
-.vw100{
-  width:100vw;
+.vw100 {
+  width: 100vw;
 }
 
-.accordion-body{
+.accordion-body {
   overflow-x: hidden;
 }
 
-.accordion-border{
+.accordion-border {
   border-bottom-style: solid;
   border-bottom-width: thin;
   border-bottom-color: #e4e4e4;
-
 }
 
-
-.row.accordion-border{
+.row.accordion-border {
   margin-bottom: 1rem;
 }
 
-.details-pane-heading{
+.details-pane-heading {
   font-size: 1.1rem;
 }
 
-.payment-options{
-  font-size:1.7rem;
+.payment-options {
+  font-size: 1.7rem;
 }
 
-
-.footer-logo{
+.footer-logo {
   height: 80px;
   width: auto;
 }
 
-
-
-.product-img-container{
+.product-img-container {
   height: 35em;
   background-color: grey;
   overflow: hidden;
@@ -477,45 +479,39 @@ a.btn-compliment:hover {
   object-position: 50% 50%;
 }
 
-img.cover{
+img.cover {
   object-fit: cover;
 }
 
-.product-display-img{
+.product-display-img {
   height: 100%;
   /* object-fit: scale-down; */
   object-position: 50%;
   /* background-color: grey; */
 }
 
-.products-home-image{
+.products-home-image {
   /* background: url("/img/main-lg.jpg"); */
   background-repeat: no-repeat;
   background-size: cover;
   background-color: #f9d3f8;
 }
 
-
 .mt-n1 {
   margin-top: -0.25rem !important;
 }
-
 
 .mt-n2 {
   margin-top: -0.50rem !important;
 }
 
-
 .mt-n3 {
   margin-top: -0.75rem !important;
 }
 
-
 .mt-n4 {
   margin-top: -1rem !important;
 }
-
-
 
 .mt-n5 {
   margin-top: -1.25rem !important;
@@ -527,4 +523,19 @@ img.cover{
 
 .mt-n20 {
   margin-top: -6rem !important;
+}
+
+.loadingSign {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6));
+  transition: 0.6s;
+  z-index: 1;
+}
+
+.btn-sylist{
+  height: 6rem;
+  padding-top: 2rem;
+  width: 6rem;
+  border-color: #cb2975;
+  border-width: thin;;
+
 }
