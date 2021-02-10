@@ -191,3 +191,7 @@ function setProgress() {
       break;
   }
 }
+
+function showDatepicker(){
+  $( "#datepicker" ).datepicker();
+}
