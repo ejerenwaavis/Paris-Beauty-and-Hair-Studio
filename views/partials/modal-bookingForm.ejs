@@ -17,17 +17,20 @@ add to cart or book now
 
   <ul class="nav  justify-content-center" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
-      <a class="nav-link active" id="stage1" data-bs-toggle="tab" href="#stage1-pane" role="tab" aria-controls="style" aria-selected="true">Step 1</a>
+      <a class="nav-link" id="stage1-dummy-link" data-bs-toggle="tab"  role="tab" aria-controls="style" aria-selected="true">Step 1</a>
+      <a class="nav-link d-none" id="stage1" data-bs-toggle="tab" href="#stage1-pane" role="tab" aria-controls="style" aria-selected="true">Step 1</a>
     </li>
     <li class="nav-item" role="presentation">
-      <a class="nav-link disabled" id="stage2" data-bs-toggle="tab" href="#stage2-pane" role="tab" aria-controls="date" aria-selected="false">Step 2</a>
+      <a class="nav-link disabled" id="stage2-dummy-link" data-bs-toggle="tab" role="tab" aria-controls="date" aria-selected="false">Step 2</a>
+      <a class="nav-link d-none" id="stage2" data-bs-toggle="tab" href="#stage2-pane" role="tab" aria-controls="date" aria-selected="false">Step 2</a>
     </li>
     <li class="nav-item" role="presentation">
-      <a class="nav-link disabled" id="stage3" data-bs-toggle="tab" href="#stage3-pane" role="tab" aria-controls="review" aria-selected="false">Step 3</a>
+      <a class="nav-link disabled" id="stage3-dummy-link" data-bs-toggle="tab" role="tab" aria-controls="review" aria-selected="false">Step 3</a>
+      <a class="nav-link d-none" id="stage3" data-bs-toggle="tab" href="#stage3-pane" role="tab" aria-controls="review" aria-selected="false">Step 3</a>
     </li>
   </ul>
-  <div class="progress" style="height: 1px;">
-    <div class="progress-bar bg-accent" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+  <div class="progress" style="height: 2px;">
+    <div class="progress-bar bg-accent" role="progressbar" id="progress" style="width: 33.3%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
   </div>
 
   <div class="container loadingSign my-5 py-4 text-center" id="loadingSign">
@@ -51,7 +54,7 @@ add to cart or book now
         <div class="row mb-3 justify-content-center">
           <div class="col">
             <select id="selectOption" class="form-select" disabled>
-              <option selected>Select Style Option</option>
+              <option value="null" selected>Select Style Option</option>
             </select>
           </div>
         </div>
@@ -145,15 +148,17 @@ add to cart or book now
         <!-- Button trigger modal -->
         <!-- <input type="submit" name="" value="Subit"> -->
         <div class="col-10 col-sm-8 col-md-8">
-          <a type="" role="submit" onclick="showNextTab()" class="btn btn-outline-accent rounded-pill d-block">
-            Confirm Booking
+          <a type="" role="submit" onclick="showNextTab()" id="nextTabButton" class="btn btn-outline-accent rounded-pill d-block">
+            Continue
           </a>
         </div>
         <div class="col-2 col-sm-2 col-md-2 mt-3">
-          <a type="" onclick="clearForm()" class="btn btn-outline-danger py-2 d-block" name="" value=""><i class="far fa-trash-alt"></i> </a>
+          <a type="" onclick="showPreviousTab()" class="btn btn-outline-danger py-2 d-block" name="" id="previousTabButton" value="">
+            <i class="fas fa-arrow-circle-left"></i>
+          </a>
         </div>
         <div class="col-12 col-sm-2 col-md-2 mt-3">
-          <a type="" role="submit" onclick="addToCart()" class="btn btn-warning py-2 d-block" name="" value=""> <span class="d-sm-none ">Add to Cart</span> <i class="fas fa-cart-plus"></i> </a>
+          <a type="" role="submit" onclick="addToCart()" id="addToCart" class="btn btn-warning disabled py-2 d-block" name="" value=""> <span class="d-sm-none ">Add to Cart</span> <i class="fas fa-cart-plus"></i> </a>
         </div>
       </div>
     </div>
