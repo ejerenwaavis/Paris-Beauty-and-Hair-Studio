@@ -17,7 +17,7 @@ add to cart or book now
 
   <ul class="nav  justify-content-center" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
-      <a class="nav-link" id="stage1-dummy-link" data-bs-toggle="tab"  role="tab" aria-controls="style" aria-selected="true">Step 1</a>
+      <a class="nav-link" id="stage1-dummy-link" data-bs-toggle="tab" role="tab" aria-controls="style" aria-selected="true">Step 1</a>
       <a class="nav-link d-none" id="stage1" data-bs-toggle="tab" href="#stage1-pane" role="tab" aria-controls="style" aria-selected="true">Step 1</a>
     </li>
     <li class="nav-item" role="presentation">
@@ -40,7 +40,7 @@ add to cart or book now
   <form class=" pt-3 pb-5" id="bookingForm" action="/book" method="post">
     <div class="tab-content " id="myTabContent ">
 
-      <div class="tab-pane fade" id="stage1-pane" role="tabpanel" aria-labelledby="stage1">
+      <div class="tab-pane fade show active" id="stage1-pane" role="tabpanel" aria-labelledby="stage1">
         <p class="card-title mb-2 bordered">
           Select Base Style
         </p>
@@ -63,7 +63,7 @@ add to cart or book now
             Choose Stylist
           </p>
           <div class="row mb-2  justify-content-center" id="stylistContainer">
-            <div class="col text-center"  >
+            <div class="col text-center">
               ...
             </div>
           </div>
@@ -74,38 +74,36 @@ add to cart or book now
 
       <input type="text" hidden name="stylist" id="stylist" value="">
 
-      <div class="tab-pane fade show active" id="stage2-pane" role="tabpanel" aria-labelledby="stage2">
-        <input type="text" id="datepicker" onfocus="showDatepicker()">
-        <hr>
-        <div class="container mb-3 justify-content-center">
-          <div class="row text-center border-bottom py-3 bg-light">
+      <div class="tab-pane fade " id="stage2-pane" role="tabpanel" aria-labelledby="stage2">
+        <div class="container calendar mb-3 justify-content-center">
+          <div class="row text-center calendar-header border-bottom bg-light">
 
-            <div class="col">
+            <div class="col sunday d-none d-sm-block px-0">
               Sun
             </div>
-            <div class="col">
+            <div class="col px-0">
               Mon
             </div>
-            <div class="col">
-              Tues
+            <div class="col px-0">
+              Tue
             </div>
-            <div class="col">
+            <div class="col px-0">
               Wed
             </div>
-            <div class="col">
+            <div class="col px-0">
               Thu
             </div>
-            <div class="col">
+            <div class="col px-0">
               Fri
             </div>
-            <div class="col">
+            <div class="col px-0">
               Sat
             </div>
           </div>
 
 
-          <div class="row text-center border-bottom py-3">
-            <div class="col">
+          <div class="row text-center border-bottom">
+            <div class="col sunday d-none d-sm-block">
               1
             </div>
             <div class="col ">
@@ -128,14 +126,14 @@ add to cart or book now
             </div>
           </div>
 
-          <div class="row text-center border-bottom py-3">
-            <div class="col">
+          <div class="row text-center border-bottom  ">
+            <div class="col sunday d-none d-sm-block">
               8
             </div>
             <div class="col">
               9
             </div>
-            <div class="col">
+            <div class="col today">
               10
             </div>
             <div class="col">
@@ -149,6 +147,79 @@ add to cart or book now
             </div>
             <div class="col">
               14
+            </div>
+          </div>
+
+          <div class="row text-center border-bottom">
+            <div class="col sunday d-none d-sm-block">
+              15
+            </div>
+            <div class="col">
+              16
+            </div>
+            <div class="col">
+              17
+            </div>
+            <div class="col">
+              18
+            </div>
+            <div class="col">
+              19
+            </div>
+            <div class="col">
+              20
+            </div>
+            <div class="col">
+              21
+            </div>
+          </div>
+
+          <div class="row text-center border-bottom">
+            <div class="col sunday d-none d-sm-block">
+              22
+            </div>
+            <div class="col">
+              23
+            </div>
+            <div class="col">
+              24
+            </div>
+            <div class="col">
+              25
+            </div>
+            <div class="col">
+              26
+            </div>
+            <div class="col">
+              27
+            </div>
+            <div class="col">
+              28
+            </div>
+          </div>
+
+
+          <div class="row text-center border-bottom">
+            <div class="col sunday d-none d-sm-block">
+              29
+            </div>
+            <div class="col">
+              30
+            </div>
+            <div class="col">
+              31
+            </div>
+            <div class="col date-muted">
+              1
+            </div>
+            <div class="col date-muted">
+              2
+            </div>
+            <div class="col date-muted">
+              3
+            </div>
+            <div class="col date-muted">
+              4
             </div>
           </div>
         </div>

@@ -21,6 +21,12 @@ function showNextTab() {
     console.log("next Stage is " + (bookingStage + 1));
     bookingStage++;
     setProgress();
+    if(bookingStage == 2){
+      console.log("getting Dates");
+      $.get("/days/"+ $('#stylist').val(), function (data){
+        console.log(data);
+      })
+    }
   } else {
     console.log("Checkout needed");
   }
@@ -98,7 +104,6 @@ function showStyleOPtions() {
     $("#selectOption").attr("disabled", "");
   }
 }
-
 
 function blockBookingPannel() {
   $("#bookingForm").hide();

@@ -1,5 +1,7 @@
 require("dotenv").config();
 const PASSWORD = process.env.PASSWORD;
+const OPENTIME = {hrs:Number(process.env.OPENTIMEHRS), mins: Number(process.env.OPENTIMEMINS)};
+const CLOSETIME = {hrs:Number(process.env.CLOSETIMEHRS), mins: Number(process.env.CLOSETIMEMINS)};
 
 const express = require("express");
 const app = express();
@@ -39,17 +41,38 @@ const styleSchema = new mongoose.Schema({
     duration: Number, //duration in minutes
   }]
 });
-
 const Style = mongoose.model("Style", styleSchema);
 
-const stylistSchema = new mongoose.Schema({
-  name: String,
-  photoURL:String,
-  appointments: [String], // and array of appointment ID's
 
+const stylistSchema = new mongoose.Schema({
+  username: String,
+  name: String,
+  photoURL: String,
+});
+const Stylist = mongoose.model("Stylist", stylistSchema);
+
+
+const appointmentSchema = new mongoose.Schema({
+  _id: String,
+  clientUsername: String,
+  clientName: String,
+  style: {
+    baseStyle: String,
+    option: String
+  },
+  price: {
+    deposit: Number,
+    balance: Number,
+    total: Number
+  },
+  startTime: {hrs:Number,mins:Number}, //{h:Number, m:Number}, // time of ap[pointment start
+  duration: Number, //in minutes
+  date: Date, //date of appointment
+  stopTime: {hrs:Number,mins:Number},
+  stylist: String,
 });
 
-const Stylist = mongoose.model("Stylist", stylistSchema);
+const Appointment = mongoose.model("Appointment", appointmentSchema);
 
 
 
@@ -128,36 +151,111 @@ app.route("/getStyles")
   .get(function(req, res) {
     Style.find({}, function(err, foundOBJ) {
       // console.log(foundOBJ);
-      if(foundOBJ){
+      if (foundOBJ) {
         res.send(foundOBJ);
       }
     })
   })
 
-  app.route("/stylists")
-    .get(function(req, res) {
-      Stylist.find({}, function(err, foundOBJ) {
-        // console.log(foundOBJ);
-        if(foundOBJ){
-          res.send(foundOBJ);
-        }
-      })
+app.route("/stylists")
+  .get(function(req, res) {
+    Stylist.find({}, function(err, foundOBJ) {
+      // console.log(foundOBJ);
+      if (foundOBJ) {
+        res.send(foundOBJ);
+      }
     })
-    .post(function(req,res){
-      const stylist = new Stylist({
-        name: "Avis",
-        photoURL:"https://lh3.googleusercontent.com/-3biAz13t9EA/Xc2ZBrgL4XI/AAAAAAAACfw/NYsnpIKzfBcU3cryHfmDrSXt5np5OqqqQCEwYBhgLKtQDAL1OcqxlfPshAeKxbMyutm8vJ4y3nqxfPM5PCHgxyG1CjVMyj_r08Be4k5jFkk0-lPhJq9iKZba0i3S6zQIDYlTLHmZXt-02ixvkgP8MwE5XT0-c7t_s1TkSEyeuTzQBr8G0pT6XixkQmZv0ZB69bUJV6eH4pmT_u2LbUJe9duvoA8YXdxV6Ly3m9WXy7AgP_S0lfkPuTVr6thiBcfNElUyUUYJlzi1JtyRGdCFA_LSZn7UnNgYh82JuJe0pklResLBvSc7aCq42jt481KABPp8uzbkXmcK2hUGyNkw71FKuOptme3Axb_Dm9bov6Xp2WFjr-GhnZIue-Kgo5qbNM93khCkrjt58UJSFIMkaVfx67sEDZreUIQaKGF-Ms5VUwDynF3KNDjsWZThnCdW-yOcIwgg7b_NYEYJo7bnzmyhNdFW6P_Zm7hwkmD6nBQtaVX6Z1pxsvehFnCIaNBUlweDpPznYv974yXERmf3r0Jcf5fnwcQqyemtv4rENzG-lTXpgOh6kkityosOwojIeCrcvzaLoTSogVzbLq2VXp0Y8f8lw0nQklcLjSJ0BSU8BJnhlm5XTCWt7rgBhAUyaNi94jR7nIqeyJSUncqnJHKEYWVnJMK3cgoEG/w138-h140-p/2019-11-14.png",
-        appointments: ["44444444aaaaa"], // and array of appointment ID's
-
-      })
-
-      stylist.save(function(err, savedDoc){
-        if(!err){
-          console.log("Successfully Saved Document");
-        }
-      })
+  })
+  .post(function(req, res) {
+    const stylist = new Stylist({
+      username: new Date().getTime() + "susan@gmail.com",
+      name: "Susan",
+      photoURL: "https://lh3.googleusercontent.com/-3biAz13t9EA/Xc2ZBrgL4XI/AAAAAAAACfw/NYsnpIKzfBcU3cryHfmDrSXt5np5OqqqQCEwYBhgLKtQDAL1OcqxlfPshAeKxbMyutm8vJ4y3nqxfPM5PCHgxyG1CjVMyj_r08Be4k5jFkk0-lPhJq9iKZba0i3S6zQIDYlTLHmZXt-02ixvkgP8MwE5XT0-c7t_s1TkSEyeuTzQBr8G0pT6XixkQmZv0ZB69bUJV6eH4pmT_u2LbUJe9duvoA8YXdxV6Ly3m9WXy7AgP_S0lfkPuTVr6thiBcfNElUyUUYJlzi1JtyRGdCFA_LSZn7UnNgYh82JuJe0pklResLBvSc7aCq42jt481KABPp8uzbkXmcK2hUGyNkw71FKuOptme3Axb_Dm9bov6Xp2WFjr-GhnZIue-Kgo5qbNM93khCkrjt58UJSFIMkaVfx67sEDZreUIQaKGF-Ms5VUwDynF3KNDjsWZThnCdW-yOcIwgg7b_NYEYJo7bnzmyhNdFW6P_Zm7hwkmD6nBQtaVX6Z1pxsvehFnCIaNBUlweDpPznYv974yXERmf3r0Jcf5fnwcQqyemtv4rENzG-lTXpgOh6kkityosOwojIeCrcvzaLoTSogVzbLq2VXp0Y8f8lw0nQklcLjSJ0BSU8BJnhlm5XTCWt7rgBhAUyaNi94jR7nIqeyJSUncqnJHKEYWVnJMK3cgoEG/w138-h140-p/2019-11-14.png",
     })
 
+    stylist.save(function(err, savedDoc) {
+      if (!err) {
+        res.send(savedDoc);
+      }
+    })
+  })
+
+app.route("/appt")
+  .get(function(req, res) {
+    Appointment.find(function(err, foundOBJ) {
+      res.send(foundOBJ);
+    })
+  })
+  .post(function(req, res) {
+    const appt = new Appointment({
+      _id: "Susan" + new Date().getTime(),
+      clientUsername: "janedoe5@gmail.com",
+      clientName: "Jane Doe",
+      style: {
+        baseStyle: "Box Braids/Goddess Box braids",
+        option: "Small Waist length"
+      },
+      price: {
+        deposit: 100,
+        balance: 120,
+        total: 220
+      },
+      startTime: {hrs:11,mins:30}, // time of appointment start in hrs //{h:Number, m:Number},
+      duration: 30, //In minutes
+      date: new Date(2021, 01, 14, 11, 30), //date of appointment
+      stopTime: getApptStopTime({hrs:11,mins:30}, 30),
+      stylist: "Susan",
+    })
+
+    appt.save(function(err, savedDoc) {
+      if (!err) {
+        res.send(savedDoc);
+      }
+    })
+  })
+
+app.route("/days/:stylist")
+  .get(function(req, res) {
+    const stylist = req.params.stylist;
+
+    Appointment.find({
+      stylist: stylist
+    }, function(err, foundAppts) {
+
+      if (!err) {
+        let days = [];
+        let today = new Date();
+        let daysInMonth = new Date(today.getFullYear(), (today.getMonth() + 1), 0).getDate(); //Zero Based
+
+        let match = 0;
+        console.log(daysInMonth);
+
+        for (var i = 1; i < daysInMonth + 1; i++) {
+          var tempDate = new Date(today.getFullYear(), today.getMonth(), i);
+
+          // console.log(day.date);
+          let todaysAppts = []
+          for (appt of foundAppts) {
+            if (appt.date.getFullYear() === tempDate.getFullYear() && appt.date.getMonth() === tempDate.getMonth() && appt.date.getDate() === tempDate.getDate()) {
+              match++;
+              todaysAppts.push(appt);
+            }
+          }
+          if(todaysAppts.length > 0){
+            todaysAppts.sort(compareAppts)
+            console.log(todaysAppts);
+          }
+          let day = {
+            date: tempDate,
+            availableTimes:getAvailableTimes(todaysAppts),
+          }
+          days.push(day);
+        }
+        days.push(match);
+        res.send(days);
+      }
+    })
+  });
 
 
 app.route("/")
@@ -174,9 +272,128 @@ app.listen(process.env.PORT || 3000, function() {
 });
 
 
-/************** functionalities *******************/
+
+
+
+/************** helper functions *******************/
 function Body(title, error, message) {
   this.title = title;
   this.error = error;
   this.message = message;
+}
+
+function compareAppts(a,b){
+  let comparison = 0;
+  if (a.date > b.date) {
+    comparison = 1;
+  } else if (a.date < b.date) {
+    comparison = -1;
+  }
+  return comparison;
+}
+
+function compareTimes(a,b){
+  let comparison = 0;
+  if (a.hrs > b.hrs) {
+    comparison = 1;
+  } else if (a.hrs < b.hrs) {
+    comparison = -1;
+  } else if (a.hrs === b.hrs ){
+    if (a.mins > b.mins) {
+      comparison = 1;
+    } else if (a.mins < b.mins) {
+      comparison = -1;
+    }
+  }
+  return comparison;
+}
+
+
+function getAvailableTimes(todaysAppts){
+  let availableTimes = [];
+
+  // for appt[i] in todaysAppts ✔
+    /* if (firstAppt || [i == 0]) ✔
+      // check if the firstAppt.start is greater than open time✔
+        // true ==> then first available time item is {start:8:30, stop: appt[i]start }✔
+          // (check if availableTimeObject duration is > 30mins)
+          // add availableTimeObject into availableTimesArray✔
+        // false => then first available time item is {start: (appt[i]start + apt[i]duration), stop: appt[i+1]start}✔
+          // (check if availableTimeObject duration is > 30mins)
+          //add avaliableTimeObject into availableTimesArray✔
+          */
+    /* else if(otherAppt || [i > 0 && i < todaysAppts.length])✔
+      // if  otherAppt.start > previousAppt[i-0].stopTime
+        // true ==> next avaliableTimeObject is: {start: previousAppt[i-0].stopTime, stop:otherAppt.startTime}
+          // (check if availableTimeObject duration is > 30mins)
+          // add availableTimeObject into availableTimesArray
+        // false => next avaliableTimeObject is: {start: otherAppt[i].stopTime, stop:otherAppt[i+1].startTime}
+          // (check if availableTimeObject duration is > 30mins)
+          // add availableTimeObject into availableTimesArray
+          */
+    /*else if (lastAppt || [i==todaysAppts.length])
+      // if  lastAppt.start > previousAppt[i-0].stopTime
+        // true ==> next avaliableTimeObject is: {start: previousAppt[i-0].stopTime, stop:lastAppt.startTime}
+          // (check if availableTimeObject duration is > 30mins)
+          // add availableTimeObject into availableTimesArray
+        // false => next avaliableTimeObject is: {start: lastAppt[i].stopTime, stop:officialStopTime ==> {hrs:21, mins:00}};
+          // (check if availableTimeObjects startTime < officialStopTime)
+          // add availableTimeObject into availableTimesArray
+          */
+    // return availableTimesArray
+
+    for(var i=0; i<todaysAppts.length;i++){
+      let appt = todaysAppts[i];
+      if(i === 0){
+        console.log("firstAppt == > " + appt.style + " @ "+appt.startTime.hrs +":"+appt.startTime.mins);
+        let comparison = compareTimes(appt.startTime, OPENTIME);
+        switch (comparison) {
+          case 1:
+            // {start:8:30, stop: appt[i]start }
+            availableTimes.push({start:OPENTIME, stop:appt.startTime});
+            break;
+          default:
+            //{start: (appt[i]start + apt[i]duration), stop: appt[i+1]start}
+            let apptStopTime = getApptStopTime(appt.startTime,appt.duration)
+            availableTimes.push({start:appt.stopTime, stop:todaysAppts[i+1].startTime})
+        }
+      }else if(i > 0 && i < todaysAppts.length-1){
+        console.log("APPT # "+ (i+1) + " ==> " + appt.style + " @ "+appt.startTime.hrs +":"+appt.startTime.mins);
+        let comparison = compareTimes(appt.startTime, todaysAppts[i-1].stopTime);
+        switch (comparison) {
+          case 1:
+            // {start:8:30, stop: appt[i]start }
+            availableTimes.push({start:todaysAppts[i-1].stopTime, stop:appt.startTime});
+            break;
+          default:
+            //{start: (appt[i]start + apt[i]duration), stop: appt[i+1]start}
+            availableTimes.push({start:appt.stopTime, stop:todaysAppts[i+1].startTime})
+        }
+      }else {
+        console.log("Last Appt. ==> " + appt.style + " @ "+appt.startTime.hrs +":"+appt.startTime.mins +" - "+appt.stopTime.hrs+":" + appt.stopTime.mins);
+        let comparison = compareTimes(appt.startTime, todaysAppts[i-1].stopTime);
+        switch (comparison) {
+          case 1:
+            // {start:8:30, stop: appt[i]start }
+            availableTimes.push({start:appt.stopTime, stop:CLOSETIME})
+            break;
+          default:
+          availableTimes.push({start:todaysAppts[i-1].stopTime, stop:appt.startTime});
+            //{start: (appt[i]start + apt[i]duration), stop: appt[i+1]start}
+        }
+      }
+    }
+
+    return availableTimes;
+}
+
+
+function getApptStopTime(apptStartTime, duration){
+  let stopHrs = apptStartTime.hrs + Math.floor((duration/60));
+  let stopMins = apptStartTime.mins + (duration%60);
+  if(stopMins > 59){
+    stopHrs += Math.floor(stopMins/60)
+    stopMins = stopMins%60;
+  }
+  return {hrs:stopHrs, mins:stopMins}
 }

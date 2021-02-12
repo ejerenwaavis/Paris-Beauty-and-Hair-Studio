@@ -537,5 +537,58 @@ img.cover {
   width: 6rem;
   border-color: #cb2975;
   border-width: thin;;
+}
+
+
+
+/* calendar controls */
+.calendar{
+  min-width: 280px;
+  overflow-x: hidden;
+}
+
+.calendar .col{
+  padding: 0.85rem 0;
+}
+
+.calendar .col:hover{
+  background-color: #cb2975;
+  color: white;
+  transition: 0.5s;
+  border-radius: 0.3rem;
+  cursor: pointer;
+
+}
+
+
+
+
+
+.calendar-header .col:hover{
+  background: inherit;
+  color: inherit;
+  cursor: default;
+}
+
+.calendar-header .sunday:hover,
+.calendar .sunday:hover,
+.calendar .date-muted:hover{
+  background: inherit;
+  color: #e6e6e6;
+  cursor: not-allowed;
+
+}
+
+.date-muted, .sunday{
+  color: #e6e6e6;
+}
+
+
+
+.today{
+  border-style: solid;
+  border-width: thin;
+  border-color: #cb2975;
+  border-radius: 0.3rem;
 
 }
