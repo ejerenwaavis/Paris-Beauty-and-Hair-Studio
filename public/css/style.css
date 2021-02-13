@@ -202,6 +202,20 @@ a {
   transition: 0.7s;
 }
 
+.btn-accent {
+  background: #cb2975;
+  color: #fff;
+  /* border: 1px solid ; */
+  /* padding: 0.6em 2.3em; */
+  transition: 0.7s;
+}
+.btn-accent:hover {
+  background: none;
+  border: 1px solid #cb2975;
+  /* padding: 0.6em 2.3em; */
+  /* transition: 0.7s; */
+}
+
 .btn-outline-accent:hover {
   background-color: #cb2975;
   /* border: 1px solid white; */
@@ -545,6 +559,9 @@ img.cover {
 .calendar{
   min-width: 280px;
   overflow-x: hidden;
+}
+.month-display{
+  min-width: 280px;
 }
 
 .calendar .col{

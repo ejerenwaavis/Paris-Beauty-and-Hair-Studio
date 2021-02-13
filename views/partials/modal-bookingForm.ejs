@@ -40,7 +40,7 @@ add to cart or book now
   <form class=" pt-3 pb-5" id="bookingForm" action="/book" method="post">
     <div class="tab-content " id="myTabContent ">
 
-      <div class="tab-pane fade show active" id="stage1-pane" role="tabpanel" aria-labelledby="stage1">
+      <div class="tab-pane fade " id="stage1-pane" role="tabpanel" aria-labelledby="stage1">
         <p class="card-title mb-2 bordered">
           Select Base Style
         </p>
@@ -74,152 +74,28 @@ add to cart or book now
 
       <input type="text" hidden name="stylist" id="stylist" value="">
 
-      <div class="tab-pane fade " id="stage2-pane" role="tabpanel" aria-labelledby="stage2">
-        <div class="container calendar mb-3 justify-content-center">
-          <div class="row text-center calendar-header border-bottom bg-light">
 
-            <div class="col sunday d-none d-sm-block px-0">
-              Sun
-            </div>
-            <div class="col px-0">
-              Mon
-            </div>
-            <div class="col px-0">
-              Tue
-            </div>
-            <div class="col px-0">
-              Wed
-            </div>
-            <div class="col px-0">
-              Thu
-            </div>
-            <div class="col px-0">
-              Fri
-            </div>
-            <div class="col px-0">
-              Sat
+      <div class="tab-pane fade show active" id="stage2-pane" role="tabpanel" aria-labelledby="stage2">
+        <div class="collapse" id="collapseCalendar">
+          <div class="row mb-3 justify-content-center">
+            <div class="container month-display">
+              <div class="input-group text-center">
+                <button type="button" class="btn col-2 btn-accent" onclick="previousMonth(this)" value="" id="prevMonthButton"><i class="fas fa-chevron-left"></i></button>
+                <input type="text" class="btn col-8 btn-outline-accent" value="MONTH" disabled id="monthDisplay" name="monthDisplay" />
+                <button type="button" class="btn  col-2 btn-accent" onclick="nextMonth(this)" value="" id="nextMonthButton" ><i class="fas fa-chevron-right"></i></button>
+              </div>
             </div>
           </div>
 
-
-          <div class="row text-center border-bottom">
-            <div class="col sunday d-none d-sm-block">
-              1
-            </div>
-            <div class="col ">
-              2
-            </div>
-            <div class="col">
-              3
-            </div>
-            <div class="col">
-              4
-            </div>
-            <div class="col">
-              5
-            </div>
-            <div class="col">
-              6
-            </div>
-            <div class="col">
-              7
-            </div>
+          <div class="container calendar mb-3 justify-content-center" id="calendar">
           </div>
+        </div>
 
-          <div class="row text-center border-bottom  ">
-            <div class="col sunday d-none d-sm-block">
-              8
-            </div>
-            <div class="col">
-              9
-            </div>
-            <div class="col today">
-              10
-            </div>
-            <div class="col">
-              11
-            </div>
-            <div class="col">
-              12
-            </div>
-            <div class="col">
-              13
-            </div>
-            <div class="col">
-              14
-            </div>
-          </div>
-
-          <div class="row text-center border-bottom">
-            <div class="col sunday d-none d-sm-block">
-              15
-            </div>
-            <div class="col">
-              16
-            </div>
-            <div class="col">
-              17
-            </div>
-            <div class="col">
-              18
-            </div>
-            <div class="col">
-              19
-            </div>
-            <div class="col">
-              20
-            </div>
-            <div class="col">
-              21
-            </div>
-          </div>
-
-          <div class="row text-center border-bottom">
-            <div class="col sunday d-none d-sm-block">
-              22
-            </div>
-            <div class="col">
-              23
-            </div>
-            <div class="col">
-              24
-            </div>
-            <div class="col">
-              25
-            </div>
-            <div class="col">
-              26
-            </div>
-            <div class="col">
-              27
-            </div>
-            <div class="col">
-              28
-            </div>
-          </div>
-
-
-          <div class="row text-center border-bottom">
-            <div class="col sunday d-none d-sm-block">
-              29
-            </div>
-            <div class="col">
-              30
-            </div>
-            <div class="col">
-              31
-            </div>
-            <div class="col date-muted">
-              1
-            </div>
-            <div class="col date-muted">
-              2
-            </div>
-            <div class="col date-muted">
-              3
-            </div>
-            <div class="col date-muted">
-              4
+        <div class="row mb-3 justify-content-center">
+          <div class="container">
+            <div class="input-group">
+              <input type="text" class="form-control disabled" disabled placeholder="Pick a Date -->" id="selectedDate" name="selectedDate" value="">
+              <button type="button" class="btn btn-accent" data-bs-toggle="collapse" href="#collapseCalendar"  name="button"><i class="far fa-calendar-alt"></i></button>
             </div>
           </div>
         </div>

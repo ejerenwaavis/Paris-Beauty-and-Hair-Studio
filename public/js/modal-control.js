@@ -18,14 +18,12 @@ function showNextTab() {
     $("#stage" + (bookingStage + 1) + "-dummy-link").removeClass("disabled")
     disableNextButtons();
     enablePrevioustButton();
-    console.log("next Stage is " + (bookingStage + 1));
+    // console.log("next Stage is " + (bookingStage + 1));
     bookingStage++;
     setProgress();
-    if(bookingStage == 2){
-      console.log("getting Dates");
-      $.get("/days/"+ $('#stylist').val(), function (data){
-        console.log(data);
-      })
+    if (bookingStage == 2) {
+      // console.log("on page 2");
+      showCalendar(new Date().getMonth());
     }
   } else {
     console.log("Checkout needed");
@@ -72,6 +70,7 @@ function loadStyles() {
       //keep spining the circle and display an error message
     }
   });
+  showCalendar(new Date().getMonth())
 }
 
 function showStyleOPtions() {
@@ -182,7 +181,6 @@ function clearOtherStylistSelection() {
   $("#stylist").val("");
 }
 
-
 function setProgress() {
   switch (bookingStage) {
     case 1:
@@ -197,6 +195,94 @@ function setProgress() {
   }
 }
 
-function showDatepicker(){
-  $( "#datepicker" ).datepicker();
+function showCalendar(month) {
+
+  // $.get("/days/" + $('#stylist').val() + "/"+month, function(days) {
+  $.get("/days/Susan/"+month, function(days) {
+    let i = 0; // max = days.length
+    let today = new Date();
+    displayMonth(days[i]);
+    let calendarHead = '<div class="row text-center calendar-header border-bottom bg-light">' +
+      '<div class="col sunday d-none d-sm-block px-0"> Sun </div>' +
+      '<div class="col px-0"> Mon</div>' +
+      '<div class="col px-0"> Tue </div>' +
+      '<div class="col px-0"> Wed </div>' +
+      '<div class="col px-0"> Thu </div>' +
+      '<div class="col px-0"> Fri </div>' +
+      '<div class="col px-0"> Sat </div>' +
+      '</div>';
+
+    $('#calendar').html(calendarHead);//calendarDatesHtml);
+
+    console.log(days);
+    while ( i < days.length ) {
+      let dayObj = days[i];
+      let date = new Date(dayObj.date);
+      let c = 0;
+      calendarDatesHtml = '<div class="row text-center border-bottom">';
+      for (c; c < 7; c++) {
+        if(c === date.getDay() ){
+          i++;
+            if(date.getDay() === 0){
+              calendarDatesHtml += '<div class="col sunday d-none d-sm-block px-0"> ' + i + ' </div>';
+            }else{
+              calendarDatesHtml += '<div class="col " value="'+i+'" onclick="selectDate(this)"> ' + i + ' </div>';
+            }
+            dayObj = days[i];
+            if(dayObj){
+              console.log(dayObj + " # ---> "+i);
+              date = new Date(dayObj.date);
+            }
+        }else{
+          if(c === 0){
+            calendarDatesHtml += '<div class="col sunday d-none d-sm-block px-0"> &nbsp; </div>';
+          }else{
+            calendarDatesHtml += '<div class="col date-muted"> &nbsp; </div>';
+          }
+        }
+      }
+      $('#calendar').append(calendarDatesHtml + '</div>');
+      calendarDatesHtml = "";
+
+    }
+
+  });
+}
+
+function displayMonth(day){
+  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const d = new Date(day.date);
+  const today = new Date();
+  $("#monthDisplay").val(monthNames[d.getMonth()] + " " +d.getFullYear());
+
+  const nextMonth = d.getMonth()+1;
+  if(today.getMonth()+1 > d.getMonth()){
+    $("#nextMonthButton").val(nextMonth);
+    $("#nextMonthButton").removeAttr("disabled");
+  }else{
+    $("#nextMonthButton").attr("disabled","");
+  }
+
+  const prevMonth = d.getMonth()-1;
+  if(today.getMonth() < d.getMonth()){
+    $("#prevMonthButton").val(prevMonth);
+    $("#prevMonthButton").removeAttr("disabled");
+  }else{
+    $("#prevMonthButton").attr("disabled","");
+  }
+}
+
+function selectDate(evt){
+  let selectedDate = new Date(new Date().getFullYear(), new Date().getMonth() , $(evt).attr("value"));
+  $("#selectedDate").val(selectedDate.toLocaleDateString());
+}
+
+function nextMonth(evt){
+  showCalendar($(evt).attr("value"));
+  console.log($(evt).attr("value"));
+}
+
+function previousMonth(evt){
+  console.log($(evt).attr("value"));
+  showCalendar($(evt).attr("value"));
 }

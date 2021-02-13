@@ -189,8 +189,8 @@ app.route("/appt")
   .post(function(req, res) {
     const appt = new Appointment({
       _id: "Susan" + new Date().getTime(),
-      clientUsername: "janedoe5@gmail.com",
-      clientName: "Jane Doe",
+      clientUsername: "abigal@gmail.com",
+      clientName: "abigal",
       style: {
         baseStyle: "Box Braids/Goddess Box braids",
         option: "Small Waist length"
@@ -200,10 +200,10 @@ app.route("/appt")
         balance: 120,
         total: 220
       },
-      startTime: {hrs:11,mins:30}, // time of appointment start in hrs //{h:Number, m:Number},
-      duration: 30, //In minutes
-      date: new Date(2021, 01, 14, 11, 30), //date of appointment
-      stopTime: getApptStopTime({hrs:11,mins:30}, 30),
+      startTime: {hrs:19,mins:30}, // time of appointment start in hrs //{h:Number, m:Number},
+      duration: 90, //In minutes
+      date: new Date(2021, 01, 16, 19, 30), //date of appointment
+      stopTime: getApptStopTime({hrs:19,mins:30}, 90),
       stylist: "Susan",
     })
 
@@ -214,26 +214,26 @@ app.route("/appt")
     })
   })
 
-app.route("/days/:stylist")
+app.route("/days/:stylist/:dateMonth")
   .get(function(req, res) {
     const stylist = req.params.stylist;
-
+    const dateMonth = req.params.dateMonth;
+    console.log("Month -> "+dateMonth);
     Appointment.find({
       stylist: stylist
     }, function(err, foundAppts) {
 
       if (!err) {
         let days = [];
-        let today = new Date();
+        let today = new Date(2021,dateMonth);
         let daysInMonth = new Date(today.getFullYear(), (today.getMonth() + 1), 0).getDate(); //Zero Based
 
         let match = 0;
-        console.log(daysInMonth);
 
+        // console.log(daysInMonth);
         for (var i = 1; i < daysInMonth + 1; i++) {
           var tempDate = new Date(today.getFullYear(), today.getMonth(), i);
 
-          // console.log(day.date);
           let todaysAppts = []
           for (appt of foundAppts) {
             if (appt.date.getFullYear() === tempDate.getFullYear() && appt.date.getMonth() === tempDate.getMonth() && appt.date.getDate() === tempDate.getDate()) {
@@ -243,15 +243,22 @@ app.route("/days/:stylist")
           }
           if(todaysAppts.length > 0){
             todaysAppts.sort(compareAppts)
-            console.log(todaysAppts);
+            // console.log(todaysAppts);
+            let day = {
+              date: tempDate,
+              availableTimes:getAvailableTimes(todaysAppts),
+            }
+            days.push(day);
+          }else{
+            let day = {
+              date: tempDate,
+              availableTimes:[{OPENTIME, CLOSETIME}],
+            }
+            days.push(day);
           }
-          let day = {
-            date: tempDate,
-            availableTimes:getAvailableTimes(todaysAppts),
-          }
-          days.push(day);
+          // console.log(i);
         }
-        days.push(match);
+        // days.push(match);
         res.send(days);
       }
     })
@@ -308,85 +315,70 @@ function compareTimes(a,b){
   return comparison;
 }
 
-
 function getAvailableTimes(todaysAppts){
   let availableTimes = [];
-
-  // for appt[i] in todaysAppts ✔
-    /* if (firstAppt || [i == 0]) ✔
-      // check if the firstAppt.start is greater than open time✔
-        // true ==> then first available time item is {start:8:30, stop: appt[i]start }✔
-          // (check if availableTimeObject duration is > 30mins)
-          // add availableTimeObject into availableTimesArray✔
-        // false => then first available time item is {start: (appt[i]start + apt[i]duration), stop: appt[i+1]start}✔
-          // (check if availableTimeObject duration is > 30mins)
-          //add avaliableTimeObject into availableTimesArray✔
-          */
-    /* else if(otherAppt || [i > 0 && i < todaysAppts.length])✔
-      // if  otherAppt.start > previousAppt[i-0].stopTime
-        // true ==> next avaliableTimeObject is: {start: previousAppt[i-0].stopTime, stop:otherAppt.startTime}
-          // (check if availableTimeObject duration is > 30mins)
-          // add availableTimeObject into availableTimesArray
-        // false => next avaliableTimeObject is: {start: otherAppt[i].stopTime, stop:otherAppt[i+1].startTime}
-          // (check if availableTimeObject duration is > 30mins)
-          // add availableTimeObject into availableTimesArray
-          */
-    /*else if (lastAppt || [i==todaysAppts.length])
-      // if  lastAppt.start > previousAppt[i-0].stopTime
-        // true ==> next avaliableTimeObject is: {start: previousAppt[i-0].stopTime, stop:lastAppt.startTime}
-          // (check if availableTimeObject duration is > 30mins)
-          // add availableTimeObject into availableTimesArray
-        // false => next avaliableTimeObject is: {start: lastAppt[i].stopTime, stop:officialStopTime ==> {hrs:21, mins:00}};
-          // (check if availableTimeObjects startTime < officialStopTime)
-          // add availableTimeObject into availableTimesArray
-          */
-    // return availableTimesArray
-
-    for(var i=0; i<todaysAppts.length;i++){
+    if (todaysAppts.length > 1){
+      for(var i=0; i<todaysAppts.length;i++){
       let appt = todaysAppts[i];
       if(i === 0){
-        console.log("firstAppt == > " + appt.style + " @ "+appt.startTime.hrs +":"+appt.startTime.mins);
+        // console.log("firstAppt == > " + appt.style + " @ "+appt.startTime.hrs +":"+appt.startTime.mins);
         let comparison = compareTimes(appt.startTime, OPENTIME);
         switch (comparison) {
           case 1:
-            // {start:8:30, stop: appt[i]start }
-            availableTimes.push({start:OPENTIME, stop:appt.startTime});
+            if(compareTimes(OPENTIME, appt.startTime) !== 0){
+              availableTimes.push({start:OPENTIME, stop:appt.startTime});
+            }
             break;
           default:
-            //{start: (appt[i]start + apt[i]duration), stop: appt[i+1]start}
-            let apptStopTime = getApptStopTime(appt.startTime,appt.duration)
-            availableTimes.push({start:appt.stopTime, stop:todaysAppts[i+1].startTime})
+            if(compareTimes(appt.stopTime, todaysAppts[i+1].startTime) !== 0){
+              availableTimes.push({start:appt.stopTime, stop:todaysAppts[i+1].startTime})
+            }
         }
       }else if(i > 0 && i < todaysAppts.length-1){
-        console.log("APPT # "+ (i+1) + " ==> " + appt.style + " @ "+appt.startTime.hrs +":"+appt.startTime.mins);
+        // console.log("APPT # "+ (i+1) + " ==> " + appt.style + " @ "+appt.startTime.hrs +":"+appt.startTime.mins);
         let comparison = compareTimes(appt.startTime, todaysAppts[i-1].stopTime);
         switch (comparison) {
           case 1:
-            // {start:8:30, stop: appt[i]start }
-            availableTimes.push({start:todaysAppts[i-1].stopTime, stop:appt.startTime});
+            if(compareTimes(todaysAppts[i-1].stopTime, appt.startTime) !== 0){
+              availableTimes.push({start:todaysAppts[i-1].stopTime, stop:appt.startTime});
+            }
             break;
           default:
-            //{start: (appt[i]start + apt[i]duration), stop: appt[i+1]start}
-            availableTimes.push({start:appt.stopTime, stop:todaysAppts[i+1].startTime})
+            if(compareTimes(appt.stopTime, todaysAppts[i+1].startTime) !== 0){
+              availableTimes.push({start:appt.stopTime, stop:todaysAppts[i+1].startTime})
+            }
         }
       }else {
-        console.log("Last Appt. ==> " + appt.style + " @ "+appt.startTime.hrs +":"+appt.startTime.mins +" - "+appt.stopTime.hrs+":" + appt.stopTime.mins);
+        // console.log("Last Appt. ==> " + appt.style + " @ "+appt.startTime.hrs +":"+appt.startTime.mins +" - "+appt.stopTime.hrs+":" + appt.stopTime.mins);
         let comparison = compareTimes(appt.startTime, todaysAppts[i-1].stopTime);
         switch (comparison) {
           case 1:
-            // {start:8:30, stop: appt[i]start }
-            availableTimes.push({start:appt.stopTime, stop:CLOSETIME})
+            if(compareTimes(appt.stopTime, CLOSETIME) !== 0){
+              availableTimes.push({start:appt.stopTime, stop:CLOSETIME})
+            }
             break;
           default:
-          availableTimes.push({start:todaysAppts[i-1].stopTime, stop:appt.startTime});
-            //{start: (appt[i]start + apt[i]duration), stop: appt[i+1]start}
+          if(compareTimes(todaysAppts[i-1].stopTime, appt.startTime) !== 0){
+            availableTimes.push({start:todaysAppts[i-1].stopTime, stop:appt.startTime});
+          }
         }
       }
     }
-
+    }else{
+      let appt = todaysAppts[0];
+      let comparison = compareTimes(appt.startTime, OPENTIME);
+      switch (comparison) {
+        case 1:
+          if(compareTimes(OPENTIME, appt.startTime) !== 0){
+            availableTimes.push({start:OPENTIME, stop:appt.startTime});
+          }
+          break;
+        default:
+            availableTimes.push(todaysAppts[0].stopTime,CLOSETIME);
+      }
+    }
     return availableTimes;
 }
-
 
 function getApptStopTime(apptStartTime, duration){
   let stopHrs = apptStartTime.hrs + Math.floor((duration/60));
