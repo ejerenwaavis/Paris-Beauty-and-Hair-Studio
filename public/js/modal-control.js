@@ -226,7 +226,15 @@ function showCalendar(month) {
             if(date.getDay() === 0){
               calendarDatesHtml += '<div class="col sunday d-none d-sm-block px-0"> ' + i + ' </div>';
             }else{
-              calendarDatesHtml += '<div class="col " value="'+i+'" onclick="selectDate(this)"> ' + i + ' </div>';
+              let available = (dayObj.availableTimes.length > 0 )? true : false;
+              console.log(available);
+              if(available){
+                calendarDatesHtml += '<div class="col " value="'+i+'" onclick="selectDate(this)"> ' + i + ' </div>';
+              }else{
+                calendarDatesHtml += '<div class="col date-muted" value="'+i+'" "> ' + i + ' </div>';
+
+                // calendarDatesHtml += '<div class="col date-muted" value="'+i+'> ' + i + ' </div>';
+              }
             }
             dayObj = days[i];
             if(dayObj){
