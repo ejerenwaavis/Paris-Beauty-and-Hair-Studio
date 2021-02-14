@@ -40,24 +40,30 @@ add to cart or book now
   <form class=" pt-3 pb-5" id="bookingForm" action="/book" method="post">
     <div class="tab-content " id="myTabContent ">
 
-      <div class="tab-pane fade " id="stage1-pane" role="tabpanel" aria-labelledby="stage1">
+      <div class="tab-pane fade show active" id="stage1-pane" role="tabpanel" aria-labelledby="stage1">
         <p class="card-title mb-2 bordered">
-          Select Base Style
+          Style Selection
         </p>
         <div class="row mb-3 justify-content-center">
           <div class="col">
-            <select id="styleSelect" class="form-select ">
+            <select id="styleSelect" name="baseStyle" class="form-select ">
               <option selected>Select Base Style</option>
             </select>
           </div>
         </div>
         <div class="row mb-3 justify-content-center">
           <div class="col">
-            <select id="selectOption" class="form-select" disabled>
-              <option value="null" selected>Select Style Option</option>
+            <div class="input-group">
+
+            <select id="selectOption" name="styleOption" class="form-select col-9" disabled>
+              <option value="null"  selected>Select Style Option</option>
             </select>
+            <span id="priceDummy" class="btn btn-outline-secondary  col-3"  >$00.0</span>
+            </div>
           </div>
         </div>
+        <input type="number" hidden id="price" name="price" value="">
+
         <div class="" id="chooseStylistSection">
           <p class="card-title mt-4 bordered">
             Choose Stylist
@@ -75,13 +81,16 @@ add to cart or book now
       <input type="text" hidden name="stylist" id="stylist" value="">
 
 
-      <div class="tab-pane fade show active" id="stage2-pane" role="tabpanel" aria-labelledby="stage2">
-        <div class="collapse" id="collapseCalendar">
+      <div class="tab-pane fade " id="stage2-pane" role="tabpanel" aria-labelledby="stage2">
+        <p class="card-title mb-2 bordered">
+          Date and Time
+        </p>
+        <div class="collapse show" id="collapseCalendar">
           <div class="row mb-3 justify-content-center">
             <div class="container month-display">
               <div class="input-group text-center">
                 <button type="button" class="btn col-2 btn-accent" onclick="previousMonth(this)" value="" id="prevMonthButton"><i class="fas fa-chevron-left"></i></button>
-                <input type="text" class="btn col-8 btn-outline-accent" value="MONTH" disabled id="monthDisplay" name="monthDisplay" />
+                <input type="text" name="month" class="btn col-8 btn-outline-accent"value="MONTH" disabled id="monthDisplay" name="monthDisplay" />
                 <button type="button" class="btn  col-2 btn-accent" onclick="nextMonth(this)" value="" id="nextMonthButton" ><i class="fas fa-chevron-right"></i></button>
               </div>
             </div>
@@ -89,78 +98,105 @@ add to cart or book now
 
           <div class="container calendar mb-3 justify-content-center" id="calendar">
           </div>
+
+        </div>
+
+        <div class="row mb-3  justify-content-center">
+          <div class="container">
+            <div class="input-group">
+              <input type="text" class="form-control disabled text-center" disabled  placeholder="Pick a Date -->"  id="selectedDate" name="date" value="">
+              <input type="text" hidden  class="form-control disabled text-center" id="date" name="selectedDate" value="">
+              <button type="button" class="btn col-3 btn-accent transition" data-bs-toggle="collapse" onclick="hideTimePanel()" href="#collapseCalendar"  name="button"><i class="far fa-calendar-alt"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="collapse" id="collapseTime">
+
+          <div class="container time calendar mb-3 justify-content-center" id="time">
+            <!-- Time Displays heres -->
+          </div>
         </div>
 
         <div class="row mb-3 justify-content-center">
           <div class="container">
             <div class="input-group">
-              <input type="text" class="form-control disabled" disabled placeholder="Pick a Date -->" id="selectedDate" name="selectedDate" value="">
-              <button type="button" class="btn btn-accent" data-bs-toggle="collapse" href="#collapseCalendar"  name="button"><i class="far fa-calendar-alt"></i></button>
+              <input type="text" class="form-control disabled text-center" disabled placeholder="Choose Time -->" id="selectedTimeDummy" value="">
+              <input type="text" hidden  class="form-control disabled text-center"  id="selectedTime" name="selectedTime" value="">
+              <button type="button" disabled class="btn col-3 btn-accent" data-bs-toggle="collapse" onclick="showTimePanel()" id="collapseTimeButton" href="#collapseTime"  name="button"><i class="far fa-clock"></i></button>
             </div>
-          </div>
-        </div>
-
-        <div class="row mb-3 justify-content-center">
-          <div class="col">
-            <label for="time" class="ps-1">Available Times</label>
-            <select class="form-control" name="time">
-              <option value="">12PM</option>
-              <option value="">3PM</option>
-              <option value="">5PM</option>
-            </select>
           </div>
         </div>
       </div>
 
       <div class="tab-pane fade " id="stage3-pane" role="tabpanel" aria-labelledby="stage3">
-        <div class="container px-5 " id="booking-summary">
+        <div class="container px-2 " id="booking-summary">
+          <p class="card-title mb-3 bordered">
+            Review Booking
+          </p>
           <div class="row accordion-border">
-            <div class="col-4">
+            <div class="col-5">
               Base Style
             </div>
-            <div class="col-8 text-end">
-              <strong>
+            <div class="col-7 text-end">
+              <strong id="baseStyleLabel">
                 Knotless Braids
               </strong>
             </div>
           </div>
           <div class="row accordion-border">
-            <div class="col-4">
+            <div class="col-5">
               Option
             </div>
-            <div class="col-8 text-end">
-              <strong>
+            <div class="col-7 text-end ">
+              <strong id="optionLabel">
                 Large Knotless Waist Length
               </strong>
             </div>
           </div>
           <div class="row accordion-border">
-            <div class="col-4">
+            <div class="col-5">
               Date
             </div>
-            <div class="col-8 text-end">
-              <strong> 01 April 2021</strong>
+            <div class="col-7 text-end">
+              <strong id="dateLabel"> 01 April 2021</strong>
             </div>
           </div>
           <div class="row accordion-border">
-            <div class="col-4 ">
+            <div class="col-5">
               Time
             </div>
-            <div class="col-8 text-end">
-              <strong>12:00PM</strong>
+            <div class="col-7 text-end">
+              <strong id="timeLabel">12:00PM</strong>
             </div>
           </div>
-          <div class="row ">
-            <div class="col-4">
+          <div class="row accordion-border">
+            <div class="col-5">
               Stylist
             </div>
-            <div class="col-8 text-end">
-              <strong>Stylist Name</strong>
+            <div class="col-7 text-end">
+              <strong id="stylistLabel">Stylist Name</strong>
+            </div>
+          </div>
+
+          <div class="row accordion-border sub-header-alt">
+            <div class="col-5 ">
+              Total Cost
+            </div>
+            <div class="col-7 text-end">
+              <span id="totalPriceLabel">$0.00</span>
+            </div>
+          </div>
+          <div class="row sub-header-alt">
+            <div class="col-5 ">
+              Deposit
+            </div>
+            <div class="col-7 text-end">
+              <span id="depositLabel">$0.00</span>
             </div>
           </div>
         </div>
       </div>
-
 
 
       <div class="row g-3 mt-3">

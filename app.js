@@ -189,8 +189,8 @@ app.route("/appt")
   .post(function(req, res) {
     const appt = new Appointment({
       _id: "Susan" + new Date().getTime(),
-      clientUsername: "abigal@gmail.com",
-      clientName: "abigal",
+      clientUsername: "bill@gmail.com",
+      clientName: "bill",
       style: {
         baseStyle: "Box Braids/Goddess Box braids",
         option: "Small Waist length"
@@ -200,10 +200,10 @@ app.route("/appt")
         balance: 120,
         total: 220
       },
-      startTime: {hrs:19,mins:30}, // time of appointment start in hrs //{h:Number, m:Number},
-      duration: 90, //In minutes
-      date: new Date(2021, 01, 16, 19, 30), //date of appointment
-      stopTime: getApptStopTime({hrs:19,mins:30}, 90),
+      startTime: {hrs:11,mins:30}, // time of appointment start in hrs //{h:Number, m:Number},
+      duration: 60, //In minutes
+      date: new Date(2021, 01, 18, 11, 30), //date of appointment
+      stopTime: getApptStopTime({hrs:11,mins:30}, 60),
       stylist: "Susan",
     })
 
@@ -214,11 +214,12 @@ app.route("/appt")
     })
   })
 
-app.route("/days/:stylist/:dateMonth")
+app.route("/days/:stylist/:dateMonth/:duration")
   .get(function(req, res) {
     const stylist = req.params.stylist;
     const dateMonth = req.params.dateMonth;
-    console.log("Month -> "+dateMonth);
+    const duration = req.params.duration;
+    console.log("duration -> "+duration);
     Appointment.find({
       stylist: stylist
     }, function(err, foundAppts) {
@@ -246,13 +247,13 @@ app.route("/days/:stylist/:dateMonth")
             // console.log(todaysAppts);
             let day = {
               date: tempDate,
-              availableTimes:getAvailableTimes(todaysAppts),
+              availableTimes:getAvailableTimes(todaysAppts,duration),
             }
             days.push(day);
           }else{
             let day = {
               date: tempDate,
-              availableTimes:[{OPENTIME, CLOSETIME}],
+              availableTimes:[{start:OPENTIME, stop:CLOSETIME}],
             }
             days.push(day);
           }
@@ -262,6 +263,11 @@ app.route("/days/:stylist/:dateMonth")
         res.send(days);
       }
     })
+  });
+
+app.route("/officialHours")
+  .get(function(req,res){
+    res.send({start:OPENTIME, stop:CLOSETIME});
   });
 
 
@@ -315,7 +321,7 @@ function compareTimes(a,b){
   return comparison;
 }
 
-function getAvailableTimes(todaysAppts){
+function getAvailableTimes(todaysAppts,duration){
   let availableTimes = [];
     if (todaysAppts.length > 1){
       for(var i=0; i<todaysAppts.length;i++){
@@ -369,9 +375,10 @@ function getAvailableTimes(todaysAppts){
       let comparison = compareTimes(appt.startTime, OPENTIME);
       switch (comparison) {
         case 1:
-          if(compareTimes(OPENTIME, appt.startTime) !== 0){
             availableTimes.push({start:OPENTIME, stop:appt.startTime});
-          }
+            if(compareTimes(appt.stopTime,CLOSETIME) === -1){
+              availableTimes.push({start:appt.stopTime, stop:CLOSETIME})
+            }
           break;
         default:
             availableTimes.push(todaysAppts[0].stopTime,CLOSETIME);
@@ -388,4 +395,14 @@ function getApptStopTime(apptStartTime, duration){
     stopMins = stopMins%60;
   }
   return {hrs:stopHrs, mins:stopMins}
+}
+function getApptDuration(appt){
+  let start = (appt.startTime.hrs * 60) + appt.startTime.mins;
+  let stop = (appt.stopTime.hrs * 60) + appt.stopTime.mins;
+  return (stop-start);
+}
+function getAvaialbleTimeDuration(avaialbleTime){
+  let start = (avaialbleTime.start.hrs * 60) + avaialbleTime.start.mins;
+  let stop = (avaialbleTime.stop.hrs * 60) + avaialbleTime.stop.mins;
+  return (stop-start);
 }

@@ -41,6 +41,11 @@ h1.font-rozha {
   font-weight: bold;
 }
 
+.sub-header-alt {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
 .cart-item-title {
   color: #777;
   /* font-family: 'Rozha One', serif; */
@@ -267,6 +272,12 @@ a.btn-compliment:hover {
   transition: 0.7s;
 }
 
+.col.active{
+  background-color: #cb2975;
+  color: #fff;
+  transition: 0.7s;
+}
+
 .image-display-container {
   height: 37em;
   background-image: url("/img/main-2-lg.jpg");
@@ -275,6 +286,8 @@ a.btn-compliment:hover {
   background-size: cover;
   /* background: linear-gradient(30deg, rgba(227,135,178,0.9), rgba(230,75,140,0.9)); */
 }
+
+
 
 .dotted-divider {
   /* border-width: 7px; */
@@ -600,7 +613,10 @@ img.cover {
   color: #e6e6e6;
 }
 
-
+.time{
+  height: 15em;
+  overflow-y: auto;
+}
 
 .today{
   border-style: solid;
@@ -608,4 +624,8 @@ img.cover {
   border-color: #cb2975;
   border-radius: 0.3rem;
 
+}
+
+.transition{
+  transition: 0.5s;
 }
