@@ -30,7 +30,6 @@ function loadStyles() {
       //keep spining the circle and display an error message
     }
   });
-  showCalendar(new Date().getMonth())
 }
 
 
@@ -120,6 +119,7 @@ function displayMonth(day){
     const d = new Date(day.date);
     const today = new Date();
     $("#monthDisplay").val(monthNames[d.getMonth()] + " " +d.getFullYear());
+    $("[data-month]").attr("data-month",""+d.getMonth());
 
     const nextMonth = d.getMonth()+1;
     if(today.getMonth()+1 > d.getMonth()){
@@ -137,20 +137,36 @@ function displayMonth(day){
       $("#prevMonthButton").attr("disabled","");
     }
 }
+function getMonthIndexAndYear(){
+  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  let split = $("#monthDisplay").val().split(" ");
+  let wordMonth = split[0];
+  let year = Number(split[1]);
+  let monthIndex;
+  for(i=0; i < monthNames.length; i++){
+    if(wordMonth===monthNames[i]){
+      // console.log(monthNames[i] + " index is: " + i);
+      monthIndex = i;
+      break;
+    }
+  }
+  return [monthIndex, year];
+}
 function hideTimePanel(){
     $("#collapseTime").collapse("hide");
 }
 function nextMonth(evt){
-  showCalendar($(evt).attr("value"));
   // console.log($(evt).attr("value"));
+
+  showCalendar($(evt).attr("value"),selectedOption.duration);
 }
 function previousMonth(evt){
     // console.log($(evt).attr("value"));
-    showCalendar($(evt).attr("value"));
+    showCalendar($(evt).attr("value"),selectedOption.duration);
 }
 function selectDate(evt){
     let dateElement = $(evt);
-    let selectedDate = new Date(new Date().getFullYear(), new Date().getMonth() , dateElement.attr("value"));
+    let selectedDate = new Date(getMonthIndexAndYear()[1], getMonthIndexAndYear()[0] , dateElement.attr("value"));
     $("#selectedDate").val(selectedDate.toLocaleDateString());
     $("#date").val(selectedDate.toLocaleDateString());
     $("#selectedDate").css("background-color", "transparent")
@@ -174,9 +190,8 @@ function selectTime(evt){
     enableNextButtons();
 }
 function showCalendar(month,duration) {
-
-  // $.get("/days/" + $('#stylist').val() + "/"+month, function(days) {
-    $.get("/days/Susan/"+month+"/"+duration, function(days) {
+  $.get("/days/" + $('#stylist').val() + "/"+month +"/"+duration, function(days) {
+    // $.get("/days/Susan/"+month+"/"+duration, function(days) {
       daysArray = days
       let i = 0; // max = days.length
       let today = new Date();

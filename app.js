@@ -8,6 +8,8 @@ const app = express();
 const ejs = require("ejs");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const stripe = require("stripe")("sk_test_51IKaVOFaAPs4sOpEdwZ8tz4bcwkovgR8axwm4NqP9jtokgRz2oRggrP3vocyV124VQVEY7ZnDsVhKZeyHwh68RM5009IdaYHxA");
+
 // const https = require("https");
 
 
