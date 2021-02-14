@@ -216,10 +216,11 @@ app.route("/appt")
     })
   })
 
-app.route("/days/:stylist/:dateMonth/:duration")
+app.route("/days/:stylist/:year/:dateMonth/:duration")
   .get(function(req, res) {
     const stylist = req.params.stylist;
     const dateMonth = req.params.dateMonth;
+    const year = req.params.year;
     const duration = req.params.duration;
     Appointment.find({
       stylist: stylist
@@ -227,7 +228,7 @@ app.route("/days/:stylist/:dateMonth/:duration")
 
       if (!err) {
         let days = [];
-        let today = new Date(2021,dateMonth);
+        let today = new Date(year,dateMonth);
         let daysInMonth = new Date(today.getFullYear(), (today.getMonth() + 1), 0).getDate(); //Zero Based
 
         let match = 0;

@@ -158,11 +158,11 @@ function hideTimePanel(){
 function nextMonth(evt){
   // console.log($(evt).attr("value"));
 
-  showCalendar($(evt).attr("value"),selectedOption.duration);
+  showCalendar(getMonthIndexAndYear()[1],$(evt).attr("value"),selectedOption.duration);
 }
 function previousMonth(evt){
     // console.log($(evt).attr("value"));
-    showCalendar($(evt).attr("value"),selectedOption.duration);
+    showCalendar(getMonthIndexAndYear()[1],$(evt).attr("value"),selectedOption.duration);
 }
 function selectDate(evt){
     let dateElement = $(evt);
@@ -189,8 +189,8 @@ function selectTime(evt){
 
     enableNextButtons();
 }
-function showCalendar(month,duration) {
-  $.get("/days/" + $('#stylist').val() + "/"+month +"/"+duration, function(days) {
+function showCalendar(year,month,duration) {
+  $.get("/days/" + $('#stylist').val() + "/"+year+"/"+month +"/"+duration, function(days) {
     // $.get("/days/Susan/"+month+"/"+duration, function(days) {
       daysArray = days
       let i = 0; // max = days.length
@@ -414,7 +414,7 @@ function showNextTab() {
       $.get("/officialHours",function(hours){
         officialHours = hours;
       });
-      showCalendar(new Date().getMonth(),selectedOption.duration);
+      showCalendar(new Date().getFullYear(),new Date().getMonth(),selectedOption.duration);
     }else if (bookingStage == 3) {
       enableNextButtons()
       $("#nextTabButton").html("Checkout <i class='fas fa-lock'></i>");
