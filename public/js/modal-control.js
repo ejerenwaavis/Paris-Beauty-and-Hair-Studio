@@ -74,10 +74,9 @@ function showStyleOPtions() {
       $("#selectOption").removeAttr("disabled");
       $('#selectOption').change(showStylistSection);
       showBookingPannel();
-      // console.log(optionSelect);
     }
   } else {
-    console.log("Base Selection Empty");
+    // console.log("Base Selection Empty");
     $("#selectOption").val("null");
     $("#selectOption").attr("disabled", "");
   }
@@ -422,7 +421,7 @@ function showPreviousTab() {
 
     $("#stage" + bookingStage + "-dummy-link").addClass("disabled");
     $("#stage" + (bookingStage - 1) + "-dummy-link").removeClass("disabled")
-    console.log("next Stage is " + (bookingStage - 1));
+    // console.log("next Stage is " + (bookingStage - 1));
     bookingStage--;
     enableNextButtons();
     if (bookingStage == 1) {
@@ -433,7 +432,7 @@ function showPreviousTab() {
     }
     setProgress();
   } else {
-    console.log("cant goo backwards anymore");
+    // console.log("cant goo backwards anymore");
   }
 }
 function showBookingPannel() {

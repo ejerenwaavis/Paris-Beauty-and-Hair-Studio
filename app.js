@@ -219,7 +219,6 @@ app.route("/days/:stylist/:dateMonth/:duration")
     const stylist = req.params.stylist;
     const dateMonth = req.params.dateMonth;
     const duration = req.params.duration;
-    console.log("duration -> "+duration);
     Appointment.find({
       stylist: stylist
     }, function(err, foundAppts) {
