@@ -251,11 +251,22 @@ app.route("/days/:stylist/:dateMonth/:duration")
             }
             days.push(day);
           }else{
-            let day = {
-              date: tempDate,
-              availableTimes:[{start:OPENTIME, stop:CLOSETIME}],
+
+            let availableTime = {start:OPENTIME, stop:CLOSETIME};
+            if(duration < getAvaialbleTimeDuration(availableTime)){
+              let day = {
+                date: tempDate,
+                availableTimes:[availableTime],
+              }
+              days.push(day);
+            }else{
+              let day = {
+                date: tempDate,
+                availableTimes:[],
+              }
+              days.push(day);
             }
-            days.push(day);
+
           }
           // console.log(i);
         }
@@ -332,12 +343,18 @@ function getAvailableTimes(todaysAppts,duration){
         switch (comparison) {
           case 1:
             if(compareTimes(OPENTIME, appt.startTime) !== 0){
-              availableTimes.push({start:OPENTIME, stop:appt.startTime});
+              let availableTime = {start:OPENTIME, stop:appt.startTime};
+              if(duration < getAvaialbleTimeDuration(availableTime)){
+                availableTimes.push(availableTime);
+              }
             }
             break;
           default:
             if(compareTimes(appt.stopTime, todaysAppts[i+1].startTime) !== 0){
-              availableTimes.push({start:appt.stopTime, stop:todaysAppts[i+1].startTime})
+              let availableTime = {start:appt.stopTime, stop:todaysAppts[i+1].startTime};
+              if(duration < getAvaialbleTimeDuration(availableTime)){
+                availableTimes.push(availableTime);
+              }
             }
         }
       }else if(i > 0 && i < todaysAppts.length-1){
@@ -346,12 +363,18 @@ function getAvailableTimes(todaysAppts,duration){
         switch (comparison) {
           case 1:
             if(compareTimes(todaysAppts[i-1].stopTime, appt.startTime) !== 0){
-              availableTimes.push({start:todaysAppts[i-1].stopTime, stop:appt.startTime});
+              let availableTime = {start:todaysAppts[i-1].stopTime, stop:appt.startTime};
+              if(duration < getAvaialbleTimeDuration(availableTime)){
+                availableTimes.push(availableTime);
+              }
             }
             break;
           default:
             if(compareTimes(appt.stopTime, todaysAppts[i+1].startTime) !== 0){
-              availableTimes.push({start:appt.stopTime, stop:todaysAppts[i+1].startTime})
+              let availableTime = {start:appt.stopTime, stop:todaysAppts[i+1].startTime};
+              if(duration < getAvaialbleTimeDuration(availableTime)){
+                availableTimes.push(availableTime);
+              }
             }
         }
       }else {
@@ -360,12 +383,18 @@ function getAvailableTimes(todaysAppts,duration){
         switch (comparison) {
           case 1:
             if(compareTimes(appt.stopTime, CLOSETIME) !== 0){
-              availableTimes.push({start:appt.stopTime, stop:CLOSETIME})
+              let availableTime = {start:appt.stopTime, stop:CLOSETIME};
+              if(duration < getAvaialbleTimeDuration(availableTime)){
+                availableTimes.push(availableTime);
+              }
             }
             break;
           default:
           if(compareTimes(todaysAppts[i-1].stopTime, appt.startTime) !== 0){
-            availableTimes.push({start:todaysAppts[i-1].stopTime, stop:appt.startTime});
+            let availableTime = {start:todaysAppts[i-1].stopTime, stop:appt.startTime};
+            if(duration < getAvaialbleTimeDuration(availableTime)){
+              availableTimes.push(availableTime);
+            }
           }
         }
       }
@@ -375,13 +404,23 @@ function getAvailableTimes(todaysAppts,duration){
       let comparison = compareTimes(appt.startTime, OPENTIME);
       switch (comparison) {
         case 1:
-            availableTimes.push({start:OPENTIME, stop:appt.startTime});
+            let firstAvailableTime = {start:OPENTIME, stop:appt.startTime};
+            if(duration < getAvaialbleTimeDuration(firstAvailableTime)){
+              availableTimes.push(firstAvailableTime);
+            }
+
             if(compareTimes(appt.stopTime,CLOSETIME) === -1){
-              availableTimes.push({start:appt.stopTime, stop:CLOSETIME})
+              let secondAvailableTime = {start:appt.stopTime, stop:CLOSETIME};
+              if(duration < getAvaialbleTimeDuration(secondAvailableTime)){
+                availableTimes.push(secondAvailableTime);
+              }
             }
           break;
         default:
-            availableTimes.push(todaysAppts[0].stopTime,CLOSETIME);
+        let availableTime = {start:todaysAppts[0].stopTime, stop:CLOSETIME};
+        if(duration < getAvaialbleTimeDuration(availableTime)){
+          availableTimes.push(availableTime);
+        }
       }
     }
     return availableTimes;

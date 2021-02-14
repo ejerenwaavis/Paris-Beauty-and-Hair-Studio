@@ -115,7 +115,7 @@ function showStylistSection() {
 
 
 
-/************** 2ns Form Segment Controls ************/
+/************** 2nd Form Segment Controls ************/
 function displayMonth(day){
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const d = new Date(day.date);
@@ -400,7 +400,7 @@ function showNextTab() {
       $.get("/officialHours",function(hours){
         officialHours = hours;
       });
-      showCalendar(new Date().getMonth());
+      showCalendar(new Date().getMonth(),selectedOption.duration);
     }else if (bookingStage == 3) {
       enableNextButtons()
       $("#nextTabButton").html("Checkout <i class='fas fa-lock'></i>");
