@@ -189,33 +189,37 @@ app.route("/appt")
     })
   })
   .post(function(req, res) {
-
-    
+    let apptDate = new Date(req.body.date);
+    let time = req.body.time;
     const appt = new Appointment({
       _id: "Susan" + new Date().getTime(),
       clientUsername: "bill@gmail.com",
       clientName: "bill",
       style: {
-        baseStyle: "Box Braids/Goddess Box braids",
-        option: "Small Waist length"
+        baseStyle: req.body.baseStyle,
+        option: req.body.styleOption //"Small Waist length"
       },
       price: {
-        deposit: 100,
-        balance: 120,
-        total: 220
+        total: req.body.price,
+        deposit: req.body.price * 0.50,
+        balance: req.body.price - (req.body.price * 0.50)
       },
-      startTime: {hrs:11,mins:30}, // time of appointment start in hrs //{h:Number, m:Number},
-      duration: 60, //In minutes
-      date: new Date(2021, 01, 18, 11, 30), //date of appointment
-      stopTime: getApptStopTime({hrs:11,mins:30}, 60),
-      stylist: "Susan",
+      startTime: time, // time of appointment start in hrs //{h:Number, m:Number},
+      duration: req.body.duration, //In minutes
+      date: new Date(apptDate.getFullYear(), apptDate.getMonth(), apptDate.getDate(), time.hrs, time.mins), //date of appointment
+      stopTime: getApptStopTime(time, req.body.duration),
+      stylist: req.body.stylist,
     })
+
+
 
     appt.save(function(err, savedDoc) {
       if (!err) {
-        res.send(savedDoc);
+        console.log(savedDoc);
+        res.send("Success");
       }
     })
+
   })
 
 app.route("/days/:stylist/:year/:dateMonth/:duration")
@@ -453,10 +457,10 @@ function getAvailableTimes(todaysAppts,duration){
 }
 
 function getApptStopTime(apptStartTime, duration){
-  let stopHrs = apptStartTime.hrs + Math.floor((duration/60));
-  let stopMins = apptStartTime.mins + (duration%60);
+  let stopHrs = Number(apptStartTime.hrs) + Math.floor((duration/60));
+  let stopMins = Number(apptStartTime.mins) + (duration%60);
   if(stopMins > 59){
-    stopHrs += Math.floor(stopMins/60)
+    stopHrs =+ Math.floor(stopMins/60)
     stopMins = stopMins%60;
   }
   return {hrs:stopHrs, mins:stopMins}

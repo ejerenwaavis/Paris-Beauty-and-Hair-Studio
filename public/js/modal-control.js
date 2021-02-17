@@ -56,7 +56,6 @@ function selectStylist(evt) {
   let btn = $(evt.nextSibling);
   btn.addClass("bg-accent text-white");
   $("#stylist").val(btn.text());
-  // $("#nextTabButton").removeClass("disabled");
   enableNextButton();
 }
 function showStyleOPtions() {
@@ -94,6 +93,7 @@ function showStylistSection() {
     if($(this).val() === styleOption.name){
         $("#priceDummy").html("<strong>$"+styleOption.price+"</strong>");
         $("#price").val(styleOption.price);
+        $("#duration").val(styleOption.duration);
         selectedOption = styleOption;
     }
   }
@@ -176,7 +176,7 @@ function selectDate(evt){
     let dateElement = $(evt);
     let selectedDate = new Date(getMonthIndexAndYear()[1], getMonthIndexAndYear()[0] , dateElement.attr("value"));
     $("#selectedDate").val(selectedDate.toLocaleDateString());
-    $("#date").val(selectedDate.toLocaleDateString());
+    $("#date").val(selectedDate);
     $("#selectedDate").css("background-color", "transparent")
     $("#collapseTimeButton").removeAttr("disabled");
     $(".col.active").removeClass("active");
@@ -259,6 +259,9 @@ function showCalendar(year,month,duration) {
         calendarDatesHtml = "";
 
       }
+      $("#collapseTime").collapse("hide");
+      $("#collapseTimeButton").attr("disabled","");
+      $("#collapseCalendar").collapse("show");
 
     });
   }
@@ -328,8 +331,8 @@ function showReviewSegment(){
   let form = $("#bookingForm").serializeArray();
   $("#baseStyleLabel").html(form[0].value);
   $("#optionLabel").html(form[1].value);
-  $("#stylistLabel").html(form[3].value);
-  $("#dateLabel").html(form[4].value);
+  $("#stylistLabel").html(form[4].value);
+  $("#dateLabel").html(new Date(form[5].value).toLocaleDateString());
   $("#timeLabel").html($('#selectedTimeDummy').val());
   $("#totalPriceLabel").html("$"+form[2].value);
   let deposit = form[2].value * 0.40;
@@ -338,6 +341,23 @@ function showReviewSegment(){
 }
 function checkOut(){
   console.log("Checking Out");
+  checkoutBusy();
+  let form = $("#bookingForm").serializeArray();
+  let body = {
+    baseStyle: form[0].value,
+    styleOption: form[1].value,
+    price: form[2].value,
+    date: form[5].value,
+    time: JSON.parse(form[6].value),
+    stylist: form[4].value,
+    duration: form[3].value
+  };
+  $.post("/appt", body, function(data){
+    if(data === "Success"){
+      console.log(data);
+      checkoutDone();
+    }
+  });
 }
 
 /***************** Timr Helper Functions ***************/
@@ -585,4 +605,14 @@ function disablePrevioustButton() {
 }
 function enablePrevioustButton() {
   $("#previousTabButton").removeClass("disabled");
+}
+function checkoutBusy(){
+  $("#nextTabButton").addClass("disabled");
+  $("#nextTabButton").html("Checking Out <i class='fas fa-circle-notch fa-spin'></i>");
+  $("#nextTabButton").attr("onClick", "alert(busy)");
+}
+function checkoutDone(){
+  $("#nextTabButton").removeClass("disabled");
+  $("#nextTabButton").html("Checkout <i class='fas fa-lock'></i>");
+  $("#nextTabButton").attr("onClick", "checkOut()");
 }
