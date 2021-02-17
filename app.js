@@ -308,6 +308,28 @@ function Body(title, error, message) {
   this.message = message;
 }
 
+function compareDates(t,d){
+  let comparison = 0;
+  if (t.getFullYear() > d.getFullYear()) {
+    comparison = 1;
+  } else if (t.getFullYear() < d.getFullYear()) {
+    comparison = -1;
+  }else if(t.getFullYear() === d.getFullYear()){
+    if (t.getMonth() > d.getMonth()) {
+      comparison = 1;
+    } else if (t.getMonth() < d.getMonth()) {
+      comparison = -1;
+    }else if(t.getMonth() == d.getMonth()){
+      if (t.getDay() > d.getDay()) {
+        comparison = 1;
+      } else if (t.getDay() < d.getDay()) {
+        comparison = -1;
+      }
+    }
+  }
+  return comparison;
+}
+
 function compareAppts(a,b){
   let comparison = 0;
   if (a.date > b.date) {

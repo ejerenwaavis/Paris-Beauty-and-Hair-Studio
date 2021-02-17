@@ -209,6 +209,7 @@ function showCalendar(year,month,duration) {
       $('#calendar').html(calendarHead);//calendarDatesHtml);
 
       // console.log(days);
+
       while ( i < days.length ) {
         let dayObj = days[i];
         let date = new Date(dayObj.date);
@@ -218,11 +219,13 @@ function showCalendar(year,month,duration) {
           if(c === date.getDay() ){
             i++;
             if(date.getDay() === 0){
-              calendarDatesHtml += '<div class="col sunday d-none d-sm-block px-0"> ' + i + ' </div>';
+                calendarDatesHtml += '<div class="col sunday d-none d-sm-block px-0"> ' + i + ' </div>';
             }else{
               let available = (dayObj.availableTimes.length > 0 )? true : false;
-              if(available){
+              if(available && (compareDates(date,today) == 1) ){
                 calendarDatesHtml += '<div class="col " value="'+i+'" onclick="selectDate(this)"> ' + i + ' </div>';
+              }else if(available && (compareDates(date,today) == 0) ){
+                calendarDatesHtml += '<div class="col today" value="'+i+'" onclick="selectDate(this)"> ' + i + ' </div>';
               }else{
                 calendarDatesHtml += '<div class="col date-muted" value="'+i+'" "> ' + i + ' </div>';
               }
@@ -247,8 +250,11 @@ function showCalendar(year,month,duration) {
     });
   }
 function showTimePanel(){
-    let selectedDate = new Date($("#selectedDate").val()).toLocaleDateString();
+    let selectedDateRaw = new Date($("#selectedDate").val());
+    let selectedDate = selectedDateRaw.toLocaleDateString();
     let selectDateDayObj = undefined;
+    let today = new Date();
+    let timeNow = {hrs:today.getHours(), mins:today.getMinutes()};//addThirtyMins({hrs:new Date().getHours(), mins:new Date().getMinutes()})
     for(day of daysArray){
       date = new Date(day.date).toLocaleDateString();
       if(selectedDate === date){
@@ -277,9 +283,17 @@ function showTimePanel(){
           break;
         } //break out of the loop if i gets to max
         timeJsonString = JSON.stringify(workTimes[i]);
+        // let currentTime = {hrs:new Date().getHours(),mins:new Date().getMinutes()}
         if($.inArray(timeJsonString, compiledAvailableTimes) !== -1 ){
-          timeHTML += "<div class='col' array-index='"+i+"' value='"+timeJsonString+"' onclick='selectTime(this)'> "+timeString(workTimes[i])+" </div>";
-          i++;
+          // console.log((compareDates(today,selectedDateRaw) == 0));
+          // console.log(timeNow.hrs + " & " + workTimes[i].hrs + " : " + compareTimes(timeNow,workTimes[i]) );
+          if( (compareDates(today,selectedDateRaw) == 0) && compareTimes(timeNow,workTimes[i]) == 1){
+            timeHTML += "<div class='col date-muted' array-index='"+i+"' value='"+timeJsonString+"' onclick='selectTime(this)'> "+timeString(workTimes[i])+" </div>";
+            i++;
+          }else{
+            timeHTML += "<div class='col' array-index='"+i+"' value='"+timeJsonString+"' onclick='selectTime(this)'> "+timeString(workTimes[i])+" </div>";
+            i++;
+        }
         }else{
           timeHTML += "<div class='col  date-muted' array-index='"+i+"' value='"+timeJsonString+"' > "+timeString(workTimes[i])+" </div>";
           badIndex.push((i-1))
@@ -340,6 +354,27 @@ function compareTimes(a,b){
       comparison = 1;
     } else if (a.mins < b.mins) {
       comparison = -1;
+    }
+  }
+  return comparison;
+}
+function compareDates(t,d){
+  let comparison = 0;
+  if (t.getFullYear() > d.getFullYear()) {
+    comparison = 1;
+  } else if (t.getFullYear() < d.getFullYear()) {
+    comparison = -1;
+  }else if(t.getFullYear() === d.getFullYear()){
+    if (t.getMonth() > d.getMonth()) {
+      comparison = 1;
+    } else if (t.getMonth() < d.getMonth()) {
+      comparison = -1;
+    }else if(t.getMonth() == d.getMonth()){
+      if (t.getDate() > d.getDate()) {
+        comparison = 1;
+      } else if (t.getDate() < d.getDate()) {
+        comparison = -1;
+      }
     }
   }
   return comparison;
