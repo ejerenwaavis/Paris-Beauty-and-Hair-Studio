@@ -8,11 +8,15 @@ $.get("/officialHours",function(hours){
   officialHours = hours;
 });
 
+// $('.modal').on('hidden.bs.modal', function (e) {
+//   console.log("Modal Clsoing");
+// })
 
 /********** Laucnh Modal ************/
 function loadStyles() {
   blockBookingPannel();
   hideStylistSection();
+  resetForm();
   let htmlSelectOptions = '<option value="null" selected>Select Base Style</option>';
 
   $.get("/getStyles", function(data) {
@@ -23,8 +27,10 @@ function loadStyles() {
       $("#styleSelect").html(htmlSelectOptions);
       $('#styleSelect').change(showStyleOPtions);
       showBookingPannel();
-      $("#nextTabButton").addClass("disabled");
-      $("#previousTabButton").addClass("disabled");
+      // $("#nextTabButton").addClass("disabled");
+      disableNextButton();
+      // $("#previousTabButton").addClass("disabled");
+      disablePrevioustButton();
       styles = data;
     } else {
       //keep spining the circle and display an error message
@@ -36,7 +42,8 @@ function loadStyles() {
 /********** 1st Form Segments Controls ************/
 function hideStylistSection() {
   $("#chooseStylistSection").hide();
-  $("#nextTabButton").addClass("disabled");
+  // $("#nextTabButton").addClass("disabled");
+  disableNextButton();
 }
 function clearOtherStylistSelection() {
   for (element of $(".btn-sylist")) {
@@ -49,11 +56,12 @@ function selectStylist(evt) {
   let btn = $(evt.nextSibling);
   btn.addClass("bg-accent text-white");
   $("#stylist").val(btn.text());
-  $("#nextTabButton").removeClass("disabled");
+  // $("#nextTabButton").removeClass("disabled");
+  enableNextButton();
 }
 function showStyleOPtions() {
   hideStylistSection();
-  disableNextButtons();
+  disableNextButton();
   if ($(this).val() !== "null") {
     blockBookingPannel();
 
@@ -81,7 +89,7 @@ function showStyleOPtions() {
   }
 }
 function showStylistSection() {
-  disableNextButtons();
+  disableNextButton();
   for (styleOption of selectedStyle.options){
     if($(this).val() === styleOption.name){
         $("#priceDummy").html("<strong>$"+styleOption.price+"</strong>");
@@ -106,7 +114,7 @@ function showStylistSection() {
       }
     })
   } else {
-    console.log("Optiion Selection Empty");
+    // console.log("Optiion Selection Empty");
     hideStylistSection();
   }
 }
@@ -187,9 +195,10 @@ function selectTime(evt){
     $("#time .col.active").removeClass("active");
     timeElement.addClass("active");
 
-    enableNextButtons();
+    enableNextButton();
 }
 function showCalendar(year,month,duration) {
+  console.log("getting dates");
   $.get("/days/" + $('#stylist').val() + "/"+year+"/"+month +"/"+duration, function(days) {
     // $.get("/days/Susan/"+month+"/"+duration, function(days) {
       daysArray = days
@@ -227,7 +236,11 @@ function showCalendar(year,month,duration) {
               }else if(available && (compareDates(date,today) == 0) ){
                 calendarDatesHtml += '<div class="col today" value="'+i+'" onclick="selectDate(this)"> ' + i + ' </div>';
               }else{
-                calendarDatesHtml += '<div class="col date-muted" value="'+i+'" "> ' + i + ' </div>';
+                if((compareDates(date,today) == 0) ){
+                  calendarDatesHtml += '<div class="col today date-muted" value="'+i+'" > ' + i + ' </div>';
+                }else{
+                  calendarDatesHtml += '<div class="col date-muted" value="'+i+'" "> ' + i + ' </div>';
+                }
               }
             }
             dayObj = days[i];
@@ -323,7 +336,9 @@ function showReviewSegment(){
   $("#depositLabel").html("$"+deposit);
 
 }
-
+function checkOut(){
+  console.log("Checking Out");
+}
 
 /***************** Timr Helper Functions ***************/
 function addThirtyMins(time){
@@ -425,7 +440,8 @@ function timeString(time){
 /********** Modal Pane Controls ************/
 function blockBookingPannel() {
   $("#bookingForm").hide();
-  $("#loadingSign").fadeIn('slow');
+  $("#loadingSign").removeClass("d-none");
+  $("#loadingSign").fadeIn('fast');
 }
 function closeReviewModal(evt) {
   $("#review").modal('hide');
@@ -437,9 +453,8 @@ function showNextTab() {
     var triggerEl = $('a[href="#stage' + (bookingStage + 1) + '-pane"]')
     triggerEl.tab('show'); // Select tab by name
 
-    $("#stage" + bookingStage + "-dummy-link").addClass("disabled");
-    $("#stage" + (bookingStage + 1) + "-dummy-link").removeClass("disabled")
-    disableNextButtons();
+
+    disableNextButton();
     enablePrevioustButton();
     // console.log("next Stage is " + (bookingStage + 1));
     bookingStage++;
@@ -450,9 +465,11 @@ function showNextTab() {
         officialHours = hours;
       });
       showCalendar(new Date().getFullYear(),new Date().getMonth(),selectedOption.duration);
+      switchPanes(bookingStage);
     }else if (bookingStage == 3) {
-      enableNextButtons()
+      enableNextButton()
       $("#nextTabButton").html("Checkout <i class='fas fa-lock'></i>");
+      $("#nextTabButton").attr("onClick", "checkOut()");
       $("#addToCart").removeClass("disabled");
       showReviewSegment();
     }
@@ -465,6 +482,7 @@ function showPreviousTab() {
     if(bookingStage==3){
       $("#addToCart").addClass("disabled");
       $("#nextTabButton").html("Continue");
+      $("#nextTabButton").attr("onClick", "showNextTab()");
     }
     var triggerEl = $('a[href="#stage' + (bookingStage - 1) + '-pane"]')
     triggerEl.tab('show'); // Select tab by name
@@ -473,19 +491,21 @@ function showPreviousTab() {
     $("#stage" + (bookingStage - 1) + "-dummy-link").removeClass("disabled")
     // console.log("next Stage is " + (bookingStage - 1));
     bookingStage--;
-    enableNextButtons();
+    enableNextButton();
     if (bookingStage == 1) {
       disablePrevioustButton()
     }
     if(bookingStage < 3){
       $("#addTocart").addClass("disabled");
     }
+    $("#nextTabButton").removeClass("btn-accent");
     setProgress();
   } else {
     // console.log("cant goo backwards anymore");
   }
 }
 function showBookingPannel() {
+  $("#loadingSign").addClass("d-none");
   $("#loadingSign").hide();
   $("#bookingForm").fadeIn('slow');
 }
@@ -493,28 +513,72 @@ function setProgress() {
   switch (bookingStage) {
     case 1:
       $("#progress").width("33.3%");
+      $("#stage" + 2 + "-dummy-link").addClass("disabled");
+      $("#stage" + 3 + "-dummy-link").addClass("disabled");
+      $("#stage" + 1 + "-dummy-link").removeClass("disabled");
       break;
     case 2:
       $("#progress").width("66.7%");
+      $("#stage" + 1 + "-dummy-link").addClass("disabled");
+      $("#stage" + 3 + "-dummy-link").addClass("disabled");
+      $("#stage" + 2 + "-dummy-link").removeClass("disabled");
       break;
     case 3:
-      $("#progress").width("99.9%");
+      $("#progress").width("100%");
+      $("#stage" + 1 + "-dummy-link").addClass("disabled");
+      $("#stage" + 2 + "-dummy-link").addClass("disabled");
+      $("#stage" + 3 + "-dummy-link").removeClass("disabled");
       break;
+  }
+}
+function resetForm(){
+  disableAllButtons();
+  clearOtherStylistSelection();
+  disableAllButtons();
+  bookingStage = 1;
+  setProgress();
+  $("#bookingForm").find("select").val("null");
+  $("#selectOption").attr("disabled", "");
+  switchPanes(bookingStage);
+}
+function switchPanes(stage){
+  switch (stage) {
+    case 1:
+      $("#stage2-pane").removeClass("show active");
+      $("#stage3-pane").removeClass("show active");
+      $("#stage1-pane").addClass("show active");
+      break;
+    case 2:
+      $("#stage1-pane").removeClass("show active");
+      $("#stage3-pane").removeClass("show active");
+      $("#stage2-pane").addClass("show active");
+      break;
+    case 3:
+      $("#stage1-pane").removeClass("show active");
+      $("#stage2-pane").removeClass("show active");
+      $("#stage3-pane").addClass("show active");
+      break;
+    default:
+
   }
 }
 
 
 /********** Button Controls ************/
 function disableAllButtons() {
-  $("#nextTabButton").addClass("disabled");
+  disableNextButton();
   $("#previousTabButton").addClass("disabled");
   $("#addToCart").addClass("disabled");
 }
-function disableNextButtons() {
+function disableNextButton() {
   $("#nextTabButton").addClass("disabled");
+  $("#nextTabButton").removeClass("btn-accent");
+  $("#nextTabButton").attr("onClick", "showNextTab()");
+  $("#nextTabButton").html("Continue");
 }
-function enableNextButtons() {
+function enableNextButton() {
   $("#nextTabButton").removeClass("disabled");
+  $("#nextTabButton").addClass("btn-accent");
 }
 function disablePrevioustButton() {
   $("#previousTabButton").addClass("disabled");
