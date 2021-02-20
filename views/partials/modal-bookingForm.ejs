@@ -14,7 +14,7 @@ add to cart or book now
  -->
 
 <div class="container">
-
+<small>
   <ul class="nav  justify-content-center" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
       <a class="nav-link" id="stage1-dummy-link" data-bs-toggle="tab" role="tab" aria-controls="style" aria-selected="true">Step 1</a>
@@ -29,14 +29,17 @@ add to cart or book now
       <a class="nav-link d-none" id="stage3" data-bs-toggle="tab" href="#stage3-pane" role="tab" aria-controls="review" aria-selected="false">Step 3</a>
     </li>
     <li class="nav-item" role="presentation">
-      <a class="nav-link disabled" id="stage4-dummy-link" data-bs-toggle="tab" role="tab" aria-controls="review" aria-selected="false">Checkout</a>
-      <a class="nav-link d-none" id="stage4" data-bs-toggle="tab" href="#stage4-pane" role="tab" aria-controls="review" aria-selected="false">Checkout</a>
+      <a class="nav-link disabled" id="stage4-dummy-link" data-bs-toggle="tab" role="tab" aria-controls="review" aria-selected="false">Step 4</a>
+      <a class="nav-link d-none" id="stage4" data-bs-toggle="tab" href="#stage4-pane" role="tab" aria-controls="review" aria-selected="false">Step 4</a>
     </li>
   </ul>
+  </small>
   <div class="progress" style="height: 2px;">
     <div class="progress-bar bg-accent" role="progressbar" id="progress" style="width: 33.3%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
   </div>
 
+  <p class="text-center pt-3 transition-2 mb-0" id="processInfo"> </p>
+  <p class="text-center text-warning pt-1 transition-2" id="processInfo2"> </p>
 
 
   <div class="container loadingSign text-center my-5  py-5" id="loadingSign">
@@ -45,7 +48,7 @@ add to cart or book now
     </div>
   </div>
 
-  <form class=" pt-3 pb-1" id="bookingForm" action="/book" method="post">
+  <form class=" pt-0 pb-1" id="bookingForm" action="/book" method="post">
     <div class="tab-content " id="myTabContent ">
 
       <div class="tab-pane fade active show" id="stage1-pane" role="tabpanel" aria-labelledby="stage1">
@@ -229,7 +232,7 @@ add to cart or book now
           </a>
         </div>
         <div class="col-10 col-sm-9 col-md-9">
-          <a type="" role="submit" onclick="showNextTab()" id="nextTabButton" class="btn btn-outline-accent rounded-pill d-block">
+          <a type="" role="submit" onclick="showNextTab()" id="nextTabButton" class="btn btn-outline-accent rounded-pill d-block py-2">
             Continue
           </a>
         </div>

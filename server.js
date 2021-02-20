@@ -2,7 +2,7 @@ require("dotenv").config();
 const PASSWORD = process.env.PASSWORD;
 const OPENTIME = {hrs:Number(process.env.OPENTIMEHRS), mins: Number(process.env.OPENTIMEMINS)};
 const CLOSETIME = {hrs:Number(process.env.CLOSETIMEHRS), mins: Number(process.env.CLOSETIMEMINS)};
-
+const DEPOSITPERCENT = process.env.DEPOSITPERCENT;
 
 const express = require("express");
 const app = express();
@@ -10,6 +10,7 @@ const ejs = require("ejs");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const stripe = require("stripe")("sk_test_51IKaVOFaAPs4sOpEdwZ8tz4bcwkovgR8axwm4NqP9jtokgRz2oRggrP3vocyV124VQVEY7ZnDsVhKZeyHwh68RM5009IdaYHxA");
+const nodemailer = require('nodemailer');
 
 // const https = require("https");
 
@@ -75,6 +76,15 @@ const appointmentSchema = new mongoose.Schema({
   date: Date, //date of appointment
   stopTime: {hrs:Number,mins:Number},
   stylist: String,
+  confirmed: {
+        type: Boolean,
+        default: false
+    },
+    expireAt: {
+       type: Date,
+       default: addExpiration(6),
+       // expires: ,
+     },
 });
 
 const Appointment = mongoose.model("Appointment", appointmentSchema);
@@ -203,7 +213,7 @@ app.route("/appt")
     let time = req.body.time;
     const appt = new Appointment({
       _id: "Susan" + new Date().getTime(),
-      clientUsername: "bill@gmail.com",
+      clientUsername: "planetavis@yahoo.com",
       clientName: "bill",
       style: {
         baseStyle: req.body.baseStyle,
@@ -211,26 +221,57 @@ app.route("/appt")
       },
       price: {
         total: (req.body.price),
-        deposit: req.body.price * 0.50,
-        balance: req.body.price - (req.body.price * 0.50)
+        deposit: req.body.price * DEPOSITPERCENT,
+        balance: req.body.price - (req.body.price * DEPOSITPERCENT)
       },
       startTime: time, // time of appointment start in hrs //{h:Number, m:Number},
       duration: req.body.duration, //In minutes
       date: new Date(apptDate.getFullYear(), apptDate.getMonth(), apptDate.getDate(), time.hrs, time.mins), //date of appointment
       stopTime: getApptStopTime(time, req.body.duration),
       stylist: req.body.stylist,
+
     })
-
-
 
     appt.save(function(err, savedDoc) {
       if (!err) {
-        console.log("Appt Saved");
-        res.send("Success");
+        res.send({status:"success", id:savedDoc._id});
+      }else{
+        res.send({status:"failed", message:"Unable to reserve booking, please try another appointment time or date"});
       }
     })
 
-  })
+  });
+
+app.route("/confirmAppointment")
+.post(function(req,res){
+  let id = req.body.id;
+  let expireyDate = null;
+  // console.log(id);
+  // console.log("In the POST Method");
+  Appointment.find({_id:id},function(err,item){
+    let appt = item[0];
+    let date = new Date(appt.date);
+    date.setDate(date.getDate()+2);
+    expireyDate = date;
+
+    Appointment.updateOne({_id:id},{confirmed:true, expireAt:expireyDate},function(e,r){
+      if(!e){
+        if(r.n > 0){
+          // console.log(r);
+          // send email here
+          sendBookingDetails(appt.clientUsername);
+          res.send("success");
+        }else{
+          console.log(r);
+          res.send("Could Not Secure Appointment, Please try again " +  r)
+        }
+      }else{
+        console.log(e);
+        res.send("Error completing booking, please contact our support team.");
+      }
+    });
+  });
+})
 
 app.route("/days/:stylist/:year/:dateMonth/:duration")
   .get(function(req, res) {
@@ -315,7 +356,7 @@ app.route("/payment")
     let price = Number(purchase.price) * 100;
     // console.log(purchase);
 
-    purchase.deposit = (price * 0.40);
+    purchase.deposit = (price * DEPOSITPERCENT);
     purchase.tax = tax(purchase.deposit);
     purchase.total = (purchase.deposit + purchase.tax);
 
@@ -328,12 +369,12 @@ app.route("/payment")
   })
 
 app.post("/create-payment-intent", async (req, res) => {
-  console.log("Creating Intent!! ");
-  const  body  = req.body;
+  // console.log("Creating Intent!! ");
+  const  pricings  = req.body.body;
   // Create a PaymentIntent with the order amount and currency
   // console.log(calculateOrderAmount(body));
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: calculateOrderAmount(body),
+    amount: calculateOrderAmount(pricings),
     currency: "usd"
   });
   res.send({
@@ -341,6 +382,15 @@ app.post("/create-payment-intent", async (req, res) => {
   });
 });
 
+app.route("/orderPricings")
+.post(function (req,res){
+  // console.log("Geting Pricings");
+  // console.log(req.body.price);
+  let deposit = (Number(req.body.price) * DEPOSITPERCENT) * 100;
+  let t = tax(deposit);
+  let total = t + deposit;
+  res.send({deposit:deposit, tax:t, total:total});
+})
 
 
 
@@ -380,7 +430,11 @@ function compareDates(t,d){
   }
   return comparison;
 }
-
+function addExpiration(mins){
+  let date = new Date();
+  date.setMinutes(date.getMinutes() + mins);
+  return date;
+}
 function compareAppts(a,b){
   let comparison = 0;
   if (a.date > b.date) {
@@ -526,14 +580,41 @@ function calculateOrderAmount(item){
   // Replace this constant with a calculation of the order's amount
   // Calculate the order total on the server to prevent
   // people from directly manipulating the amount on the client
-  let price = Number(item.body.price);
-  return (price * 100) * 0.40
+  // console.log(item.total);
+  let total = Number(item.total);
+  // console.log(total);
+  return (total);
 };
-
 function tax(amt){
   let amount = Number(amt);
   let tax = (amount * 0.029) + 30 + (amount * 0.03);
 
-  console.log(tax);
+  // console.log(tax);
   return Math.round(tax);
+}
+
+function sendBookingDetails(clientEmail){
+  console.log("Sending email to: "+ clientEmail);
+  const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'ejerenwaavis@gmail.com',
+    pass: 'mkcgncgxaqtweqbn'
+  }
+});
+
+var mailOptions = {
+  from: 'ejerenwaavis@gmail.com',
+  to: clientEmail,
+  subject: 'Sending Email using Node.js',
+  text: 'That was easy! Thanks for booking us!'
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+});
 }

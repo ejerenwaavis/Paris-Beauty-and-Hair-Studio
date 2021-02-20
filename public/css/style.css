@@ -565,9 +565,8 @@ img.cover {
 }
 
 .btn-sylist{
-  height: 6rem;
-  padding-top: 2rem;
-  width: 6rem;
+  height: auto;
+  width: auto;
   border-color: #cb2975;
   border-width: thin;;
 }
@@ -633,5 +632,9 @@ img.cover {
 }
 
 .transition{
-  transition: 0.5s;
+  transition: all 1s;
+}
+
+.transition-2{
+  transition: all 2s;
 }

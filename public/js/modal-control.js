@@ -5,6 +5,7 @@ let officialHours;
 let selectedStyle;
 let selectedOption;
 let purchaseData;
+let apptID;
 $.get("/officialHours",function(hours){
   officialHours = hours;
 });
@@ -199,7 +200,7 @@ function selectTime(evt){
     enableNextButton();
 }
 function showCalendar(year,month,duration) {
-  console.log("getting dates");
+  // console.log("getting dates");
   $.get("/days/" + $('#stylist').val() + "/"+year+"/"+month +"/"+duration, function(days) {
     // $.get("/days/Susan/"+month+"/"+duration, function(days) {
       daysArray = days
@@ -341,8 +342,10 @@ function showReviewSegment(){
 
 }
 function checkOut(){
+  $("#payButton").attr("disabled","")//disable pay button untill intnent is created
   checkoutBusy();
-  console.log("Checking Out");
+  switchPanes(4);
+  // console.log("Checking Out");
   let form = $("#bookingForm").serializeArray();
   let body = {
     baseStyle: form[0].value,
@@ -353,16 +356,42 @@ function checkOut(){
     stylist: form[4].value,
     duration: form[3].value
   };
+  let pricings;
+  $.post("/orderPricings",body, function(res){
+    // console.log(res);
+    pricings = res;
+  });
 
   $.post("/appt", body, function(data){
-    if(data === "Success"){
-      console.log(data + " Appt Saved/Held");
-      // $("#purchaseData").html(JSON.stringify(body));
+    if(data.status === "success"){
+      apptID = data.id;
+      // console.log(data + " Appt Saved/Held");
+      $("#processInfo").html("<span class='text-success'><strong>Booking Held for 5Mins:</strong> Coomplete payment to secure it.</span>");
+      $("#processInfo2").html("Do not close this dialog until payment is completed.</span>");
+       $("#processInfo").fadeIn("slow");
+      setTimeout(function() {
+        $("#processInfo").fadeOut(4000);
+      }, 4000);
       bookingStage = 4;
       setProgress()
       checkoutDone();
       $(".modalButtons").hide();
-      createPaymentIntent(body);
+      $("#checkOutBase").html(body.baseStyle);
+      $("#checkOutOption").html(body.styleOption);
+      $("#checkOutDeposit").html((pricings.deposit/100).toFixed(2));
+      $("#checkOutTax").html((pricings.tax/100).toFixed(2));
+      $("#checkOutTotal").html((pricings.total/100).toFixed(2));
+      createPaymentIntent(pricings);
+    }else{
+      bookingStage = 3;
+      switchPanes(bookingStage)
+      setProgress()
+      checkoutDone();
+      $("#processInfo").html("");
+      $("#processInfo").fadeIn("slow");
+      setTimeout(function() {
+        $("#processInfo").fadeOut(4000);
+      }, 4000);
     }
   });
 }
@@ -495,7 +524,7 @@ function showNextTab() {
       switchPanes(bookingStage);
     }else if (bookingStage == 3) {
       enableNextButton()
-      $("#nextTabButton").html("Proceed to Checkout <i class='fas fa-lock'></i>");
+      $("#nextTabButton").html("Proceed to Checkout <i class='fas fa-lock d-none d-sm-inline-block' aria-hidden='true'></i>");
       $("#nextTabButton").attr("onClick", "showNextTab()");
       // $("#addToCart").removeClass("disabled");
       showReviewSegment();
@@ -505,7 +534,7 @@ function showNextTab() {
       // $("#nextTabButton").attr("onClick", "checkOut()");
       // $(".modalButtons").hide();
       checkOut();
-      console.log("Handling Chckout Neede");
+      // console.log("Handling Chckout Neede");
     }
   } else {
     console.log("Nothing Happend");
@@ -518,7 +547,7 @@ function showPreviousTab() {
       $("#nextTabButton").html("Continue");
       $("#nextTabButton").attr("onClick", "showNextTab()");
     }else if (bookingStage == 4) {
-      $("#nextTabButton").html("Proceed to Checkout <i class='fas fa-lock'></i>");
+      $("#nextTabButton").html("Proceed to Checkout <i class='fas fa-lock d-none d-sm-inline-block' aria-hidden='true'></i>");
       $("#nextTabButton").attr("onClick", "showNextTab()");
     }
     var triggerEl = $('a[href="#stage' + (bookingStage - 1) + '-pane"]')
@@ -580,6 +609,7 @@ function setProgress() {
 }
 function resetForm(){
   disableAllButtons();
+  $("#processInfo").hide();
   clearOtherStylistSelection();
   disableAllButtons();
   bookingStage = 1;
@@ -658,6 +688,6 @@ function checkoutBusy(){
 }
 function checkoutDone(){
   $("#nextTabButton").removeClass("disabled");
-  $("#nextTabButton").html("Checkout <i class='fas fa-lock'></i>");
+  $("#nextTabButton").html("Proceed to Checkout <i class='fas fa-lock d-none d-sm-inline-block'></i>");
   $("#nextTabButton").attr("onClick", "checkOut()");
 }

@@ -1,12 +1,13 @@
 <!-- Display a payment form -->
 
+<div class="container px-0">
 
 <div id='stripeForm' class="mt-0">
-  <form id='payment-form' class="pt-3">
-    <div class="container ms-2">
+  <form id='payment-form' class="pt-1">
       <div class="row ">
+        <div class="container ">
         <div class="col-12 mb-2">
-          <h3 class="sub-header bordered">SUMMARY</h3>
+          <h3 class="card-title mb-3 bordered">SUMMARY</h3>
         </div>
         <div class="row pe-0 mb-3 accordion-border">
 
@@ -21,7 +22,7 @@
         <div class="row pe-0 mb-3 accordion-border">
 
           <div class="col-8">
-            <span id="checkOutBase">Deposit</span>
+            Deposit
           </div>
           <div class="col-4 text-end">
             $<span id="checkOutDeposit"> 25.00</span>
@@ -33,36 +34,43 @@
             Tax
           </div>
           <div class="col-4 text-end">
-            $ <span id="checkOutTax"> 5.00 </span>
+            $<span id="checkOutTax"> 5.00 </span>
           </div>
         </div>
         <div class="row pe-0 mb-3 accordion-border">
           <div class="col-8">
-            Total
+            Total Deposit Charged
           </div>
           <div class="col-4 text-end">
-            $ <span id="checkOutTotal">30.00</span>
+            $<span id="checkOutTotal">30.00</span>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="row pt-4 mt-3 ">
+    <div class="row pt-3 mt-2 ">
+      <div class="row">
+        <div class="container">
+          <h3 class="card-title mb-3 bordered">Card Details</h3>
+
+        </div>
+      </div>
+
       <div class="col-12">
         <div id='card-element' class="mb-3 ">
           <!--Stripe.js injects the Card Element-->
         </div>
       </div>
       <div class="col-12">
-        <div class="row" id="checkoutButtons">
+        <div class="row g-2" id="checkoutButtons">
 
-        <div class="col-3">
+        <div class="col-2">
           <a type="" onclick="goToReviewPane()" class="btn btn-outline-danger py-2 d-block" name="" id="checkOutpreviousTabButton" value="">
             <i class="fas fa-arrow-circle-left"></i>
           </a>
         </div>
-        <div class="col-9">
-          <button id='submit' class="py-2 btn-outline-accent">
+        <div class="col-10">
+          <button id='payButton' class="py-2 btn-outline-accent">
             <span id='button-text'>Pay</span>
             <div class='spinner hidden' id='spinner'></div>
           </button>
@@ -72,16 +80,17 @@
         <div class="col-12">
           <p id='card-error' role='alert'></p>
           <p class='result-message hidden'>
-            Payment succeeded, see the result in your
-            <a href='' target='_blank'>Stripe dashboard.</a> Refresh the page to pay again.
+            Payment succeeded, Refresh the page to start a new Booking.
           </p>
         </div>
       </div>
     </div>
 
+  </form>
 </div>
-</form>
 </div>
+</div>
+
 
 <!-- <div hidden class='d-none'>
         <input type='text' name='style' id='style' value='<%=purchase.baseStyle%>'>
