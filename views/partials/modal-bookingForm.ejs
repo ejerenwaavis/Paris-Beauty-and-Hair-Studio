@@ -28,6 +28,10 @@ add to cart or book now
       <a class="nav-link disabled" id="stage3-dummy-link" data-bs-toggle="tab" role="tab" aria-controls="review" aria-selected="false">Step 3</a>
       <a class="nav-link d-none" id="stage3" data-bs-toggle="tab" href="#stage3-pane" role="tab" aria-controls="review" aria-selected="false">Step 3</a>
     </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link disabled" id="stage4-dummy-link" data-bs-toggle="tab" role="tab" aria-controls="review" aria-selected="false">Checkout</a>
+      <a class="nav-link d-none" id="stage4" data-bs-toggle="tab" href="#stage4-pane" role="tab" aria-controls="review" aria-selected="false">Checkout</a>
+    </li>
   </ul>
   <div class="progress" style="height: 2px;">
     <div class="progress-bar bg-accent" role="progressbar" id="progress" style="width: 33.3%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
@@ -41,10 +45,10 @@ add to cart or book now
     </div>
   </div>
 
-  <form class=" pt-3 pb-5" id="bookingForm" action="/book" method="post">
+  <form class=" pt-3 pb-1" id="bookingForm" action="/book" method="post">
     <div class="tab-content " id="myTabContent ">
 
-      <div class="tab-pane fade show active" id="stage1-pane" role="tabpanel" aria-labelledby="stage1">
+      <div class="tab-pane fade active show" id="stage1-pane" role="tabpanel" aria-labelledby="stage1">
         <p class="card-title mb-2 bordered">
           Style Selection
         </p>
@@ -195,18 +199,30 @@ add to cart or book now
           <div class="row sub-header-alt">
             <div class="col-5 ">
               Deposit
+              <i class="d-block text-small"><small>(tax included at checkout)</small></i>
             </div>
             <div class="col-7 text-end">
               <span id="depositLabel">$0.00</span>
             </div>
           </div>
+
+        </div>
+      </div>
+    </form>
+    <!-- End of Main Forms -->
+
+      <div class="tab-pane fade " id="stage4-pane" role="tabpanel" aria-labelledby="stage4">
+        <div class="container px-2 " id="payment">
+          <%- include ("payment.ejs")  %>
         </div>
       </div>
 
 
-      <div class="row g-3 mt-3">
+      <div class="modalButtons">
+      <div class="row g-3 mt-1 mb-5 pb-3">
         <!-- Button trigger modal -->
         <!-- <input type="submit" name="" value="Subit"> -->
+
         <div class="col-2 col-sm-3 col-md-3 mt-3">
           <a type="" onclick="showPreviousTab()" class="btn btn-outline-danger py-2 d-block" name="" id="previousTabButton" value="">
             <i class="fas fa-arrow-circle-left"></i>
@@ -221,6 +237,9 @@ add to cart or book now
           <a type="" role="submit" onclick="addToCart()" id="addToCart" class="btn btn-warning disabled py-2 d-block" name="" value=""> <span class="d-sm-none ">Add to Cart</span> <i class="fas fa-cart-plus"></i> </a>
         </div> -->
       </div>
+      </div>
     </div>
+  <form class="d-none" hidden action="/payment" id="purchaseForm" method="post">
+    <textarea name="purchase" id="purchaseData" rows="8" cols="80"></textarea>
   </form>
 </div>

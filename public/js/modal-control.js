@@ -4,6 +4,7 @@ let daysArray = [];
 let officialHours;
 let selectedStyle;
 let selectedOption;
+let purchaseData;
 $.get("/officialHours",function(hours){
   officialHours = hours;
 });
@@ -340,8 +341,8 @@ function showReviewSegment(){
 
 }
 function checkOut(){
-  console.log("Checking Out");
   checkoutBusy();
+  console.log("Checking Out");
   let form = $("#bookingForm").serializeArray();
   let body = {
     baseStyle: form[0].value,
@@ -352,10 +353,16 @@ function checkOut(){
     stylist: form[4].value,
     duration: form[3].value
   };
+
   $.post("/appt", body, function(data){
     if(data === "Success"){
-      console.log(data);
+      console.log(data + " Appt Saved/Held");
+      // $("#purchaseData").html(JSON.stringify(body));
+      bookingStage = 4;
+      setProgress()
       checkoutDone();
+      $(".modalButtons").hide();
+      createPaymentIntent(body);
     }
   });
 }
@@ -469,7 +476,7 @@ function closeReviewModal(evt) {
   // $('#booking-form-modal').handleUpdate();
 }
 function showNextTab() {
-  if (bookingStage < 3) {
+  if (bookingStage < 4) {
     var triggerEl = $('a[href="#stage' + (bookingStage + 1) + '-pane"]')
     triggerEl.tab('show'); // Select tab by name
 
@@ -488,20 +495,30 @@ function showNextTab() {
       switchPanes(bookingStage);
     }else if (bookingStage == 3) {
       enableNextButton()
-      $("#nextTabButton").html("Checkout <i class='fas fa-lock'></i>");
-      $("#nextTabButton").attr("onClick", "checkOut()");
-      $("#addToCart").removeClass("disabled");
+      $("#nextTabButton").html("Proceed to Checkout <i class='fas fa-lock'></i>");
+      $("#nextTabButton").attr("onClick", "showNextTab()");
+      // $("#addToCart").removeClass("disabled");
       showReviewSegment();
+    }else if (bookingStage == 4) {
+      enableNextButton()
+      // $("#nextTabButton").html("Pay <i class='fas fa-lock'></i>");
+      // $("#nextTabButton").attr("onClick", "checkOut()");
+      // $(".modalButtons").hide();
+      checkOut();
+      console.log("Handling Chckout Neede");
     }
   } else {
-    console.log("Checkout needed");
+    console.log("Nothing Happend");
   }
 }
 function showPreviousTab() {
   if (bookingStage > 1) {
     if(bookingStage==3){
-      $("#addToCart").addClass("disabled");
+      // $("#addToCart").addClass("disabled");
       $("#nextTabButton").html("Continue");
+      $("#nextTabButton").attr("onClick", "showNextTab()");
+    }else if (bookingStage == 4) {
+      $("#nextTabButton").html("Proceed to Checkout <i class='fas fa-lock'></i>");
       $("#nextTabButton").attr("onClick", "showNextTab()");
     }
     var triggerEl = $('a[href="#stage' + (bookingStage - 1) + '-pane"]')
@@ -515,13 +532,13 @@ function showPreviousTab() {
     if (bookingStage == 1) {
       disablePrevioustButton()
     }
-    if(bookingStage < 3){
-      $("#addTocart").addClass("disabled");
-    }
+    // if(bookingStage < 3){
+    //   $("#addTocart").addClass("disabled");
+    // }
     $("#nextTabButton").removeClass("btn-accent");
     setProgress();
   } else {
-    // console.log("cant goo backwards anymore");
+    console.log("cant goo backwards anymore");
   }
 }
 function showBookingPannel() {
@@ -532,22 +549,32 @@ function showBookingPannel() {
 function setProgress() {
   switch (bookingStage) {
     case 1:
-      $("#progress").width("33.3%");
+      $("#progress").width("25%");
       $("#stage" + 2 + "-dummy-link").addClass("disabled");
       $("#stage" + 3 + "-dummy-link").addClass("disabled");
+      $("#stage" + 4 + "-dummy-link").addClass("disabled");
       $("#stage" + 1 + "-dummy-link").removeClass("disabled");
       break;
     case 2:
-      $("#progress").width("66.7%");
+      $("#progress").width("50%");
       $("#stage" + 1 + "-dummy-link").addClass("disabled");
       $("#stage" + 3 + "-dummy-link").addClass("disabled");
+      $("#stage" + 4 + "-dummy-link").addClass("disabled");
       $("#stage" + 2 + "-dummy-link").removeClass("disabled");
       break;
     case 3:
+      $("#progress").width("75%");
+      $("#stage" + 1 + "-dummy-link").addClass("disabled");
+      $("#stage" + 2 + "-dummy-link").addClass("disabled");
+      $("#stage" + 4 + "-dummy-link").addClass("disabled");
+      $("#stage" + 3 + "-dummy-link").removeClass("disabled");
+      break;
+    case 4:
       $("#progress").width("100%");
       $("#stage" + 1 + "-dummy-link").addClass("disabled");
       $("#stage" + 2 + "-dummy-link").addClass("disabled");
-      $("#stage" + 3 + "-dummy-link").removeClass("disabled");
+      $("#stage" + 3 + "-dummy-link").addClass("disabled");
+      $("#stage" + 4 + "-dummy-link").removeClass("disabled");
       break;
   }
 }
@@ -559,6 +586,7 @@ function resetForm(){
   setProgress();
   $("#bookingForm").find("select").val("null");
   $("#selectOption").attr("disabled", "");
+  $(".modalButtons").show();
   switchPanes(bookingStage);
 }
 function switchPanes(stage){
@@ -566,21 +594,38 @@ function switchPanes(stage){
     case 1:
       $("#stage2-pane").removeClass("show active");
       $("#stage3-pane").removeClass("show active");
+      $("#stage4-pane").removeClass("show active");
       $("#stage1-pane").addClass("show active");
       break;
     case 2:
       $("#stage1-pane").removeClass("show active");
       $("#stage3-pane").removeClass("show active");
+      $("#stage4-pane").removeClass("show active");
       $("#stage2-pane").addClass("show active");
       break;
     case 3:
       $("#stage1-pane").removeClass("show active");
       $("#stage2-pane").removeClass("show active");
+      $("#stage4-pane").removeClass("show active");
       $("#stage3-pane").addClass("show active");
+
+      break;
+    case 4:
+      $("#stage1-pane").removeClass("show active");
+      $("#stage2-pane").removeClass("show active");
+      $("#stage3-pane").removeClass("show active");
+      $("#stage4-pane").addClass("show active");
       break;
     default:
 
   }
+}
+function goToReviewPane(){
+  bookingStage = 3;
+  switchPanes(bookingStage);
+  setProgress();
+  $(".modalButtons").fadeIn("fast");
+
 }
 
 

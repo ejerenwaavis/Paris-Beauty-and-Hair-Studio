@@ -175,6 +175,11 @@ h5.sub-header.bordered,
   font-weight: bold;
 }
 
+.text-small{
+  font-weight: 400;
+  font-size: initial;
+}
+
 .text-mid-bold {
   font-weight: 500;
 }

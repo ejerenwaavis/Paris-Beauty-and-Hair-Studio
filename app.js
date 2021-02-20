@@ -3,6 +3,7 @@ const PASSWORD = process.env.PASSWORD;
 const OPENTIME = {hrs:Number(process.env.OPENTIMEHRS), mins: Number(process.env.OPENTIMEMINS)};
 const CLOSETIME = {hrs:Number(process.env.CLOSETIMEHRS), mins: Number(process.env.CLOSETIMEMINS)};
 
+
 const express = require("express");
 const app = express();
 const ejs = require("ejs");
@@ -21,6 +22,8 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(express.static("public"));
+app.use(express.static("."));
+app.use(express.json());
 
 
 
@@ -82,7 +85,14 @@ const Appointment = mongoose.model("Appointment", appointmentSchema);
 app.route("/home")
   .get(function(req, res) {
     res.render("home", {
-      body: new Body("Home", "", "")
+      body: new Body("Home", "", ""),
+      purchase:{
+        baseStyle:"PlaceHolder",
+        styleOption:"PlaceHolder",
+        deposit:2500,
+        tax:500,
+        total:3000
+      },
     });
   });
 
@@ -200,7 +210,7 @@ app.route("/appt")
         option: req.body.styleOption //"Small Waist length"
       },
       price: {
-        total: req.body.price,
+        total: (req.body.price),
         deposit: req.body.price * 0.50,
         balance: req.body.price - (req.body.price * 0.50)
       },
@@ -215,7 +225,7 @@ app.route("/appt")
 
     appt.save(function(err, savedDoc) {
       if (!err) {
-        console.log(savedDoc);
+        console.log("Appt Saved");
         res.send("Success");
       }
     })
@@ -295,6 +305,41 @@ app.route("/")
     res.render("cover");
   });
 
+/************ Stripe Payment **************/
+app.route("/payment")
+  .get(function(req,res){
+    res.render("payment");
+  })
+  .post(function(req,res){
+    let purchase = JSON.parse(req.body.purchase);
+    let price = Number(purchase.price) * 100;
+    // console.log(purchase);
+
+    purchase.deposit = (price * 0.40);
+    purchase.tax = tax(purchase.deposit);
+    purchase.total = (purchase.deposit + purchase.tax);
+
+    console.log(purchase);
+    // console.log(Number(purchase.tax));
+    // console.log(purchase.deposit + purchase.tax);
+
+    res.send("Payment OBJS Recieved");
+    // res.render("payment", {body: new Body("Home", "", ""), purchase: purchase});
+  })
+
+app.post("/create-payment-intent", async (req, res) => {
+  console.log("Creating Intent!! ");
+  const  body  = req.body;
+  // Create a PaymentIntent with the order amount and currency
+  // console.log(calculateOrderAmount(body));
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: calculateOrderAmount(body),
+    currency: "usd"
+  });
+  res.send({
+    clientSecret: paymentIntent.client_secret
+  });
+});
 
 
 
@@ -474,4 +519,21 @@ function getAvaialbleTimeDuration(avaialbleTime){
   let start = (avaialbleTime.start.hrs * 60) + avaialbleTime.start.mins;
   let stop = (avaialbleTime.stop.hrs * 60) + avaialbleTime.stop.mins;
   return (stop-start);
+}
+
+function calculateOrderAmount(item){
+
+  // Replace this constant with a calculation of the order's amount
+  // Calculate the order total on the server to prevent
+  // people from directly manipulating the amount on the client
+  let price = Number(item.body.price);
+  return (price * 100) * 0.40
+};
+
+function tax(amt){
+  let amount = Number(amt);
+  let tax = (amount * 0.029) + 30 + (amount * 0.03);
+
+  console.log(tax);
+  return Math.round(tax);
 }
