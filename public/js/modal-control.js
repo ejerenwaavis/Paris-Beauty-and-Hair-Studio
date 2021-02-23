@@ -200,9 +200,9 @@ function selectTime(evt){
     enableNextButton();
 }
 function showCalendar(year,month,duration) {
+  blockBookingPannel();
   // console.log("getting dates");
   $.get("/days/" + $('#stylist').val() + "/"+year+"/"+month +"/"+duration, function(days) {
-    // $.get("/days/Susan/"+month+"/"+duration, function(days) {
       daysArray = days
       let i = 0; // max = days.length
       let today = new Date();
@@ -227,6 +227,7 @@ function showCalendar(year,month,duration) {
         let c = 0;
         calendarDatesHtml = '<div class="row text-center border-bottom">';
         for (c; c < 7; c++) {
+          // console.log("C ==> "+ c +" | date ==> "+ date.getDay());
           if(c === date.getDay() ){
             i++;
             if(date.getDay() === 0){
@@ -264,6 +265,7 @@ function showCalendar(year,month,duration) {
       $("#collapseTime").collapse("hide");
       $("#collapseTimeButton").attr("disabled","");
       $("#collapseCalendar").collapse("show");
+      showBookingPannel();
 
     });
   }
@@ -273,15 +275,33 @@ function showTimePanel(){
     let selectDateDayObj = undefined;
     let today = new Date();
     let timeNow = {hrs:today.getHours(), mins:today.getMinutes()};//addThirtyMins({hrs:new Date().getHours(), mins:new Date().getMinutes()})
+    let dc=0;
     for(day of daysArray){
       date = new Date(day.date).toLocaleDateString();
       if(selectedDate === date){
         selectDateDayObj = day;
+        console.log("day found at: ***"+ dc);
         break;
+      }else{
+        // console.log("Date note found :"+ dc);
       }
+      dc++;
     }
+    console.log("finished with assigning the selectedDatOBJ");
+    /**************** Debugging SelectDayObject ****************/
+    if(selectDateDayObj === undefined){
+      console.log("Couldnt find anything");
+    }else{
+      console.log("found date obj is: -> ");
+      console.log(selectDateDayObj);
+    }
+    /**************** Debugging SelectDayObject ****************/
+
     let compiledAvailableTimes = [];
+    console.log("Ready to compile available Times **********");
     for(time of selectDateDayObj.availableTimes){
+      console.log("available time: ----> ");
+      console.log(time);
       compiledAvailableTimes = generateCompiledAvailableTimes(time.start,time.stop, compiledAvailableTimes);
     }
     let workTimes = generateWorkTimes(officialHours.start, officialHours.stop);
@@ -451,17 +471,21 @@ function compareDates(t,d){
   return comparison;
 }
 function generateCompiledAvailableTimes(start, stop, compiledArray){
-
+  console.log("compiling Avaialable Times");
   compiledArray.push(JSON.stringify(start));
   let currentTime = start;
   let end = false;
+  console.log("before the 'generateCompiledTimes()' while loop");
   while(!end){
     currentTime = addThirtyMins(currentTime);
     compiledArray.push(JSON.stringify(currentTime));
+    console.log(compareTimes(currentTime,stop) === 0);
     if(compareTimes(currentTime,stop) === 0){
       end = true;
     }
   }
+  console.log("After the 'generateCompiledTimes()' while loop");
+
   return compiledArray;
 }
 function generateWorkTimes(start,stop){

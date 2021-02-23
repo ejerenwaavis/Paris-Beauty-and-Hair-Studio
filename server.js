@@ -3,13 +3,18 @@ const PASSWORD = process.env.PASSWORD;
 const OPENTIME = {hrs:Number(process.env.OPENTIMEHRS), mins: Number(process.env.OPENTIMEMINS)};
 const CLOSETIME = {hrs:Number(process.env.CLOSETIMEHRS), mins: Number(process.env.CLOSETIMEMINS)};
 const DEPOSITPERCENT = process.env.DEPOSITPERCENT;
+const SERVICE = process.env.SERVICE;
+const USER = process.env.MAILERUSER;
+const PASS = process.env.MAILERPASS;
+const STRIPEAPI = process.env.STRIPEAPI;
+
 
 const express = require("express");
 const app = express();
 const ejs = require("ejs");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const stripe = require("stripe")("sk_test_51IKaVOFaAPs4sOpEdwZ8tz4bcwkovgR8axwm4NqP9jtokgRz2oRggrP3vocyV124VQVEY7ZnDsVhKZeyHwh68RM5009IdaYHxA");
+const stripe = require("stripe")(STRIPEAPI);
 const nodemailer = require('nodemailer');
 
 // const https = require("https");
@@ -242,6 +247,11 @@ app.route("/appt")
 
   });
 
+app.route("/email")
+  .get(function(req,res){
+      res.render("email");
+  });
+
 app.route("/confirmAppointment")
 .post(function(req,res){
   let id = req.body.id;
@@ -259,7 +269,7 @@ app.route("/confirmAppointment")
         if(r.n > 0){
           // console.log(r);
           // send email here
-          sendBookingDetails(appt.clientUsername);
+          sendBookingDetails(appt);
           res.send("success");
         }else{
           console.log(r);
@@ -327,10 +337,10 @@ app.route("/days/:stylist/:year/:dateMonth/:duration")
             }
 
           }
-          // console.log(i);
         }
-        // days.push(match);
         res.send(days);
+      }else{
+        console.log(err);
       }
     })
   });
@@ -345,6 +355,8 @@ app.route("/")
   .get(function(req, res) {
     res.render("cover");
   });
+
+
 
 /************ Stripe Payment **************/
 app.route("/payment")
@@ -444,7 +456,6 @@ function compareAppts(a,b){
   }
   return comparison;
 }
-
 function compareTimes(a,b){
   let comparison = 0;
   if (a.hrs > b.hrs) {
@@ -460,7 +471,6 @@ function compareTimes(a,b){
   }
   return comparison;
 }
-
 function getAvailableTimes(todaysAppts,duration){
   let availableTimes = [];
     if (todaysAppts.length > 1){
@@ -554,7 +564,6 @@ function getAvailableTimes(todaysAppts,duration){
     }
     return availableTimes;
 }
-
 function getApptStopTime(apptStartTime, duration){
   let stopHrs = Number(apptStartTime.hrs) + Math.floor((duration/60));
   let stopMins = Number(apptStartTime.mins) + (duration%60);
@@ -574,7 +583,6 @@ function getAvaialbleTimeDuration(avaialbleTime){
   let stop = (avaialbleTime.stop.hrs * 60) + avaialbleTime.stop.mins;
   return (stop-start);
 }
-
 function calculateOrderAmount(item){
 
   // Replace this constant with a calculation of the order's amount
@@ -592,22 +600,35 @@ function tax(amt){
   // console.log(tax);
   return Math.round(tax);
 }
-
-function sendBookingDetails(clientEmail){
-  console.log("Sending email to: "+ clientEmail);
+function sendBookingDetails(appt){
+  console.log("Sending email to: "+ appt.clientUsername);
   const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: SERVICE,
   auth: {
-    user: 'ejerenwaavis@gmail.com',
-    pass: 'mkcgncgxaqtweqbn'
+    user: USER,
+    pass: PASS,
   }
 });
 
 var mailOptions = {
-  from: 'ejerenwaavis@gmail.com',
-  to: clientEmail,
+  from: USER,
+  to: appt.clientUsername,
   subject: 'Sending Email using Node.js',
-  text: 'That was easy! Thanks for booking us!'
+  html: '<!DOCTYPE html><html lang="en" dir="ltr"><head><meta charset="utf-8"><title></title>'
+        +'<base href="/"><link rel="icon" href="img/logo/favicon-alt.png" type="image/x-icon" />'
+        +'<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;500;700&display=swap" rel="stylesheet">'
+        +'<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">'
+        +'<script src="https://kit.fontawesome.com/5f30a8a83b.js" crossorigin="anonymous"></script><link rel="stylesheet" href="/css/email.css">'
+        +'<link rel="stylesheet" href="/css/style.css">'
+        +'</head><body><div class="container mt-4 mb-3"><div class="d-block text-center"><img class="img-logo" src="img/logo/paris-primary-sm.png" alt="">'
+        +'</div></div><div class="container text-center"><h1 class="font-rozha mb-3">Thank you for booking us!</h1>'
+        +'<div class="card border-accent text-center mb-4"><div class="text-white card-header bg-accent">Appointment Details</div>'
+        +'<div class="card-body"><div class="row border-top py-3"><h5 class="card-title">Style</h5><p class="py-0 mb-0">Takedown | Loose Hair</p></div><div class="row border-bottom border-top cols-1 cols-sm-2 h-100">'
+        +'<div class="col border-end py-3"><h5 class="card-title">Date</h5><p class="card-text"><span class="d-none d-sm-inline-block">Tuesday</span> 02/25/2021</p></div>'
+          +'<div class="col border-start py-3"><h5 class="card-title">Time</h5><p class="card-text">12:30PM</p></div></div>'
+          +'<div class="row border-bottom pb-0 pt-3"><h5 class="card-title">Stylist</h5><p>Tinen</p></div></div>'
+        +'<div class="card-footer text-muted"><a href="#" class="btn btn-outline-accent">Add to Calendar</a></div>'
+      +'</div><!-- end of card --><p class="card-text">We look forward to taking good care of your hair, untill then stay safe!.</p></div></body></html>'
 };
 
 transporter.sendMail(mailOptions, function(error, info){
