@@ -278,12 +278,14 @@ function showTimePanel(){
     let dc=0;
     for(day of daysArray){
       date = new Date(day.date).toLocaleDateString();
+      console.log(day);
+      console.log(date + "<-------->"+ selectedDate);
       if(selectedDate === date){
         selectDateDayObj = day;
         console.log("day found at: ***"+ dc);
         break;
       }else{
-        // console.log("Date note found :"+ dc);
+        console.log("Date note found :"+ dc);
       }
       dc++;
     }
