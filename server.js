@@ -240,7 +240,7 @@ app.route("/appt")
 
     appt.save(function(err, savedDoc) {
       if (!err) {
-        console.log(savedDoc._id);
+        // console.log(savedDoc._id);
         apptSelfDestruct(savedDoc._id);
         res.send({status:"success", id:savedDoc._id});
       }else{
@@ -609,20 +609,25 @@ function tax(amt){
 }
 
 function apptSelfDestruct(apptID){
-  console.log("Appointment ID is: " +apptID);
+  // console.log("Appointment ID is: " +apptID);
   setTimeout(function(){
     Appointment.deleteOne({_id:apptID, confirmed:false}, function(err,status){
-      console.log(apptID);
+      // console.log(apptID);
       // console.log(err);
       console.log(status.n);
-      if(!err && status.n>0){
-        console.log("deleted: "+apptID+" ");
+      if(!err){
+          if(status.n>0){
+            // console.log("deleted: "+apptID+" ");
+          }else{
+            console.log("Unable to delete id" + apptID);
+          }
       }else{
-        console.log("Unable to delete id");
+        console.log(err);
       }
     });
   },(1000 * 60 * 5));
 }
+
 function sendBookingDetails(appt){
   console.log("Sending email to: "+ appt.clientUsername);
   const transporter = nodemailer.createTransport({
@@ -633,32 +638,41 @@ function sendBookingDetails(appt){
   }
 });
 
-var mailOptions = {
+  var mailOptions = {
   from: USER,
   to: appt.clientUsername,
   subject: 'Sending Email using Node.js',
-  html: '<!DOCTYPE html><html lang="en" dir="ltr"><head><meta charset="utf-8"><title></title>'
-        +'<base href="/"><link rel="icon" href="img/logo/favicon-alt.png" type="image/x-icon" />'
-        +'<link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;500;700&display=swap" rel="stylesheet">'
-        +'<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">'
-        +'<script src="https://kit.fontawesome.com/5f30a8a83b.js" crossorigin="anonymous"></script><link rel="stylesheet" href="/css/email.css">'
-        +'<link rel="stylesheet" href="/css/style.css">'
-        +'</head><body><div class="container mt-4 mb-3"><div class="d-block text-center"><img class="img-logo" src="img/logo/paris-primary-sm.png" alt="">'
-        +'</div></div><div class="container text-center"><h1 class="font-rozha mb-3">Thank you for booking us!</h1>'
-        +'<div class="card border-accent text-center mb-4"><div class="text-white card-header bg-accent">Appointment Details</div>'
-        +'<div class="card-body"><div class="row border-top py-3"><h5 class="card-title">Style</h5><p class="py-0 mb-0">Takedown | Loose Hair</p></div><div class="row border-bottom border-top cols-1 cols-sm-2 h-100">'
-        +'<div class="col border-end py-3"><h5 class="card-title">Date</h5><p class="card-text"><span class="d-none d-sm-inline-block">Tuesday</span> 02/25/2021</p></div>'
-          +'<div class="col border-start py-3"><h5 class="card-title">Time</h5><p class="card-text">12:30PM</p></div></div>'
-          +'<div class="row border-bottom pb-0 pt-3"><h5 class="card-title">Stylist</h5><p>Tinen</p></div></div>'
-        +'<div class="card-footer text-muted"><a href="#" class="btn btn-outline-accent">Add to Calendar</a></div>'
-      +'</div><!-- end of card --><p class="card-text">We look forward to taking good care of your hair, untill then stay safe!.</p></div></body></html>'
-};
+  html: '<table style="background:#F8F9FA; border:1px solid #e4e4e4;margin-left:auto;margin-right:auto; height:100%; width:100%;text-align:center;">'
+    +'<tr ><td style="padding:0.7rem 0 0 0;"> <a href="https://www.parisbeautyandhairstudio.com/home"><img class="img-logo" src="https://parisbeautyandhairstudio.herokuapp.com/img/logo/paris-primary-sm.png" alt=""></a> </td></tr>'
+    +'<tr><td> <h1 style="padding:1rem;">Thanks For Booking us!</h1> </td></tr>'
+    +'<tr><td><table style="border:1px solid #e4e4e4; margin-left:auto;margin-right:auto; width:70%;text-align:center;"><tr>'
+    +'<td colspan="2" style="color:#fff; background:#cb2975;padding:10px 0 10px 0;">Appointment Details</td></tr>'
+    +'<tr style="border-bottom:1px solid #e4e4e4"> <td colspan="2" style="padding:1rem 0 10px 0;"> <h5 style="margin-bottom:0.5rem"><b>Style</b></h5>  '+appt.style.baseStyle +' | <small>'+ appt.style.option+'</small> </td></tr> <tr>'
+    +'<td style="padding:1rem 0 10px 0; width:50%; border-right:#e4e4e4 1px solid"> <h5 style="margin-bottom:0.5rem"><b>Date</b></h5>  '+new Date(appt.date).toDateString()+' </td>'
+    +'<td style="padding:1rem 0 10px 0;width:50%"> <h5 style="margin-bottom:0.5rem"><b>Time</b></h5>  '+timeString(appt.startTime)+' </td></tr>'
+    +'<tr style="border-top:1px solid #e4e4e4"> <td colspan="2" style="padding:1rem 0 10px 0;"> <h5 style="margin-bottom:0.5rem"><b>Stylist</b></h5>  '+appt.stylist+' </td></tr>'
+    // +'<tr style="background:#e4e4e4"> <td colspan="2" style="border-top:1px solid #e4e4e4; padding:2rem 2rem;"> <button style="padding:0.5rem 5rem; border-radius:20px; background:transparent; border:1px solid #cb2975;" type="button" name="button">Add To Calendar</button></td></tr>'
+    +'</table></td></tr>'
+    +'<tr><td style=" padding: 1.5rem 1rem; width:20px">We look forward to taking good care of your hair,<br> untill then stay safe!.</td></tr></table>'
+  };
 
-transporter.sendMail(mailOptions, function(error, info){
+  transporter.sendMail(mailOptions, function(error, info){
   if (error) {
     console.log(error);
   } else {
     console.log('Email sent: ' + info.response);
   }
 });
+}
+function timeString(time){
+  if(time){
+
+    if(time.hrs>11){
+      return ""+((time.hrs-12 === 0)? 12 : ((time.hrs-12) > 9)?(time.hrs-12):"0"+(time.hrs-12))+":"+((time.mins < 10)? "0"+time.mins:time.mins) + "pm";
+    }else{
+      return ""+((time.hrs > 9)?time.hrs:"0"+time.hrs)+":"+((time.mins < 10)? "0"+time.mins:time.mins) + "am";
+    }
+  }else{
+    console.log("undefined time");
+  }
 }
