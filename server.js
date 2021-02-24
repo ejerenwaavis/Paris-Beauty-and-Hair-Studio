@@ -267,7 +267,7 @@ app.route("/confirmAppointment")
     date.setDate(date.getDate()+2);
     expireyDate = date;
 
-    Appointment.updateOne({_id:id},{confirmed:true, expireAt:expireyDate},function(e,r){
+    Appointment.updateOne({_id:id},{confirmed:true},function(e,r){
       if(!e){
         if(r.n > 0){
           // console.log(r);
@@ -611,7 +611,7 @@ function tax(amt){
 function apptSelfDestruct(apptID){
   console.log("Appointment ID is: " +apptID);
   setTimeout(function(){
-    Appointment.deleteOne({_id:apptID}, function(err,status){
+    Appointment.deleteOne({_id:apptID, confirmed:false}, function(err,status){
       console.log(apptID);
       // console.log(err);
       console.log(status.n);
