@@ -85,11 +85,11 @@ const appointmentSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    expireAt: {
-       type: Date,
-       default: addExpiration(6),
-       // expires: ,
-     },
+    // expireAt: {
+    //    type: Date,
+    //    default: addExpiration(6),
+    //    // expires: ,
+    //  },
 });
 
 const Appointment = mongoose.model("Appointment", appointmentSchema);
@@ -216,8 +216,9 @@ app.route("/appt")
   .post(function(req, res) {
     let apptDate = new Date(req.body.date);
     let time = req.body.time;
+    let apptID = req.body.stylist + new Date().getTime();
     const appt = new Appointment({
-      _id: "Susan" + new Date().getTime(),
+      _id: apptID,
       clientUsername: "planetavis@yahoo.com",
       clientName: "bill",
       style: {
@@ -239,6 +240,8 @@ app.route("/appt")
 
     appt.save(function(err, savedDoc) {
       if (!err) {
+        console.log(savedDoc._id);
+        apptSelfDestruct(savedDoc._id);
         res.send({status:"success", id:savedDoc._id});
       }else{
         res.send({status:"failed", message:"Unable to reserve booking, please try another appointment time or date"});
@@ -294,51 +297,55 @@ app.route("/days/:stylist/:year/:dateMonth/:duration")
     }, function(err, foundAppts) {
 
       if (!err) {
-        let days = [];
-        let today = new Date(year,dateMonth);
-        let daysInMonth = new Date(today.getFullYear(), (today.getMonth() + 1), 0).getDate(); //Zero Based
+        if(foundAppts){
+          let days = [];
+          let today = new Date(year,dateMonth);
+          let daysInMonth = new Date(today.getFullYear(), (today.getMonth() + 1), 0).getDate(); //Zero Based
 
-        let match = 0;
+          let match = 0;
 
-        // console.log(daysInMonth);
-        for (var i = 1; i < daysInMonth + 1; i++) {
-          var tempDate = new Date(today.getFullYear(), today.getMonth(), i);
+          // console.log(daysInMonth);
+          for (var i = 1; i < daysInMonth + 1; i++) {
+            var tempDate = new Date(today.getFullYear(), today.getMonth(), i);
 
-          let todaysAppts = []
-          for (appt of foundAppts) {
-            if (appt.date.getFullYear() === tempDate.getFullYear() && appt.date.getMonth() === tempDate.getMonth() && appt.date.getDate() === tempDate.getDate()) {
-              match++;
-              todaysAppts.push(appt);
+            let todaysAppts = []
+            for (appt of foundAppts) {
+              if (appt.date.getFullYear() === tempDate.getFullYear() && appt.date.getMonth() === tempDate.getMonth() && appt.date.getDate() === tempDate.getDate()) {
+                match++;
+                todaysAppts.push(appt);
+              }
             }
-          }
-          if(todaysAppts.length > 0){
-            todaysAppts.sort(compareAppts)
-            // console.log(todaysAppts);
-            let day = {
-              date: tempDate,
-              availableTimes:getAvailableTimes(todaysAppts,duration),
-            }
-            days.push(day);
-          }else{
-
-            let availableTime = {start:OPENTIME, stop:CLOSETIME};
-            if(duration < getAvaialbleTimeDuration(availableTime)){
+            if(todaysAppts.length > 0){
+              todaysAppts.sort(compareAppts)
+              // console.log(todaysAppts);
               let day = {
                 date: tempDate,
-                availableTimes:[availableTime],
+                availableTimes:getAvailableTimes(todaysAppts,duration),
               }
               days.push(day);
             }else{
-              let day = {
-                date: tempDate,
-                availableTimes:[],
-              }
-              days.push(day);
-            }
 
+              let availableTime = {start:OPENTIME, stop:CLOSETIME};
+              if(duration < getAvaialbleTimeDuration(availableTime)){
+                let day = {
+                  date: tempDate,
+                  availableTimes:[availableTime],
+                }
+                days.push(day);
+              }else{
+                let day = {
+                  date: tempDate,
+                  availableTimes:[],
+                }
+                days.push(day);
+              }
+
+            }
           }
+          res.send(days);
+        }else{
+          res.send(days);
         }
-        res.send(days);
       }else{
         console.log(err);
       }
@@ -599,6 +606,22 @@ function tax(amt){
 
   // console.log(tax);
   return Math.round(tax);
+}
+
+function apptSelfDestruct(apptID){
+  console.log("Appointment ID is: " +apptID);
+  setTimeout(function(){
+    Appointment.deleteOne({_id:apptID}, function(err,status){
+      console.log(apptID);
+      // console.log(err);
+      console.log(status.n);
+      if(!err && status.n>0){
+        console.log("deleted: "+apptID+" ");
+      }else{
+        console.log("Unable to delete id");
+      }
+    });
+  },(1000 * 60 * 5));
 }
 function sendBookingDetails(appt){
   console.log("Sending email to: "+ appt.clientUsername);
