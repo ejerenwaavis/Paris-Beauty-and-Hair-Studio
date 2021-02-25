@@ -5,6 +5,10 @@ phases:
       docker: 18
     commands:
       - docker --version
+       # Install pip
+      - sudo apt-get install python-pip
+      # Install dependencies needed for running tests
+      - npm install
       # Upgrade AWS CLI to the latest version
       - pip install --upgrade awscli
       - aws --version
