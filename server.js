@@ -7,6 +7,10 @@ const SERVICE = process.env.SERVICE;
 const USER = process.env.MAILERUSER;
 const PASS = process.env.MAILERPASS;
 const STRIPEAPI = process.env.STRIPEAPI;
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRETE = process.env.CLIENT_SECRETE;
+const SECRETE = process.env.SECRETE;
+
 
 
 const express = require("express");
@@ -17,8 +21,11 @@ const mongoose = require("mongoose");
 const stripe = require("stripe")(STRIPEAPI);
 const nodemailer = require('nodemailer');
 
-// const https = require("https");
-
+/**************** Authentication Constants **************/
+const session = require("express-session");
+const passport = require("passport");
+const passportLocalMongoose = require("passport-local-mongoose");
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 
 
@@ -31,6 +38,14 @@ app.use(express.static("public"));
 app.use(express.static("."));
 app.use(express.json());
 
+//Authentication & Session Management Config
+app.use(session({
+  secret: SECRETE,
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 
@@ -91,9 +106,72 @@ const appointmentSchema = new mongoose.Schema({
     //    // expires: ,
     //  },
 });
-
 const Appointment = mongoose.model("Appointment", appointmentSchema);
 
+
+const userSchema = new mongoose.Schema({
+  username: String,
+  _id: String,
+  verified: { type: Boolean, default: false }
+});
+userSchema.plugin(passportLocalMongoose);
+const User = mongoose.model("User", userSchema);
+
+
+/********* Configure Passport **************/
+passport.use(User.createStrategy());
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
+
+//telling passport to use GoogleStrategy
+passport.use(new GoogleStrategy({
+    clientID: CLIENT_ID,
+    clientSecret: CLIENT_SECRETE,
+    // callbackURL: "https://auto-g-codes.herokuapp.com/loggedIn",
+    callbackURL: "/loggedin",
+    userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    let userProfile = profile._json;
+
+    User.findOne({
+      _id: userProfile.sub
+    }, function(err, user) {
+      console.log(err);
+      if (!err) {
+        console.log("userFOund---->:");
+        console.log(user);
+        if (user) {
+            return cb(null, user)
+        } else {
+          console.log("user not found - creating new user");
+          let newUser = new User({
+            username: userProfile.name,
+            _id: userProfile.sub,
+            verified: false
+          })
+          newUser.save()
+            .then(function() {
+              console.log("User Created Successfully");
+              return cb(null,user);
+            })
+            .catch(function(err) {
+              console.log("failed to create user");
+              console.log(err);
+            });
+        }
+      } else {
+        console.log("Internal error");
+        return cb(new Error(err))
+      }
+    });
+  }
+));
 
 
 
@@ -101,13 +179,7 @@ app.route("/home")
   .get(function(req, res) {
     res.render("home", {
       body: new Body("Home", "", ""),
-      purchase:{
-        baseStyle:"PlaceHolder",
-        styleOption:"PlaceHolder",
-        deposit:2500,
-        tax:500,
-        total:3000
-      },
+      purchase:initialPurchase(),
     });
   });
 
@@ -413,13 +485,52 @@ app.route("/orderPricings")
 
 
 
-app.listen(process.env.PORT || 3000, function() {
-  console.log("Paris Hair and Beauty Studio is Live");
-});
+
+/****************** Authentication *******************/
+app.route("/login")
+  .get(function(req, res) {
+    res.render("login", {
+      body: new Body("Login", "", ""),
+      purchase: initialPurchase(),
+    });
+  })
+
+app.get('/auth/google', passport.authenticate('google', {
+  scope: ['profile']
+}));
+
+app.route("/loggedin")
+  .get(passport.authenticate('google', {
+      failureRedirect: '/login'
+    }),
+    function(req, res) {
+      // Successful authentication, redirect user page.
+      // console.log("Logged IN");
+      // console.log(user);
+      // res.redirect("/");
+      res.render('home', {
+        body: new Body("Home", "", "Google Authentication Successful"),
+        purchase: initialPurchase(),
+      });
+    })
+
+
+app.route("/logout")
+  .get(function(req, res) {
+    req.logout();
+    console.log("Logged Out");
+    // res.redirect("/");
+    res.render("home", {
+      body: new Body("Home", "", ""),
+      purchase:initialPurchase(),
+    });
+  });
 
 
 
-
+  app.listen(process.env.PORT || 3000, function() {
+    console.log("Paris Hair and Beauty Studio is Live");
+  });
 
 /************** helper functions *******************/
 function Body(title, error, message) {
@@ -427,7 +538,15 @@ function Body(title, error, message) {
   this.error = error;
   this.message = message;
 }
-
+function initialPurchase(){
+  return {
+    baseStyle:"PlaceHolder",
+    styleOption:"PlaceHolder",
+    deposit:0,
+    tax:0,
+    total:0
+  }
+}
 function compareDates(t,d){
   let comparison = 0;
   if (t.getFullYear() > d.getFullYear()) {
