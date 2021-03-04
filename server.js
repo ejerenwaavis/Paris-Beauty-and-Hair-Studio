@@ -10,6 +10,7 @@ const STRIPEAPI = process.env.STRIPEAPI;
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRETE = process.env.CLIENT_SECRETE;
 const SECRETE = process.env.SECRETE;
+const SALTROUNDS = Number(process.env.SALTROUNDS);
 
 
 
@@ -20,6 +21,10 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const stripe = require("stripe")(STRIPEAPI);
 const nodemailer = require('nodemailer');
+const bcrypt = require('bcrypt');
+
+
+
 
 /**************** Authentication Constants **************/
 const session = require("express-session");
@@ -110,8 +115,18 @@ const Appointment = mongoose.model("Appointment", appointmentSchema);
 
 
 const userSchema = new mongoose.Schema({
-  username: String,
   _id: String,
+  username: String,
+  phone: String,
+  firstName: String,
+  lastName: String,
+  DoB: Date,
+  password: {type:String,default:""},
+  photoURL: String,
+  userHasPassword: {
+    type: Boolean,
+    default:false
+  },
   verified: { type: Boolean, default: false }
 });
 userSchema.plugin(passportLocalMongoose);
@@ -138,26 +153,26 @@ passport.use(new GoogleStrategy({
   },
   function(accessToken, refreshToken, profile, cb) {
     let userProfile = profile._json;
-
+    // console.log(userProfile);
     User.findOne({
-      _id: userProfile.sub
+      _id: userProfile.email
     }, function(err, user) {
-      console.log(err);
       if (!err) {
-        console.log("userFOund---->:");
-        console.log(user);
+        console.log("Logged In ----> "+user._id);
         if (user) {
             return cb(null, user)
         } else {
           console.log("user not found - creating new user");
           let newUser = new User({
-            username: userProfile.name,
-            _id: userProfile.sub,
+            _id: userProfile.email,
+            username: userProfile.email,
+            firstName: userProfile.given_name,
+            lastName: userProfile.family_name,
+            photoURL: userProfile.picture,
             verified: false
           })
           newUser.save()
             .then(function() {
-              console.log("User Created Successfully");
               return cb(null,user);
             })
             .catch(function(err) {
@@ -167,26 +182,36 @@ passport.use(new GoogleStrategy({
         }
       } else {
         console.log("Internal error");
-        return cb(new Error(err))
+        console.log(err);
+        return cb(new Error(err));
       }
     });
   }
 ));
 
 
-
 app.route("/home")
   .get(function(req, res) {
-    res.render("home", {
-      body: new Body("Home", "", ""),
-      purchase:initialPurchase(),
-    });
+    if(req.isAuthenticated()){
+      res.render("home", {
+        body: new Body("Home", "", ""),
+        purchase:initialPurchase(),
+        user:req.user,
+      });
+    }else{
+      res.render("home", {
+        body: new Body("Home", "", ""),
+        purchase:initialPurchase(),
+        user:req.user,
+      });
+    }
   });
 
 app.route("/cart")
   .get(function(req, res) {
     res.render("cart", {
-      body: new Body("Bag", "", "")
+      body: new Body("Bag", "", ""),
+      user:req.user,
     });
   });
 
@@ -199,10 +224,21 @@ app.route("/shop")
 
 
 app.route("/account")
+
   .get(function(req, res) {
-    res.render("account", {
-      body: new Body("Account", "", "")
-    });
+    if(req.user){
+      res.render("account", {
+        body: new Body("Account", "", ""),
+        purchase: initialPurchase(),
+        user:req.user,
+      });
+    }else{
+      res.render("login", {
+        body: new Body("Login", "You are not Logged In, Please sign in to see your account", ""),
+        purchase: initialPurchase(),
+        user:req.user,
+      });
+    }
   });
 
 app.route("/book")
@@ -288,11 +324,13 @@ app.route("/appt")
   .post(function(req, res) {
     let apptDate = new Date(req.body.date);
     let time = req.body.time;
+    let email = req.body.clientEmail;
+    let name = req.body.clientName;
     let apptID = req.body.stylist + new Date().getTime();
     const appt = new Appointment({
       _id: apptID,
-      clientUsername: "planetavis@yahoo.com",
-      clientName: "bill",
+      clientUsername: email,
+      clientName: name,
       style: {
         baseStyle: req.body.baseStyle,
         option: req.body.styleOption //"Small Waist length"
@@ -324,8 +362,40 @@ app.route("/appt")
 
 app.route("/email")
   .get(function(req,res){
-      res.render("email");
+    const transporter = nodemailer.createTransport({
+      service: SERVICE,
+      auth: {
+        user: USER,
+        pass: PASS,
+      }
+    });
+
+    let content = 'BEGIN:VCALENDAR\r\nPRODID:-//ACME/DesktopCalendar//EN\r\nMETHOD:REQUEST\r\n...';
+
+    let message = {
+        from: USER,
+        to: 'planetavis@yahoo.com',
+        subject: 'Appointment iCal',
+        text: 'Please see the attached appointment',
+        icalEvent: {
+            filename: 'invitation.ics',
+            method: 'request',
+            content: content
+        }
+    };
+
+    transporter.sendMail(message, function(error, info){
+      if (error) {
+        console.log(error);
+        res.send(error)
+      } else {
+        console.log('Email sent: ' + info.response);
+        res.send("Success")
+      }
+    });
+      // res.render("email");
   });
+
 
 app.route("/confirmAppointment")
 .post(function(req,res){
@@ -342,8 +412,6 @@ app.route("/confirmAppointment")
     Appointment.updateOne({_id:id},{confirmed:true},function(e,r){
       if(!e){
         if(r.n > 0){
-          // console.log(r);
-          // send email here
           sendBookingDetails(appt);
           res.send("success");
         }else{
@@ -436,7 +504,6 @@ app.route("/")
   });
 
 
-
 /************ Stripe Payment **************/
 app.route("/payment")
   .get(function(req,res){
@@ -459,7 +526,7 @@ app.route("/payment")
     // res.render("payment", {body: new Body("Home", "", ""), purchase: purchase});
   })
 
-app.post("/create-payment-intent", async (req, res) => {
+app.post("/create-payment-intent", async function (req, res){
   // console.log("Creating Intent!! ");
   const  pricings  = req.body.body;
   // Create a PaymentIntent with the order amount and currency
@@ -476,7 +543,7 @@ app.post("/create-payment-intent", async (req, res) => {
 app.route("/orderPricings")
 .post(function (req,res){
   // console.log("Geting Pricings");
-  // console.log(req.body.price);
+  console.log(req.body);
   let deposit = (Number(req.body.price) * DEPOSITPERCENT) * 100;
   let t = tax(deposit);
   let total = t + deposit;
@@ -489,14 +556,23 @@ app.route("/orderPricings")
 /****************** Authentication *******************/
 app.route("/login")
   .get(function(req, res) {
-    res.render("login", {
-      body: new Body("Login", "", ""),
-      purchase: initialPurchase(),
-    });
+    if(req.isAuthenticated()){
+      console.log("Authenticated Request");
+      res.redirect("/home")
+    } else {
+      console.log("Unauthorized Access, Please Login");
+      res.render("login", {
+        body: new Body("Login", "", "")
+      });
+    }
   })
 
 app.get('/auth/google', passport.authenticate('google', {
-  scope: ['profile']
+  // scope: ['profile']
+  scope: [
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email'
+    ]
 }));
 
 app.route("/loggedin")
@@ -507,11 +583,7 @@ app.route("/loggedin")
       // Successful authentication, redirect user page.
       // console.log("Logged IN");
       // console.log(user);
-      // res.redirect("/");
-      res.render('home', {
-        body: new Body("Home", "", "Google Authentication Successful"),
-        purchase: initialPurchase(),
-      });
+      res.redirect("/home");
     })
 
 
@@ -523,8 +595,82 @@ app.route("/logout")
     res.render("home", {
       body: new Body("Home", "", ""),
       purchase:initialPurchase(),
+      user:null,
     });
   });
+
+
+  app.route("/register")
+    .get(function(req, res) {
+      if(req.isAuthenticated()){
+        // console.log("Authenticated Request");
+        res.redirect("/home")
+      } else {
+        // console.log("Unauthorized Access, Please Login");
+        res.render("register", {
+          body: new Body("Register", "", ""),
+          purchase: initialPurchase(),
+          user: null,
+        });
+      }
+    })
+    .post(function(req,res){
+      const user = new User({
+        _id: req.body.username,
+        username: req.body.username,
+        phone: req.body.phone,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        password: req.body.password,
+        DoB: new Date(req.body.DoB),
+        photoURL: "",
+        userHasPassword:true,
+        verified:false,
+      })
+      let hahsPassword;
+      bcrypt.hash(req.body.password, SALTROUNDS, function(err, hash) {
+          if(!err){
+            user.password = hash;
+            // console.log(user);
+            User.exists({_id:user._id},function(err,exists){
+              if(exists){
+                res.render("/register",{
+                  body:new Body("Register","User email aready exists",""),
+                  purchase: initialPurchase(),
+                  user: user,
+                });
+              }else{
+                user.save(function(err,savedObj){
+                  // console.log(err);
+                  if(!err){
+                    // console.log(savedObj);
+                    res.redirect("/login");
+                  }else{
+
+                  }
+                })
+              }
+            });
+          }else{
+            // console.log(user);
+            // console.log(err);
+            res.render("register",{
+              body:new Body("Register","Unable to complete registration (error: e-PWD)",""),
+              purchase: initialPurchase(),
+              user: user,
+            });
+          }
+      });
+
+    })
+
+    app.route("/usernameExist")
+      .post(function(req,res){
+        // console.log("username to search ---> "+req.body.username);
+        User.exists({_id:req.body.username}, function(err,exists){
+          res.send(exists);
+        })
+      })
 
 
 

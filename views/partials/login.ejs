@@ -1,10 +1,4 @@
-
-<%- include("partials/header.ejs")%>
-
-<section class="d-block pt-5 text-center">
-  <img src="img/logo/paris-primary-sm.png" class="logo" alt="">
-<!-- <p class="pt-5">Login</p> -->
-<div class="container col-10 col-sm-8 col-md-8 col-lg-5 my-5 text-center pt-4">
+<div class="container text-center pt-4">
   <div class="row justify-content-center">
     <div class="col-12 col-sm-10 col-md-8 mb-2">
       <a href="/auth/google" class="text-left  w-100 btn btn-lg btn-primary btn-block p-0 m-0">
@@ -12,11 +6,8 @@
           <div class="col-2 text-start">
             <img src="img/google-icon-2.png" class="google-icon" alt="">
           </div>
-          <div class="col-8 ">
-              <small class=""> Sign in with Google</small>
-          </div>
-          <div class="col-2 ">
-              <small class=""> &nbsp;</small>
+          <div class="col-10 ">
+              <small> Sign in with Google</small>
           </div>
         </div>
       </a>
@@ -27,7 +18,7 @@
       </div>
     </div>
     <div class="col-12 col-sm-10 col-md-8">
-      <form class="form-signin" action="/login" method="post" id="form-signin">
+      <form class="form-signin" id="form-signin">
         <label for="inputEmail" class="sr-only">Email address</label>
         <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
@@ -38,9 +29,10 @@
             <input type="checkbox" value="remember-me"> Remember me
           </label>
         </div>
+        <!-- <p> For security measures, you are required to login with a google account, click the button below to continue.</p> -->
       </form>
+      Don't have an account? Register <a href="/register" class="d-inline">here</a>
     </div>
+
   </div>
-  Don't have an account? Register <a href="/register" class="d-inline">here </a>
 </div>
-</section>

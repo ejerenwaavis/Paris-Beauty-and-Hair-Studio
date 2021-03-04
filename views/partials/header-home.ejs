@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" >
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -60,18 +60,36 @@
         <i class="fas fa-md fa-shopping-cart me-1 d-none d-md-inline-block"></i>
         SHOP
       </a> -->
-      <a href=""  class="nav-link  nav-br " onclick="loadStyles()" data-bs-toggle="modal" data-bs-target="#booking-form-modal">
+      <a href="" class="nav-link nav-bl nav-br " onclick="loadStyles()" data-bs-toggle="modal" data-bs-target="#booking-form-modal">
         <i class="fas fa-md fa-calendar-alt me-1 d-none d-md-inline-block"></i>
         BOOK
       </a>
+      <%if(user){%>
+
+      <div class="dropdown">
+        <a class="nav-link nav-br dropdown-toggle <%=(body.title === 'Account')? 'active':'' %>" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="<%=user.photoURL%>" class="userIcon" alt="">
+          <%=user.firstName%>
+        </a>
+
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <li><a class="dropdown-item" href="/account">My Account</a></li>
+          <li><a class="dropdown-item" href="/myAppointments">My Appointments</a></li>
+          <li><a class="dropdown-item" href="/logout">Sign Out</a></li>
+        </ul>
+      </div>
+
+      <%}else{%>
+
       <a href="" data-bs-toggle="modal" data-bs-target="#signIn" class="nav-link <%=(body.title === 'SignIn')? 'active':'' %> nav-br">
         <i class="fas fa-md fa-user me-1 d-none d-md-inline-block"></i>
         <span class="">
           SIGNIN
         </span>
       </a>
+      <%}%>
       <!-- <a href="/cart" class=" <%=(body.title === 'Bag')? 'active':'' %> nav-link nav-br">
-        <i class="fas fa-md fa-shopping-bag"></i>
+      <i class="fas fa-md fa-shopping-bag"></i>
       </a> -->
     </div>
   </nav>
@@ -93,7 +111,7 @@
   </div>
 
 
-<!-- Sign in Modal -->
+  <!-- Sign in Modal -->
   <div class="modal fade" id="signIn" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="signIn" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content bordered-accent">
@@ -102,7 +120,7 @@
           <a type="button" class="text-white" data-bs-dismiss="modal" aria-label="Close"><i class="far fa-lg fa-times-circle"></i></a>
         </div>
         <div class="modal-body">
-          <%- include ("../login.ejs")  %>
+          <%- include ("login.ejs")  %>
         </div>
 
       </div>

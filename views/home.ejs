@@ -1,13 +1,25 @@
 <%- include ("partials/header-home.ejs")  %>
 
 
-
-
 <div class="p-5 image-display-container shadow">
+  
+  <%if (body.message){%>
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <!-- <strong>Holy guacamole!</strong>  -->
+    <%= body.message%>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <%}else if(body.error){%>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <!-- <strong>Holy guacamole!</strong>  -->
+      <%= body.error%>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <%}%>
+
   <div class="container py-5">
     <div class="row  mt-lg-5 jumbo-container">
       <div class="col-12 ms-lg-5 ps-lg-5">
-
         <h1 class=" jumbo text-compliment">
           Alpharetta's #1 <br class="d-none d-sm-block" /> Beauty Spot!
         </h1>

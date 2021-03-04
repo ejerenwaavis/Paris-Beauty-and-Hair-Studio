@@ -6,6 +6,7 @@ let selectedStyle;
 let selectedOption;
 let purchaseData;
 let apptID;
+let clientDetails = false;
 $.get("/officialHours",function(hours){
   officialHours = hours;
 });
@@ -42,6 +43,12 @@ function loadStyles() {
 
 
 /********** 1st Form Segments Controls ************/
+function editBookingFor(){
+  $("#clientEmail").removeAttr("disabled");
+  $("#clientName").removeAttr("disabled");
+  $("#clientWarningSection").removeAttr("hidden");
+  setTimeout(function(){$("#clientWarningSection").fadeOut(5000)},5000);
+}
 function hideStylistSection() {
   $("#chooseStylistSection").hide();
   // $("#nextTabButton").addClass("disabled");
@@ -278,32 +285,21 @@ function showTimePanel(){
     let dc=0;
     for(day of daysArray){
       date = new Date(day.date).toLocaleDateString();
-      console.log(day);
-      console.log(date + "<-------->"+ selectedDate);
       if(selectedDate === date){
         selectDateDayObj = day;
-        console.log("day found at: ***"+ dc);
         break;
       }else{
         console.log("Date note found :"+ dc);
       }
       dc++;
     }
-    console.log("finished with assigning the selectedDatOBJ");
-    /**************** Debugging SelectDayObject ****************/
-    if(selectDateDayObj === undefined){
-      console.log("Couldnt find anything");
-    }else{
-      console.log("found date obj is: -> ");
-      console.log(selectDateDayObj);
-    }
-    /**************** Debugging SelectDayObject ****************/
+
 
     let compiledAvailableTimes = [];
-    console.log("Ready to compile available Times **********");
+    // console.log("Ready to compile available Times **********");
     for(time of selectDateDayObj.availableTimes){
-      console.log("available time: ----> ");
-      console.log(time);
+      // console.log("available time: ----> ");
+      // console.log(time);
       compiledAvailableTimes = generateCompiledAvailableTimes(time.start,time.stop, compiledAvailableTimes);
     }
     let workTimes = generateWorkTimes(officialHours.start, officialHours.stop);
@@ -353,13 +349,13 @@ function showTimePanel(){
 /************** 3rd Form Segment Controls ************/
 function showReviewSegment(){
   let form = $("#bookingForm").serializeArray();
-  $("#baseStyleLabel").html(form[0].value);
-  $("#optionLabel").html(form[1].value);
-  $("#stylistLabel").html(form[4].value);
-  $("#dateLabel").html(new Date(form[5].value).toLocaleDateString());
+  $("#baseStyleLabel").html($("#styleSelect").val());
+  $("#optionLabel").html($("#selectOption").val());
+  $("#stylistLabel").html($("#stylist").val());
+  $("#dateLabel").html(new Date($("#selectedDate").val()).toLocaleDateString());
   $("#timeLabel").html($('#selectedTimeDummy').val());
-  $("#totalPriceLabel").html("$"+form[2].value);
-  let deposit = form[2].value * 0.40;
+  $("#totalPriceLabel").html("$"+$("#price").val());
+  let deposit = $("#price").val() * 0.40;
   $("#depositLabel").html("$"+deposit);
 
 }
@@ -368,24 +364,27 @@ function checkOut(){
   checkoutBusy();
   switchPanes(4);
   // console.log("Checking Out");
-  let form = $("#bookingForm").serializeArray();
   let body = {
-    baseStyle: form[0].value,
-    styleOption: form[1].value,
-    price: form[2].value,
-    date: form[5].value,
-    time: JSON.parse(form[6].value),
-    stylist: form[4].value,
-    duration: form[3].value
+    baseStyle: $("#styleSelect").val(),
+    styleOption: $("#selectOption").val(),
+    price: Number($("#price").val()),
+    date: $("#selectedDate").val(),
+    time: JSON.parse($("#selectedTime").val()),
+    stylist: $("#stylist").val(),
+    duration: $("#duration").val(),
+    clientEmail: $("#clientEmail").val(),
+    clientName:  $("#clientName").val()
   };
   let pricings;
   $.post("/orderPricings",body, function(res){
-    // console.log(res);
+    console.log(res);
     pricings = res;
   });
 
   $.post("/appt", body, function(data){
+    console.log(data);
     if(data.status === "success"){
+
       apptID = data.id;
       // console.log(data + " Appt Saved/Held");
       $("#processInfo").html("<span class='text-success'><strong>Booking Held for 5Mins:</strong> Coomplete payment to secure it.</span>");
@@ -409,7 +408,7 @@ function checkOut(){
       switchPanes(bookingStage)
       setProgress()
       checkoutDone();
-      $("#processInfo").html("");
+      $("#processInfo").html(data.message);
       $("#processInfo").fadeIn("slow");
       setTimeout(function() {
         $("#processInfo").fadeOut(4000);
@@ -473,20 +472,20 @@ function compareDates(t,d){
   return comparison;
 }
 function generateCompiledAvailableTimes(start, stop, compiledArray){
-  console.log("compiling Avaialable Times");
+  // console.log("compiling Avaialable Times");
   compiledArray.push(JSON.stringify(start));
   let currentTime = start;
   let end = false;
-  console.log("before the 'generateCompiledTimes()' while loop");
+  // console.log("before the 'generateCompiledTimes()' while loop");
   while(!end){
     currentTime = addThirtyMins(currentTime);
     compiledArray.push(JSON.stringify(currentTime));
-    console.log(compareTimes(currentTime,stop) === 0);
+    // console.log(compareTimes(currentTime,stop) === 0);
     if(compareTimes(currentTime,stop) === 0){
       end = true;
     }
   }
-  console.log("After the 'generateCompiledTimes()' while loop");
+  // console.log("After the 'generateCompiledTimes()' while loop");
 
   return compiledArray;
 }
@@ -532,35 +531,50 @@ function closeReviewModal(evt) {
 }
 function showNextTab() {
   if (bookingStage < 4) {
-    var triggerEl = $('a[href="#stage' + (bookingStage + 1) + '-pane"]')
-    triggerEl.tab('show'); // Select tab by name
+    if(bookingStage == 1){
+      let clientName = $("#clientName").val();
+      let clientEmail = $("#clientEmail").val();
+      if(clientName && clientEmail){
+        clientDetails = true;
+      }else{
+        clientDetails  = false;
+      }
+    }
+    if(clientDetails){
+      var triggerEl = $('a[href="#stage' + (bookingStage + 1) + '-pane"]')
+      triggerEl.tab('show'); // Select tab by name
 
 
-    disableNextButton();
-    enablePrevioustButton();
-    // console.log("next Stage is " + (bookingStage + 1));
-    bookingStage++;
-    setProgress();
-    if (bookingStage == 2) {
-      // console.log("on page 2");
-      $.get("/officialHours",function(hours){
-        officialHours = hours;
-      });
-      showCalendar(new Date().getFullYear(),new Date().getMonth(),selectedOption.duration);
-      switchPanes(bookingStage);
-    }else if (bookingStage == 3) {
-      enableNextButton()
-      $("#nextTabButton").html("Proceed to Checkout <i class='fas fa-lock d-none d-sm-inline-block' aria-hidden='true'></i>");
-      $("#nextTabButton").attr("onClick", "showNextTab()");
-      // $("#addToCart").removeClass("disabled");
-      showReviewSegment();
-    }else if (bookingStage == 4) {
-      enableNextButton()
-      // $("#nextTabButton").html("Pay <i class='fas fa-lock'></i>");
-      // $("#nextTabButton").attr("onClick", "checkOut()");
-      // $(".modalButtons").hide();
-      checkOut();
-      // console.log("Handling Chckout Neede");
+      disableNextButton();
+      enablePrevioustButton();
+      // console.log("next Stage is " + (bookingStage + 1));
+      bookingStage++;
+      setProgress();
+      if (bookingStage == 2) {
+        // console.log("on page 2");
+        $.get("/officialHours",function(hours){
+          officialHours = hours;
+        });
+        showCalendar(new Date().getFullYear(),new Date().getMonth(),selectedOption.duration);
+        switchPanes(bookingStage);
+      }else if (bookingStage == 3) {
+        enableNextButton()
+        $("#nextTabButton").html("Proceed to Checkout <i class='fas fa-lock d-none d-sm-inline-block' aria-hidden='true'></i>");
+        $("#nextTabButton").attr("onClick", "showNextTab()");
+        // $("#addToCart").removeClass("disabled");
+        showReviewSegment();
+      }else if (bookingStage == 4) {
+        enableNextButton()
+        // $("#nextTabButton").html("Pay <i class='fas fa-lock'></i>");
+        // $("#nextTabButton").attr("onClick", "checkOut()");
+        // $(".modalButtons").hide();
+        checkOut();
+        // console.log("Handling Chckout Neede");
+    }
+
+    }else{
+      $("#clientDetailsError").removeAttr("hidden");
+      setTimeout(function(){$("#clientDetailsError").fadeOut(3000)},4000)
     }
   } else {
     console.log("Nothing Happend");

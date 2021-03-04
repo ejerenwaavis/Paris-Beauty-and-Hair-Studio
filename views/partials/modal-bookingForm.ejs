@@ -14,25 +14,25 @@ add to cart or book now
  -->
 
 <div class="container">
-<small>
-  <ul class="nav  justify-content-center" id="myTab" role="tablist">
-    <li class="nav-item" role="presentation">
-      <a class="nav-link" id="stage1-dummy-link" data-bs-toggle="tab" role="tab" aria-controls="style" aria-selected="true">Step 1</a>
-      <a class="nav-link d-none" id="stage1" data-bs-toggle="tab" href="#stage1-pane" role="tab" aria-controls="style" aria-selected="true">Step 1</a>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a class="nav-link disabled" id="stage2-dummy-link" data-bs-toggle="tab" role="tab" aria-controls="date" aria-selected="false">Step 2</a>
-      <a class="nav-link d-none" id="stage2" data-bs-toggle="tab" href="#stage2-pane" role="tab" aria-controls="date" aria-selected="false">Step 2</a>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a class="nav-link disabled" id="stage3-dummy-link" data-bs-toggle="tab" role="tab" aria-controls="review" aria-selected="false">Step 3</a>
-      <a class="nav-link d-none" id="stage3" data-bs-toggle="tab" href="#stage3-pane" role="tab" aria-controls="review" aria-selected="false">Step 3</a>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a class="nav-link disabled" id="stage4-dummy-link" data-bs-toggle="tab" role="tab" aria-controls="review" aria-selected="false">Step 4</a>
-      <a class="nav-link d-none" id="stage4" data-bs-toggle="tab" href="#stage4-pane" role="tab" aria-controls="review" aria-selected="false">Step 4</a>
-    </li>
-  </ul>
+  <small>
+    <ul class="nav  justify-content-center" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="stage1-dummy-link" data-bs-toggle="tab" role="tab" aria-controls="style" aria-selected="true">Step 1</a>
+        <a class="nav-link d-none" id="stage1" data-bs-toggle="tab" href="#stage1-pane" role="tab" aria-controls="style" aria-selected="true">Step 1</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link disabled" id="stage2-dummy-link" data-bs-toggle="tab" role="tab" aria-controls="date" aria-selected="false">Step 2</a>
+        <a class="nav-link d-none" id="stage2" data-bs-toggle="tab" href="#stage2-pane" role="tab" aria-controls="date" aria-selected="false">Step 2</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link disabled" id="stage3-dummy-link" data-bs-toggle="tab" role="tab" aria-controls="review" aria-selected="false">Step 3</a>
+        <a class="nav-link d-none" id="stage3" data-bs-toggle="tab" href="#stage3-pane" role="tab" aria-controls="review" aria-selected="false">Step 3</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link disabled" id="stage4-dummy-link" data-bs-toggle="tab" role="tab" aria-controls="review" aria-selected="false">Step 4</a>
+        <a class="nav-link d-none" id="stage4" data-bs-toggle="tab" href="#stage4-pane" role="tab" aria-controls="review" aria-selected="false">Step 4</a>
+      </li>
+    </ul>
   </small>
   <div class="progress" style="height: 2px;">
     <div class="progress-bar bg-accent" role="progressbar" id="progress" style="width: 33.3%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
@@ -51,7 +51,38 @@ add to cart or book now
   <form class=" pt-0 pb-1" id="bookingForm" action="/book" method="post">
     <div class="tab-content " id="myTabContent ">
 
-      <div class="tab-pane fade active show" id="stage1-pane" role="tabpanel" aria-labelledby="stage1">
+      <div class="tab-pane fade " id="stage1-pane" role="tabpanel" aria-labelledby="stage1">
+        <!-- <div class="tab-pane fade active show" id="stage1-pane" role="tabpanel" aria-labelledby="stage1"> -->
+        <div class="row mb-2">
+          <div class="col-9">
+            <p class="card-title mb-2 bordered">Booking For</p>
+          </div>
+          <%if(user){%>
+          <div class="col-3 text-end">
+            <a href="#"><i class="fas fa-edit text-accent " onclick="editBookingFor()"></i></a>
+          </div>
+          <%}%>
+        </div>
+        <p id="clientDetailsError" hidden class="text-danger my-0 py-0 pb-1">Please provide an email adress and a name for this booking. </p>
+        <div class="row mb-4 ">
+          <div class="col-12 col-md-6 mb-3">
+            <input class="form-control" required id="clientEmail" <%=user?'disabled':''%> type="email" name="clientEmail" value="<%=user?user.username:''%>" placeholder="youremail@mail.com">
+          </div>
+          <div class="col-12 col-md-6">
+            <input class="form-control" required id="clientName" type="text" name="clientName" value="<%=user?user.firstName+' '+user.lastName:''%>" placeholder="Full Name">
+          </div>
+          <div class="col-12 " hidden id="clientWarningSection">
+            <div class="row  align-items-center text-warning">
+              <div class="col-2 text-center">
+                <i class='fas fa-exclamation-circle'></i>
+              </div>
+              <div class="col-10">
+                <p id="clientInfo" class="">The appointment details will be sent to the provided email.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <p class="card-title mb-2 bordered">
           Style Selection
         </p>
@@ -141,7 +172,7 @@ add to cart or book now
         </div>
       </div>
 
-      <div class="tab-pane fade " id="stage3-pane" role="tabpanel" aria-labelledby="stage3">
+      <div class="tab-pane " id="stage3-pane" role="tabpanel" aria-labelledby="stage3">
         <div class="container px-2 " id="booking-summary">
           <p class="card-title mb-3 bordered">
             Review Booking
@@ -208,41 +239,40 @@ add to cart or book now
               <span id="depositLabel">$0.00</span>
             </div>
           </div>
-
         </div>
       </div>
-    </form>
-    <!-- End of Main Forms -->
+  </form>
+  <!-- End of Main Forms -->
 
-      <div class="tab-pane fade " id="stage4-pane" role="tabpanel" aria-labelledby="stage4">
-        <div class="container px-2 " id="payment">
-          <%- include ("payment.ejs")  %>
-        </div>
+  <div class="tab-pane fade active show" id="stage4-pane" role="tabpanel" aria-labelledby="stage4">
+    <div class="container px-2 " id="payment">
+      <%- include ("payment.ejs")  %>
+    </div>
+  </div>
+
+
+  <div class="modalButtons">
+    <div class="row g-3 mt-1 mb-5 pb-3">
+      <!-- Button trigger modal -->
+      <!-- <input type="submit" name="" value="Subit"> -->
+
+      <div class="col-2 col-sm-3 col-md-3 mt-3">
+        <a type="" onclick="showPreviousTab()" class="btn btn-outline-danger py-2 d-block" name="" id="previousTabButton" value="">
+          <i class="fas fa-arrow-circle-left"></i>
+        </a>
       </div>
-
-
-      <div class="modalButtons">
-      <div class="row g-3 mt-1 mb-5 pb-3">
-        <!-- Button trigger modal -->
-        <!-- <input type="submit" name="" value="Subit"> -->
-
-        <div class="col-2 col-sm-3 col-md-3 mt-3">
-          <a type="" onclick="showPreviousTab()" class="btn btn-outline-danger py-2 d-block" name="" id="previousTabButton" value="">
-            <i class="fas fa-arrow-circle-left"></i>
-          </a>
-        </div>
-        <div class="col-10 col-sm-9 col-md-9">
-          <a type="" role="submit" onclick="showNextTab()" id="nextTabButton" class="btn btn-outline-accent rounded-pill d-block py-2">
-            Continue
-          </a>
-        </div>
-        <!-- <div class="col-12 col-sm-2 col-md-2 mt-3">
+      <div class="col-10 col-sm-9 col-md-9">
+        <a type="" role="submit" onclick="showNextTab()" id="nextTabButton" class="btn btn-outline-accent rounded-pill d-block py-2">
+          Continue
+        </a>
+      </div>
+      <!-- <div class="col-12 col-sm-2 col-md-2 mt-3">
           <a type="" role="submit" onclick="addToCart()" id="addToCart" class="btn btn-warning disabled py-2 d-block" name="" value=""> <span class="d-sm-none ">Add to Cart</span> <i class="fas fa-cart-plus"></i> </a>
         </div> -->
-      </div>
-      </div>
     </div>
-  <form class="d-none" hidden action="/payment" id="purchaseForm" method="post">
-    <textarea name="purchase" id="purchaseData" rows="8" cols="80"></textarea>
-  </form>
+  </div>
+</div>
+<form class="d-none" hidden action="/payment" id="purchaseForm" method="post">
+  <textarea name="purchase" id="purchaseData" rows="8" cols="80"></textarea>
+</form>
 </div>

@@ -217,6 +217,14 @@ a {
   transition: 0.7s;
 }
 
+.disabled.btn-outline-accent {
+  background: none;
+  border: 1px solid #999;
+  padding: 0.6em 2.3em;
+  color: #999;
+  transition: 0.7s;
+}
+
 .btn-accent {
   background: #cb2975;
   color: #fff;
@@ -236,6 +244,14 @@ a {
   /* border: 1px solid white; */
   box-shadow: 2px 2px 7px 0 #777;
   color: white;
+  transition: 0.7s;
+}
+
+.disabled.btn-outline-accent:hover {
+  background: none;
+  /* border: 1px solid white; */
+  box-shadow: 0px 0px 0px 0 transparent;
+  color: #999;
   transition: 0.7s;
 }
 
@@ -679,6 +695,12 @@ img.cover {
   border-radius: 1.5px;
 }
 
+.userIcon{
+  height: 1.4em;
+border-radius: 50%;
+}
 #form-signin{
   width: 100%;
 }
+
+/******************Form Validation****************************/

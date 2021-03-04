@@ -9,6 +9,7 @@
   "author": "Avis",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "dot-env": "0.0.1",
     "dotenv": "^8.2.0",
