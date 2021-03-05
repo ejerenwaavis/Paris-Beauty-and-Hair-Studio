@@ -210,7 +210,7 @@ passport.use(new GoogleStrategy({
             });
         }
       } else {
-        console.log("Internal error");
+        console.log("***********Internal error*************");
         console.log(err);
         return cb(new Error(err));
       }
@@ -617,7 +617,7 @@ app.get('/auth/google', passport.authenticate('google', {
 }));
 
 app.route("/loggedin")
-  .get(passport.authenticate('google', {
+  /*.get(passport.authenticate('google', {
       failureRedirect: '/login'
     }),
     function(req, res) {
@@ -625,7 +625,20 @@ app.route("/loggedin")
       // console.log("Logged IN");
       // console.log(user);
       res.redirect("/home");
-    })
+    })*/
+
+    .get(function(req, res, next) {
+      passport.authenticate('google', function(err, user, info) {
+        if (err) { return next(err); }
+        // Redirect if it fails
+        if (!user) { return res.redirect('/login'); }
+        req.logIn(user, function(err) {
+          if (err) { return next(err); }
+          // Redirect if it succeeds
+          return res.redirect('/home');
+        });
+      })(req, res, next);
+    });
 
 
 app.route("/logout")
