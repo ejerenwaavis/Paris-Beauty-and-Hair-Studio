@@ -28,7 +28,7 @@ const bcrypt = require('bcrypt');
 
 /**************** Authentication Constants **************/
 const session = require("express-session");
-const passport = require("passport");
+const passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
 const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
@@ -143,6 +143,35 @@ passport.deserializeUser(function(user, done) {
 });
 
 
+//telling passprt to use local Strategy
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    // console.log("Finding user");
+    User.findOne({ _id: username }, function (err, user) {
+      // console.log("dons searching for user");
+      if (err) { console.log(err); return done(err); }
+      if (!user) {
+        console.log("incorrect User name");
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+
+      bcrypt.compare(password, user.password, function(err, result) {
+        if(!err){
+          if(!result){
+            console.log("incorrect password");
+            return done(null, false, { message: 'Incorrect password.' });
+          }else{
+            return done(null, user);
+          }
+        }else{
+          // console.log("********some other error *************");
+          console.log(err);
+        }
+      });
+    });
+  }
+));
+
 //telling passport to use GoogleStrategy
 passport.use(new GoogleStrategy({
     clientID: CLIENT_ID,
@@ -224,7 +253,6 @@ app.route("/shop")
 
 
 app.route("/account")
-
   .get(function(req, res) {
     if(req.user){
       res.render("account", {
@@ -557,15 +585,28 @@ app.route("/orderPricings")
 app.route("/login")
   .get(function(req, res) {
     if(req.isAuthenticated()){
-      console.log("Authenticated Request");
+      // console.log("Authenticated Request");
       res.redirect("/home")
     } else {
-      console.log("Unauthorized Access, Please Login");
+      // console.log("Unauthorized Access, Please Login");
       res.render("login", {
         body: new Body("Login", "", "")
       });
     }
   })
+
+.post(function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err) { return next(err); }
+    // Redirect if it fails
+    if (!user) { return res.redirect('/login'); }
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      // Redirect if it succeeds
+      return res.redirect('/home');
+    });
+  })(req, res, next);
+});
 
 app.get('/auth/google', passport.authenticate('google', {
   // scope: ['profile']
@@ -600,83 +641,83 @@ app.route("/logout")
   });
 
 
-  app.route("/register")
-    .get(function(req, res) {
-      if(req.isAuthenticated()){
-        // console.log("Authenticated Request");
-        res.redirect("/home")
-      } else {
-        // console.log("Unauthorized Access, Please Login");
-        res.render("register", {
-          body: new Body("Register", "", ""),
-          purchase: initialPurchase(),
-          user: null,
-        });
-      }
-    })
-    .post(function(req,res){
-      const user = new User({
-        _id: req.body.username,
-        username: req.body.username,
-        phone: req.body.phone,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        password: req.body.password,
-        DoB: new Date(req.body.DoB),
-        photoURL: "",
-        userHasPassword:true,
-        verified:false,
-      })
-      let hahsPassword;
-      bcrypt.hash(req.body.password, SALTROUNDS, function(err, hash) {
-          if(!err){
-            user.password = hash;
-            // console.log(user);
-            User.exists({_id:user._id},function(err,exists){
-              if(exists){
-                res.render("/register",{
-                  body:new Body("Register","User email aready exists",""),
-                  purchase: initialPurchase(),
-                  user: user,
-                });
-              }else{
-                user.save(function(err,savedObj){
-                  // console.log(err);
-                  if(!err){
-                    // console.log(savedObj);
-                    res.redirect("/login");
-                  }else{
-
-                  }
-                })
-              }
-            });
-          }else{
-            // console.log(user);
-            // console.log(err);
-            res.render("register",{
-              body:new Body("Register","Unable to complete registration (error: e-PWD)",""),
-              purchase: initialPurchase(),
-              user: user,
-            });
-          }
+app.route("/register")
+  .get(function(req, res) {
+    if(req.isAuthenticated()){
+      // console.log("Authenticated Request");
+      res.redirect("/home")
+    } else {
+      // console.log("Unauthorized Access, Please Login");
+      res.render("register", {
+        body: new Body("Register", "", ""),
+        purchase: initialPurchase(),
+        user: null,
       });
+    }
+  })
+  .post(function(req,res){
+    const user = new User({
+      _id: req.body.username,
+      username: req.body.username,
+      phone: req.body.phone,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      password: req.body.password,
+      DoB: new Date(req.body.DoB),
+      photoURL: "",
+      userHasPassword:true,
+      verified:false,
+    })
+    let hahsPassword;
+    bcrypt.hash(req.body.password, SALTROUNDS, function(err, hash) {
+        if(!err){
+          user.password = hash;
+          // console.log(user);
+          User.exists({_id:user._id},function(err,exists){
+            if(exists){
+              res.render("/register",{
+                body:new Body("Register","User email aready exists",""),
+                purchase: initialPurchase(),
+                user: user,
+              });
+            }else{
+              user.save(function(err,savedObj){
+                // console.log(err);
+                if(!err){
+                  // console.log(savedObj);
+                  res.redirect("/login");
+                }else{
 
+                }
+              })
+            }
+          });
+        }else{
+          // console.log(user);
+          // console.log(err);
+          res.render("register",{
+            body:new Body("Register","Unable to complete registration (error: e-PWD)",""),
+            purchase: initialPurchase(),
+            user: user,
+          });
+        }
+    });
+
+  })
+
+app.route("/usernameExist")
+    .post(function(req,res){
+      // console.log("username to search ---> "+req.body.username);
+      User.exists({_id:req.body.username}, function(err,exists){
+        res.send(exists);
+      })
     })
 
-    app.route("/usernameExist")
-      .post(function(req,res){
-        // console.log("username to search ---> "+req.body.username);
-        User.exists({_id:req.body.username}, function(err,exists){
-          res.send(exists);
-        })
-      })
 
 
-
-  app.listen(process.env.PORT || 3000, function() {
-    console.log("Paris Hair and Beauty Studio is Live");
-  });
+app.listen(process.env.PORT || 3000, function() {
+  console.log("Paris Hair and Beauty Studio is Live");
+});
 
 /************** helper functions *******************/
 function Body(title, error, message) {
