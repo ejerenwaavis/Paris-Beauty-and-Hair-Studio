@@ -176,7 +176,7 @@ passport.use(new LocalStrategy(
 passport.use(new GoogleStrategy({
     clientID: CLIENT_ID,
     clientSecret: CLIENT_SECRETE,
-    callbackURL: "http://parisbeautyandhairstudio.herokuapp.com/loggedin",
+    callbackURL: "https://parisbeautyandhairstudio.herokuapp.com/loggedin",
     // callbackURL: "/loggedin",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
