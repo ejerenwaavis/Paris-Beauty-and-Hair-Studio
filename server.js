@@ -176,8 +176,8 @@ passport.use(new LocalStrategy(
 passport.use(new GoogleStrategy({
     clientID: CLIENT_ID,
     clientSecret: CLIENT_SECRETE,
-    // callbackURL: "https://auto-g-codes.herokuapp.com/loggedIn",
-    callbackURL: "/loggedin",
+    callbackURL: "https://parisbeautyandhairstudio.herokuapp.com/loggedin",
+    // callbackURL: "/loggedin",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
   function(accessToken, refreshToken, profile, cb) {
