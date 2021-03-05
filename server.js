@@ -176,8 +176,8 @@ passport.use(new LocalStrategy(
 passport.use(new GoogleStrategy({
     clientID: CLIENT_ID,
     clientSecret: CLIENT_SECRETE,
-    callbackURL: "https://parisbeautyandhairstudio.herokuapp.com/loggedin",
-    // callbackURL: "/loggedin",
+    // callbackURL: "https://parisbeautyandhairstudio.herokuapp.com/loggedin",
+    callbackURL: "/loggedin",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
   function(accessToken, refreshToken, profile, cb) {
@@ -609,8 +609,8 @@ app.route("/login")
 });
 
 app.get('/auth/google', passport.authenticate('google', {
-  // scope: ['profile']
-  scope: [
+  scope: ['profile']
+  // scope: [
         'https://www.googleapis.com/auth/userinfo.profile',
         'https://www.googleapis.com/auth/userinfo.email'
     ]
