@@ -609,8 +609,8 @@ app.route("/login")
 });
 
 app.get('/auth/google', passport.authenticate('google', {
-  scope: ['profile']
-  // scope: [
+  // scope: ['profile']
+  scope: [
         'https://www.googleapis.com/auth/userinfo.profile',
         'https://www.googleapis.com/auth/userinfo.email'
     ]
