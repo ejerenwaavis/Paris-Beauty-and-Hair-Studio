@@ -1,4 +1,6 @@
 require("dotenv").config();
+
+/**************** SYSTEM VAIRAIBLES ******************/
 const PASSWORD = process.env.PASSWORD;
 const OPENTIME = {hrs:Number(process.env.OPENTIMEHRS), mins: Number(process.env.OPENTIMEMINS)};
 const CLOSETIME = {hrs:Number(process.env.CLOSETIMEHRS), mins: Number(process.env.CLOSETIMEMINS)};
@@ -11,9 +13,12 @@ const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRETE = process.env.CLIENT_SECRETE;
 const SECRETE = process.env.SECRETE;
 const SALTROUNDS = Number(process.env.SALTROUNDS);
+FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID
+FACEBOOK_APP_SECRET = process.env.FACEBOOK_APP_SECRET
 
 
 
+/************* Module Invocations *********************/
 const express = require("express");
 const app = express();
 const ejs = require("ejs");
@@ -28,8 +33,10 @@ const bcrypt = require('bcrypt');
 
 /**************** Authentication Constants **************/
 const session = require("express-session");
-const passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
+const passport = require('passport');
 const passportLocalMongoose = require("passport-local-mongoose");
+const LocalStrategy = require('passport-local').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 
@@ -120,7 +127,7 @@ const userSchema = new mongoose.Schema({
   phone: String,
   firstName: String,
   lastName: String,
-  DoB: Date,
+  // DoB: Date,
   password: {type:String,default:""},
   photoURL: String,
   userHasPassword: {
@@ -172,12 +179,62 @@ passport.use(new LocalStrategy(
   }
 ));
 
+//telling passport to use Facebook Strategy
+passport.use(new FacebookStrategy({
+    clientID: FACEBOOK_APP_ID,
+    clientSecret: FACEBOOK_APP_SECRET,
+    callbackURL: "https://parisbeautyandhairstudio.herokuapp.com/facebookLoggedin",
+    // callbackURL: "/facebookLoggedin",
+    enableProof: true,
+    profileFields: ["birthday", "email", "first_name", 'picture.type(large)', "last_name"]
+  },
+
+  function(accessToken, refreshToken, profile, cb) {
+    let userProfile = profile._json;
+    // console.log("************ FB Profile *******");
+    // console.log(userProfile.picture.data.url);
+    User.findOne({ _id: userProfile.email }, function (err, user) {
+      if(!err){
+        if(user){
+          console.log("Logged in as ----> "+user._id);
+          return cb(err, user);
+        }else{
+          let newUser = new User({
+            _id: userProfile.email,
+            username: userProfile.email,
+            firstName: userProfile.first_name,
+            lastName: userProfile.last_name,
+            photoURL: userProfile.picture.data.url,
+            verified: false
+          });
+
+          newUser.save()
+            .then(function() {
+              console.log("New FB user created ---> "+newUser.username);
+              // console.log(newUser);
+              return cb(user);
+            })
+            .catch(function(err) {
+              console.log("failed to create user");
+              console.log(err);
+              return cb(new Error(err));
+            });
+        }
+      }else{
+          console.log("***********Internal error*************");
+          console.log(err);
+          return cb(new Error(err));
+      }
+    });
+  }
+));
+
 //telling passport to use GoogleStrategy
 passport.use(new GoogleStrategy({
     clientID: CLIENT_ID,
     clientSecret: CLIENT_SECRETE,
-    // callbackURL: "https://parisbeautyandhairstudio.herokuapp.com/loggedin",
-    callbackURL: "/loggedin",
+    callbackURL: "https://parisbeautyandhairstudio.herokuapp.com/loggedin",
+    // callbackURL: "/googleLoggedin",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
   function(accessToken, refreshToken, profile, cb) {
@@ -187,8 +244,9 @@ passport.use(new GoogleStrategy({
       _id: userProfile.email
     }, function(err, user) {
       if (!err) {
-        console.log("Logged In ----> "+user._id);
+        // console.log("logged in");
         if (user) {
+            console.log("Logged in as ----> "+user._id);
             return cb(null, user)
         } else {
           console.log("user not found - creating new user");
@@ -207,6 +265,7 @@ passport.use(new GoogleStrategy({
             .catch(function(err) {
               console.log("failed to create user");
               console.log(err);
+              return cb(new Error(err));
             });
         }
       } else {
@@ -264,10 +323,51 @@ app.route("/account")
       res.render("login", {
         body: new Body("Login", "You are not Logged In, Please sign in to see your account", ""),
         purchase: initialPurchase(),
+        login:null,
         user:req.user,
       });
     }
-  });
+  })
+  .post(function(req,res){
+    // let strdateOfBirth = (req.body.DoB).replace(/-/g,",");
+    let update = {
+      firstName : req.body.firstName,
+      lastName : req.body.lastName,
+      username : req.user.username,
+      phone : req.body.phone,
+      // bday : new Date(strdateOfBirth).toLocaleString(),
+    }
+    console.log(update);
+
+    User.updateOne({_id:update.username},{
+      firstName:(update.firstName)?update.firstName:"",
+      lastName:(update.lastName)?update.lastName:"",
+      phone:(update.phone)?update.phone:null,
+      // DoB:(update.bday)?update.bday:null,
+    },function(e,r){
+      if(!e){
+        if(r.n > 0){
+          console.log("Account Updated");
+          res.redirect("/account");
+        }else{
+          console.log("failed to update");
+          res.render("account", {
+            body: new Body("Account","Account Update Failed: Internal Server ERror",""),
+            purchase: initialPurchase(),
+            user:req.user,
+          })
+        }
+      }else{
+        console.log(e);
+        res.render("account", {
+          body: new Body("Account","Account Update Failed: Internal Server ERror",""),
+          purchase: initialPurchase(),
+          user:req.user,
+        })
+      }
+    });
+  })
+
 
 app.route("/book")
   .get(function(req, res) {
@@ -590,16 +690,19 @@ app.route("/login")
     } else {
       // console.log("Unauthorized Access, Please Login");
       res.render("login", {
-        body: new Body("Login", "", "")
+        body: new Body("Login", "", ""),
+        login:null
       });
     }
   })
 
 .post(function(req, res, next) {
   passport.authenticate('local', function(err, user, info) {
+    console.log(user);
+    // console.log(info);
     if (err) { return next(err); }
     // Redirect if it fails
-    if (!user) { return res.redirect('/login'); }
+    if (!user) { return res.render('login',{body:new Body("Login",info.message,""), login:req.body.username }); }
     req.logIn(user, function(err) {
       if (err) { return next(err); }
       // Redirect if it succeeds
@@ -616,17 +719,29 @@ app.get('/auth/google', passport.authenticate('google', {
     ]
 }));
 
-app.route("/loggedin")
-  /*.get(passport.authenticate('google', {
-      failureRedirect: '/login'
-    }),
-    function(req, res) {
-      // Successful authentication, redirect user page.
-      // console.log("Logged IN");
-      // console.log(user);
-      res.redirect("/home");
-    })*/
+app.get('/auth/facebook', passport.authenticate('facebook',{ scope: 'email'}));
+app.route("/facebookLoggedin")
+    .get(function(req, res, next) {
+      passport.authenticate('facebook', function(err, user, info) {
+        if (err) {
+          console.log(err);
+          return next(err);
+        }
+        // Redirect if it fails
+        if (!user) { console.log(err); return res.redirect('/login'); }
+        req.logIn(user, function(err) {
+          if (err) { return next(err); }
+          // Redirect if it succeeds
+          return res.redirect('/home');
+        });
+      })(req, res, next);
+    });
 
+
+
+
+
+app.route("/googleLoggedin")
     .get(function(req, res, next) {
       passport.authenticate('google', function(err, user, info) {
         if (err) { return next(err); }
@@ -676,7 +791,7 @@ app.route("/register")
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       password: req.body.password,
-      DoB: new Date(req.body.DoB),
+      // DoB: new Date(req.body.DoB).toLocaleString(),
       photoURL: "",
       userHasPassword:true,
       verified:false,
@@ -726,7 +841,20 @@ app.route("/usernameExist")
       })
     })
 
-
+app.route("/deleteAccess")
+  .get(function(req,res){
+    let provider = req.params.provider;
+    if(provider === provider){
+      res.render("accessDeletion",{body:new Body("Delete Access","",""), user:req.user});
+    }
+  })
+  .post(function(req,res){
+    User.deleteOne({_id:req.user.username},function(err,deleted){
+      console.log(err);
+      console.log(deleted);
+      res.redirect("/logout")
+    })
+  })
 
 app.listen(process.env.PORT || 3000, function() {
   console.log("Paris Hair and Beauty Studio is Live");

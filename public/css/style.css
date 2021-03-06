@@ -1,5 +1,6 @@
 a {
   text-decoration: none;
+  cursor: pointer;
 }
 
 body {
@@ -116,6 +117,10 @@ h5.sub-header.bordered,
 .bg-overlay-dark {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 0.3), rgba(120, 120, 120, 0.94));
   transition: 0.6s;
+}
+
+.bg-fb{
+  background-color: #45619D;
 }
 
 .logo {

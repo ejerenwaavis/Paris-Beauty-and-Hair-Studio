@@ -1,35 +1,74 @@
-
 <%- include("partials/header.ejs")%>
 
 <section class="d-block pt-5 text-center">
-  <img src="img/logo/paris-primary-sm.png" class="logo" alt="">
-<!-- <p class="pt-5">Login</p> -->
-<div class="container col-10 col-sm-8 col-md-8 col-lg-5 my-5 text-center pt-4">
-  <div class="row justify-content-center">
-    <div class="col-12 col-sm-10 col-md-8 mb-2">
-      <a href="/auth/google" class="text-left  w-100 btn btn-lg btn-primary btn-block p-0 m-0">
-        <div class="row g-0 align-items-center">
-          <div class="col-2 text-start">
-            <img src="img/google-icon-2.png" class="google-icon" alt="">
-          </div>
-          <div class="col-8 ">
+  <a href="/home">
+    <img src="img/logo/paris-primary-sm.png" class="logo" alt="">
+  </a>
+
+
+  <div class="container col-10 col-sm-8 col-md-8 col-lg-5 my-5 text-center pt-4">
+    <div class="row justify-content-center">
+      <div class="col-12 col-sm-10 col-md-8 mb-2">
+        <a href="/auth/google" class="text-left  w-100 btn btn-lg btn-primary btn-block p-0 m-0">
+          <div class="row g-0 align-items-center">
+            <div class="col-2 text-start">
+              <img src="img/google-icon-2.png" class="google-icon" alt="">
+            </div>
+            <div class="col-8 ">
               <small class=""> Sign in with Google</small>
-          </div>
-          <div class="col-2 ">
+            </div>
+            <div class="col-2 ">
               <small class=""> &nbsp;</small>
+            </div>
           </div>
-        </div>
-      </a>
-    </div>
-    <div class="col-12 col-sm-10 col-md-8 mb-3">
-      <div class='line-container my-3'>
-        <div class='line-icon-longer'> or </div>
+        </a>
       </div>
-    </div>
-    <div class="col-12 col-sm-10 col-md-8">
+
+      <div class="col-12 col-sm-10 col-md-8 mb-2">
+        <a href="/auth/facebook" class="text-left  w-100 btn btn-lg bg-fb text-white btn-block p-0 m-0">
+          <div class="row g-0 align-items-center">
+            <div class="col-2 text-start ">
+              <!-- <i class="fab fa-facebook-square"></i> -->
+              <img src="img/fb_icon.png" class="google-icon" alt="">
+            </div>
+            <div class="col-8 ">
+              <small class=""> Sign in with Facebook</small>
+            </div>
+            <div class="col-2 ">
+              <small class=""> &nbsp;</small>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-12 col-sm-10 col-md-8 mb-3">
+        <div class='line-container my-3'>
+          <div class='line-icon-longer'> or </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-10 col-md-8">
+
+        <%if (body.message){%>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <!-- <strong>Holy guacamole!</strong>  -->
+          <small>
+            <%= body.message%>
+          </small>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <%}else if(body.error){%>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <!-- <strong>Holy guacamole!</strong>  -->
+          <small>
+            <%= body.error%>
+          </small>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <%}%>
+
       <form class="form-signin" action="/login" method="post" id="form-signin">
         <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="username" name="username" class="form-control" placeholder="Email address" required autofocus>
+        <input value="<%=(login)?login:'' %>" type="email" id="username" name="username" class="form-control" placeholder="Email address" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" id="password" name="password" class="form-control mb-3" placeholder="Password" required>
         <button class="btn rounded-pill btn-outline-accent w-100 mb-3" type="submit">Sign in</button>
@@ -44,3 +83,6 @@
   Don't have an account? Register <a href="/register" class="d-inline">here </a>
 </div>
 </section>
+
+<!-- bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>

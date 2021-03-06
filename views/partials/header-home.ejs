@@ -7,6 +7,7 @@
   <meta name="description" content="Paris Hair and beauty Website">
   <meta name="author" content="Avis Ejerenwa">
   <title> <%=(body)?body.title + " ·":"" %> Paris Beauty and Hair Studio</title>
+  <base href="/" >
 
   <!-- Icon -->
   <link rel='icon' href='img/logo/favicon-alt.png' type='image/x-icon' />
@@ -60,7 +61,7 @@
         <i class="fas fa-md fa-shopping-cart me-1 d-none d-md-inline-block"></i>
         SHOP
       </a> -->
-      <a href="" class="nav-link nav-bl nav-br " onclick="loadStyles()" data-bs-toggle="modal" data-bs-target="#booking-form-modal">
+      <a  class="nav-link nav-bl nav-br " onclick="loadStyles()" data-bs-toggle="modal" data-bs-target="#booking-form-modal">
         <i class="fas fa-md fa-calendar-alt me-1 d-none d-md-inline-block"></i>
         BOOK
       </a>
@@ -97,7 +98,7 @@
   <!-- Booking Form -->
   <div class="modal fade" id="booking-form-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="booking-form" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content bordered-accent">
+      <div class="modal-content">
         <div class="modal-header bg-accent text-white">
           <h5 class="modal-title d-block m-auto" id="reviewLabel">Booking</h5>
           <a type="button" class="text-white" data-bs-dismiss="modal" aria-label="Close"><i class="far fa-lg fa-times-circle"></i></a>
@@ -114,7 +115,7 @@
   <!-- Sign in Modal -->
   <div class="modal fade" id="signIn" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="signIn" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content bordered-accent">
+      <div class="modal-content">
         <div class="modal-header bg-accent text-white">
           <h5 class="modal-title d-block m-auto" id="">Sign In</h5>
           <a type="button" class="text-white" data-bs-dismiss="modal" aria-label="Close"><i class="far fa-lg fa-times-circle"></i></a>
