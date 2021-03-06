@@ -233,7 +233,7 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
     clientID: CLIENT_ID,
     clientSecret: CLIENT_SECRETE,
-    callbackURL: "https://parisbeautyandhairstudio.herokuapp.com/loggedin",
+    callbackURL: "https://parisbeautyandhairstudio.herokuapp.com/googleLoggedin",
     // callbackURL: "/googleLoggedin",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
