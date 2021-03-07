@@ -183,8 +183,8 @@ passport.use(new LocalStrategy(
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
-    // callbackURL: "https://parisbeautyandhairstudio.herokuapp.com/facebookLoggedin",
-    callbackURL: "/facebookLoggedin",
+    callbackURL: "https://parisbeautyandhairstudio.herokuapp.com/facebookLoggedin",
+    // callbackURL: "/facebookLoggedin",
     enableProof: true,
     profileFields: ["birthday", "email", "first_name", 'picture.type(large)', "last_name"]
   },
@@ -233,8 +233,8 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
     clientID: CLIENT_ID,
     clientSecret: CLIENT_SECRETE,
-    // callbackURL: "https://parisbeautyandhairstudio.herokuapp.com/googleLoggedin",
-    callbackURL: "/googleLoggedin",
+    callbackURL: "https://parisbeautyandhairstudio.herokuapp.com/googleLoggedin",
+    // callbackURL: "/googleLoggedin",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
   function(accessToken, refreshToken, profile, cb) {
