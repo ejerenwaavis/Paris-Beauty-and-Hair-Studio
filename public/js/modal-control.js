@@ -288,8 +288,6 @@ function showTimePanel(){
       if(selectedDate === date){
         selectDateDayObj = day;
         break;
-      }else{
-        console.log("Date note found :"+ dc);
       }
       dc++;
     }
@@ -365,8 +363,10 @@ function checkOut(){
   switchPanes(4);
   // console.log("Checking Out");
   let body = {
-    baseStyle: $("#styleSelect").val(),
-    styleOption: $("#selectOption").val(),
+    style:{
+      baseStyle: $("#styleSelect").val(),
+      option: $("#selectOption").val(),
+    },
     price: Number($("#price").val()),
     date: $("#selectedDate").val(),
     time: JSON.parse($("#selectedTime").val()),
@@ -377,12 +377,12 @@ function checkOut(){
   };
   let pricings;
   $.post("/orderPricings",body, function(res){
-    console.log(res);
+    // console.log(res);
     pricings = res;
   });
 
   $.post("/appt", body, function(data){
-    console.log(data);
+    // console.log(data);
     if(data.status === "success"){
 
       apptID = data.id;
@@ -397,8 +397,8 @@ function checkOut(){
       setProgress()
       checkoutDone();
       $(".modalButtons").hide();
-      $("#checkOutBase").html(body.baseStyle);
-      $("#checkOutOption").html(body.styleOption);
+      $("#checkOutBase").html(body.style.baseStyle);
+      $("#checkOutOption").html(body.style.option);
       $("#checkOutDeposit").html((pricings.deposit/100).toFixed(2));
       $("#checkOutTax").html((pricings.tax/100).toFixed(2));
       $("#checkOutTotal").html((pricings.total/100).toFixed(2));

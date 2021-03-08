@@ -314,11 +314,35 @@ app.route("/shop")
 app.route("/account")
   .get(function(req, res) {
     if(req.user){
-      res.render("account", {
-        body: new Body("Account", "", ""),
-        purchase: initialPurchase(),
-        user:req.user,
+      // console.log("finding appts for --> "+ req.user.username);
+      Appointment.find({clientUsername:req.user.username}, function(err,foundAppts){
+
+        let activeAppts = [];
+        let inactiveAppts = [];
+        let unconfirmedAppts = [];
+        let today = new Date();
+        for(appt of foundAppts){
+          if(appt.date.getTime() > today.getTime()){
+            if(appt.confirmed){
+              activeAppts.push(appt);
+            }else{
+              unconfirmedAppts.push(appt);
+            }
+          }else{
+            inactiveAppts.push(appt);
+          }
+        }
+        // console.log(activeAppts);
+        res.render("account", {
+          body: new Body("Account", "", ""),
+          purchase: initialPurchase(),
+          activeAppts:activeAppts,
+          inactiveAppts:inactiveAppts,
+          unconfirmedAppts:unconfirmedAppts,
+          user:req.user,
+        });
       });
+
     }else{
       res.render("login", {
         body: new Body("Login", "You are not Logged In, Please sign in to see your account", ""),
@@ -337,7 +361,7 @@ app.route("/account")
       phone : req.body.phone,
       // bday : new Date(strdateOfBirth).toLocaleString(),
     }
-    console.log(update);
+    // console.log(update);
 
     User.updateOne({_id:update.username},{
       firstName:(update.firstName)?update.firstName:"",
@@ -368,6 +392,47 @@ app.route("/account")
     });
   })
 
+app.route("/myAppointments")
+  .get(function(req,res){
+    if(req.user){
+      // console.log("finding appts for --> "+ req.user.username);
+      Appointment.find({clientUsername:req.user.username}, function(err,foundAppts){
+
+        let activeAppts = [];
+        let inactiveAppts = [];
+        let unconfirmedAppts = [];
+        let today = new Date();
+        for(appt of foundAppts){
+          if(appt.date.getTime() > today.getTime()){
+            if(appt.confirmed){
+              activeAppts.push(appt);
+            }else{
+              unconfirmedAppts.push(appt);
+            }
+          }else{
+            inactiveAppts.push(appt);
+          }
+        }
+        // console.log(activeAppts);
+        res.render("myAppointments", {
+          body: new Body("My Appointments", "", ""),
+          purchase: initialPurchase(),
+          activeAppts:activeAppts,
+          inactiveAppts:inactiveAppts,
+          unconfirmedAppts:unconfirmedAppts,
+          user:req.user,
+        });
+      });
+
+    }else{
+      res.render("login", {
+        body: new Body("Login", "You are not Logged In, Please sign in to see your account", ""),
+        purchase: initialPurchase(),
+        login:null,
+        user:req.user,
+      });
+    }
+  });
 
 app.route("/book")
   .get(function(req, res) {
@@ -460,8 +525,8 @@ app.route("/appt")
       clientUsername: email,
       clientName: name,
       style: {
-        baseStyle: req.body.baseStyle,
-        option: req.body.styleOption //"Small Waist length"
+        baseStyle: req.body.style.baseStyle,
+        option: req.body.style.option //"Small Waist length"
       },
       price: {
         total: (req.body.price),
@@ -671,11 +736,31 @@ app.post("/create-payment-intent", async function (req, res){
 app.route("/orderPricings")
 .post(function (req,res){
   // console.log("Geting Pricings");
-  console.log(req.body);
-  let deposit = (Number(req.body.price) * DEPOSITPERCENT) * 100;
-  let t = tax(deposit);
-  let total = t + deposit;
-  res.send({deposit:deposit, tax:t, total:total});
+  // console.log(req.body);
+  Style.findOne({baseStyle:req.body.style.baseStyle}, function(err,style){
+    if(!err){
+      if(style){
+        for(option of style.options){
+          if(option.name === req.body.style.option){
+            // console.log(option);
+
+            // console.log(dbPrice);
+            // console.log(req.body);
+            let deposit = (option.price * DEPOSITPERCENT) * 100;
+            let t = tax(deposit);
+            let total = t + deposit;
+            res.send({deposit:deposit, tax:t, total:total});
+            break;
+          }
+        }
+      }else{
+        res.send("Error: Could Not Find Seleced Style");
+      }
+    }else{
+      res.send("Error: "+err);
+    }
+  });
+
 })
 
 
@@ -875,6 +960,11 @@ function initialPurchase(){
     total:0
   }
 }
+function addExpiration(mins){
+  let date = new Date();
+  date.setMinutes(date.getMinutes() + mins);
+  return date;
+}
 function compareDates(t,d){
   let comparison = 0;
   if (t.getFullYear() > d.getFullYear()) {
@@ -895,11 +985,6 @@ function compareDates(t,d){
     }
   }
   return comparison;
-}
-function addExpiration(mins){
-  let date = new Date();
-  date.setMinutes(date.getMinutes() + mins);
-  return date;
 }
 function compareAppts(a,b){
   let comparison = 0;

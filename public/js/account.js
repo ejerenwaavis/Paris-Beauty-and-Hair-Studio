@@ -1,6 +1,6 @@
 
 $(function(){
-  setYear();
+  // setYear();
 });
 
 function enableSubmit(){

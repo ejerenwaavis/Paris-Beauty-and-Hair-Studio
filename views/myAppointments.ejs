@@ -1,0 +1,267 @@
+<%- include ("partials/header-home.ejs")  %>
+
+<%if (body.message){%>
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  <!-- <strong>Holy guacamole!</strong>  -->
+  <%= body.message%>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<%}else if(body.error){%>
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  <!-- <strong>Holy guacamole!</strong>  -->
+  <%= body.error%>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<%}%>
+
+<section class="my-5" id="appts">
+  <div class="container">
+
+    <h4 class="header d-none d-sm-block bordered mb-3">
+      Your Appointments
+    </h4>
+    <h6 class="sub-header d-sm-none bordered mb-3">
+        Your Appointments
+      </h6>
+    <div class="mb-5">
+        <ul class="nav nav-tabs appointments-nav">
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active"  data-bs-toggle="tab" data-bs-target="#activeAppts"  role="tab" aria-controls="activeAppts" aria-selected="true">Active <span class="d-none d-md-inline">Bookings</span> <span class="badge rounded-pill bg-accent"><%=activeAppts.length%></span>
+</a>
+</li>
+<%if(unconfirmedAppts.length){%>
+<li class="nav-item" role="presentation">
+  <a class="nav-link " data-bs-toggle="tab" data-bs-target="#unconfirmedAppts" role="tab" aria-controls="unconfirmedAppts" aria-selected="true">Unconfirmed <span class="d-none d-md-inline">Bookings</span> <span
+      class="badge rounded-pill bg-accent"><%=unconfirmedAppts.length%></span> </a>
+</li>
+<%}%>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#inactiveAppts"  role="tab" aria-controls="inactiveAppts" aria-selected="true">Fulfilled <span class="d-none d-md-inline">Bookings</span> <span class="badge rounded-pill bg-accent"><%=inactiveAppts.length%></span>
+</a>
+</li>
+
+</ul>
+</div>
+
+<div class="tab-content">
+
+  <div class="tab-pane fade show active" id="activeAppts" role="tabpanel" aria-labelledby="activeAppts-tab">
+    <div class="row">
+      <%if(!activeAppts.length){%>
+      <div class="row text-center justify-content-center">
+        <div class="col-6">
+          <h3 class="sub-header text-center">You currently have no Active Bookings</h3>
+          <a class="btn rounded-pill btn-outline-accent" href="" onclick="loadStyles()" data-bs-toggle="modal" data-bs-target="#booking-form-modal">
+            BOOK A SERVICE
+          </a>
+        </div>
+      </div>
+      <%}%>
+<%for(appt of activeAppts){%>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+        <div class="card h-100 border-success  text-center">
+          <div class="card-header">
+            <span class="text-bold d-block"><%=appt.date.toLocaleDateString()%></span>
+            <span class="text-bold"> <%=((appt.startTime.hrs<10)?"0"+appt.startTime.hrs:appt.startTime.hrs)+":"+ appt.startTime.mins%> <%=(appt.startTime.hrs>11)?"PM":"AM" %></span>
+          </div>
+          <div class="card-body py-3 px-3">
+
+            <span class="d-block mb-2"><span class="text-bold">Style</span> <br> <%=appt.style.baseStyle%></span>
+            <span class="d-block mb-2"><span class="text-bold">Option</span> <br> <%=appt.style.option%></small> </span>
+            <span class="card-text"><span class="text-bold">Stylist</span> <br> <%=appt.stylist%></span>
+
+          </div>
+        </div>
+      </div>
+      <%}%>
+</div>
+
+  </div>
+  <div class="tab-pane fade" id="unconfirmedAppts" role="tabpanel" aria-labelledby="unconfirmedAppts-tab">
+<div class="row">
+  <%if(!unconfirmedAppts.length){%>
+      <div class="row text-center justify-content-center">
+        <div class="col-6">
+          <h3 class="sub-header text-center">You currently have no Pending Bookings</h3>
+          <a class="btn rounded-pill btn-outline-accent" href="" onclick="loadStyles()" data-bs-toggle="modal" data-bs-target="#booking-form-modal">
+            BOOK A SERVICE
+          </a>
+        </div>
+      </div>
+      <%}%>
+<%for(appt of unconfirmedAppts){%>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+        <div class="card h-100 border-warning  text-center">
+          <div class="card-header">
+            <span class="text-bold d-block"><%=appt.date.toLocaleDateString()%></span>
+            <span class="text-bold"> <%=((appt.startTime.hrs<10)?"0"+appt.startTime.hrs:appt.startTime.hrs)+":"+ appt.startTime.mins%> <%=(appt.startTime.hrs>11)?"PM":"AM" %></span>
+          </div>
+          <div class="card-body py-3 px-3">
+
+            <span class="d-block mb-2"><span class="text-bold">Style</span> <br> <%=appt.style.baseStyle%></span>
+            <span class="d-block mb-2"><span class="text-bold">Option</span> <br> <%=appt.style.option%></small> </span>
+            <span class="card-text"><span class="text-bold">Stylist</span> <br> <%=appt.stylist%></span>
+            <button type="button" onclick="openPayementPanel(this)" apptString='<%=JSON.stringify(appt)%>' class="my-2  w-100 btn btn-sm btn-outline-accent rounded-pill" name="button" data-bs-toggle="modal" data-bs-target="#confirm-modal"> Confirm </button>
+          </div>
+        </div>
+      </div>
+      <%}%>
+</div>
+
+
+
+
+</div>
+
+<div class="tab-pane fade " id="inactiveAppts" role="tabpanel" aria-labelledby="inactiveAppts-tab">
+<div class="row">
+  <%if(!inactiveAppts.length){%>
+      <div class="row text-center justify-content-center">
+        <div class="col-6">
+          <h3 class="sub-header text-center">You currently have no Passed Bookings</h3>
+          <a class="btn rounded-pill btn-outline-accent" href="" onclick="loadStyles()" data-bs-toggle="modal" data-bs-target="#booking-form-modal">
+            BOOK A SERVICE
+          </a>
+        </div>
+      </div>
+      <%}%>
+      <%for(appt of inactiveAppts){%>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+        <div class="card h-100 border-muted-feint py-0 text-center text-muted-feint">
+          <div class="card-header bg-light">
+            <span class="text-bold d-block"><%=appt.date.toLocaleDateString()%></span>
+            <span class="text-bold"> <%=((appt.startTime.hrs<10)?"0"+appt.startTime.hrs:appt.startTime.hrs)+":"+ appt.startTime.mins%> <%=(appt.startTime.hrs>11)?"PM":"AM" %></span>
+          </div>
+          <div class="card-body py-3  px-3">
+
+            <span class="d-block mb-2"><span class="text-bold">Style</span> <br> <%=appt.style.baseStyle%></span>
+            <span class="d-block mb-2"><span class="text-bold">Option</span> <br> <%=appt.style.option%></small> </span>
+            <span class="card-text"><span class="text-bold">Stylist</span> <br> <%=appt.stylist%></span>
+
+          </div>
+        </div>
+      </div>
+      <%}%>
+</div>
+
+    </div>
+  </div>
+  </div>
+</section>
+
+<div class="modal fade" id="confirm-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="booking-form" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-accent text-white">
+        <h5 class="modal-title d-block m-auto" id="reviewLabel">Confirm Booking</h5>
+        <a type="button" onclick="location.reload();" class="text-white" data-bs-dismiss="modal" aria-label="Close"><i class="far fa-lg fa-times-circle"></i></a>
+      </div>
+      <div class="modal-body">
+
+        <div class="container loadingSign text-center my-5  py-5" id="confirmLoadingSign">
+          <div class="spinner-border text-accent" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        <div id="successConfirmed" class="py-5 my-3">
+          <p class="text-success">Booking has been Confirmed</p>
+        </div>
+          <div class="container px-3 " id="confirmPayment">
+            <div id='stripeForm' class="mt-0">
+              <form id='confirm-payment-form' class="pt-1">
+                  <div class="row ">
+                    <div class="container ">
+                    <div class="col-12 mb-2">
+                      <h3 class="card-title mb-3 bordered">SUMMARY</h3>
+                    </div>
+                    <div class="row pe-0 mb-3 accordion-border">
+
+                      <div class="col-12">
+                        <span id="confirmCheckOutBase">BaseStyle</span>
+                         | <span class="text-small">
+                          <small> <span id="confirmCheckOutOption">Option</span></small>
+                        </span>
+                      </div>
+
+                    </div>
+                    <div class="row pe-0 mb-3 accordion-border">
+
+                      <div class="col-8">
+                        Deposit
+                      </div>
+                      <div class="col-4 text-end">
+                        $<span id="confirmCheckOutDeposit"> 25.00</span>
+                      </div>
+
+                    </div>
+                    <div class="row pe-0 mb-3 accordion-border">
+                      <div class="col-8">
+                        Tax
+                      </div>
+                      <div class="col-4 text-end">
+                        $<span id="confirmCheckOutTax"> 5.00 </span>
+                      </div>
+                    </div>
+                    <div class="row pe-0 mb-3 accordion-border">
+                      <div class="col-8">
+                        Total Deposit Charged
+                      </div>
+                      <div class="col-4 text-end">
+                        $<span id="confirmCheckOutTotal">30.00</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row pt-3 mt-2 ">
+                  <div class="row">
+                    <div class="container">
+                      <h3 class="card-title mb-3 bordered">Card Details</h3>
+
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <div id='confirm-card-element' class="mb-3 ">
+                      <!--Stripe.js injects the Card Element-->
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="row g-2" id="checkoutButtons">
+
+                    <!-- <div class="col-2">
+                      <a type="" onclick="goToReviewPane()" class="btn btn-outline-danger py-2 d-block" name="" id="checkOutpreviousTabButton" value="">
+                        <i class="fas fa-arrow-circle-left"></i>
+                      </a>
+                    </div> -->
+                    <div class="col-12">
+                      <button id='confirm-payButton' class="py-2 btn-outline-accent">
+                        <span id='confirm-button-text'>Pay</span>
+                        <div class='spinner hidden' id='confirm-spinner'></div>
+                      </button>
+                    </div>
+                  </div>
+
+                    <div class="col-12">
+                      <p id='confirm-card-error' role='alert'></p>
+                      <p class='result-message hidden'>
+                        Payment succeeded, Refresh the page to start a new Booking.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+            </div>
+          </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<%- include ("partials/footer.ejs") %>
+
+      <script type="text/javascript" src="js/appointments.js"></script>
