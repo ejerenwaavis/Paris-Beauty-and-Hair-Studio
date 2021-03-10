@@ -1,20 +1,24 @@
 require("dotenv").config();
 
 /**************** SYSTEM VAIRAIBLES ******************/
-const PASSWORD = process.env.PASSWORD;
+const MONGOPASSWORD = process.env.MONGOPASSWORD;
+const MONGOUSER = process.env.MONGOUSER;
+const MONGOURI2 = process.env.MONGOURI2;
+
 const OPENTIME = {hrs:Number(process.env.OPENTIMEHRS), mins: Number(process.env.OPENTIMEMINS)};
 const CLOSETIME = {hrs:Number(process.env.CLOSETIMEHRS), mins: Number(process.env.CLOSETIMEMINS)};
 const DEPOSITPERCENT = process.env.DEPOSITPERCENT;
 const SERVICE = process.env.SERVICE;
 const USER = process.env.MAILERUSER;
 const PASS = process.env.MAILERPASS;
+const MAILER = process.env.MAILER;
 const STRIPEAPI = process.env.STRIPEAPI;
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRETE = process.env.CLIENT_SECRETE;
 const SECRETE = process.env.SECRETE;
 const SALTROUNDS = Number(process.env.SALTROUNDS);
-FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID
-FACEBOOK_APP_SECRET = process.env.FACEBOOK_APP_SECRET
+const FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID
+const FACEBOOK_APP_SECRET = process.env.FACEBOOK_APP_SECRET
 
 
 
@@ -62,7 +66,8 @@ app.use(passport.session());
 
 
 // Mongoose Configuration and Setup
-const uri = "mongodb+srv://Admin-Avis:" + PASSWORD + "@db1.s2pl8.mongodb.net/parisStudio";
+const uri = "mongodb+srv://"+MONGOUSER+":" + MONGOPASSWORD + MONGOURI2;
+// console.log(uri);
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -183,12 +188,11 @@ passport.use(new LocalStrategy(
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "https://parisbeautyandhairstudio.herokuapp.com/facebookLoggedin",
-    // callbackURL: "/facebookLoggedin",
+    // callbackURL: "https://parisbeautyandhairstudio.herokuapp.com/facebookLoggedin",
+    callbackURL: "/facebookLoggedin",
     enableProof: true,
     profileFields: ["birthday", "email", "first_name", 'picture.type(large)', "last_name"]
   },
-
   function(accessToken, refreshToken, profile, cb) {
     let userProfile = profile._json;
     // console.log("************ FB Profile *******");
@@ -233,8 +237,8 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
     clientID: CLIENT_ID,
     clientSecret: CLIENT_SECRETE,
-    callbackURL: "https://parisbeautyandhairstudio.herokuapp.com/googleLoggedin",
-    // callbackURL: "/googleLoggedin",
+    // callbackURL: "https://parisbeautyandhairstudio.herokuapp.com/googleLoggedin",
+    callbackURL: "/googleLoggedin",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
   function(accessToken, refreshToken, profile, cb) {
@@ -551,7 +555,24 @@ app.route("/appt")
       }
     })
 
-  });
+  })
+  .delete(function(req,res){
+    const apptID = req.body.apptID;
+    Appointment.deleteOne({_id:apptID}, function(err,deleted){
+      if(!err){
+        if(deleted.n>0){
+          console.log();
+          res.send(true);
+        }else{
+          res.send(false);
+        }
+      }else{
+        console.log("Error Occured\n");
+        console.log(err);
+        res.send(false);
+      }
+    })
+  })
 
 app.route("/email")
   .get(function(req,res){
@@ -566,7 +587,7 @@ app.route("/email")
     let content = 'BEGIN:VCALENDAR\r\nPRODID:-//ACME/DesktopCalendar//EN\r\nMETHOD:REQUEST\r\n...';
 
     let message = {
-        from: USER,
+        from: MAILER,
         to: 'planetavis@yahoo.com',
         subject: 'Appointment iCal',
         text: 'Please see the attached appointment',
@@ -1171,9 +1192,9 @@ function sendBookingDetails(appt){
 });
 
   var mailOptions = {
-  from: USER,
+  from: MAILER,
   to: appt.clientUsername,
-  subject: 'Sending Email using Node.js',
+  subject: 'Booking Details for '+ new Date(appt.date).toLocaleDateString(),
   html: '<table style="background:#F8F9FA; border:1px solid #e4e4e4;margin-left:auto;margin-right:auto; height:100%; width:100%;text-align:center;">'
     +'<tr ><td style="padding:0.7rem 0 0 0;"> <a href="https://www.parisbeautyandhairstudio.com/home"><img class="img-logo" src="https://parisbeautyandhairstudio.herokuapp.com/img/logo/paris-primary-sm.png" alt=""></a> </td></tr>'
     +'<tr><td> <h1 style="padding:1rem;">Thanks For Booking us!</h1> </td></tr>'

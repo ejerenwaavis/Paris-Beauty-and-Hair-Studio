@@ -152,3 +152,37 @@ function confirmFinalizeOrder(apptID){
    });
 
 }
+
+
+
+
+
+function openDeleteDialog(evt){
+  let apptID = $(evt).attr("apptID");
+  console.log(apptID);
+  $("#confirmDeleteButton").attr("apptID",apptID);
+}
+
+function deleteAppt(evt){
+  $("#confirmDeleteButton").html('<i class=" px-3 fas fa-circle-notch fa-spin"></i>');
+  $("#confirmDeleteButton").attr("disabled","");
+  apptID = $(evt).attr("apptID");
+  $.ajax({
+    url: '/appt',
+    type: 'DELETE',
+    data: {apptID:apptID},
+    success: function(result) {
+        console.log(result);
+        if(result){
+          location.reload();
+        }else{
+          $("#confirmDeleteButton").html("Delete");
+          $("#confirmDeleteButton").removeAttr("disabled");
+        }
+    },
+    error: function(result){
+      console.log(result);
+    },
+  });
+
+}
