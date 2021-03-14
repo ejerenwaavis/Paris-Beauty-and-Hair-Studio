@@ -19,7 +19,7 @@ const SECRETE = process.env.SECRETE;
 const SALTROUNDS = Number(process.env.SALTROUNDS);
 const FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID
 const FACEBOOK_APP_SECRET = process.env.FACEBOOK_APP_SECRET
-
+const SERVER = process.env.PORT;
 
 
 /************* Module Invocations *********************/
@@ -90,7 +90,7 @@ const Style = mongoose.model("Style", styleSchema);
 const stylistSchema = new mongoose.Schema({
   username: String,
   name: String,
-  photoURL: String,
+  photoURL: { type: String, default: "" },
 });
 const Stylist = mongoose.model("Stylist", stylistSchema);
 
@@ -139,7 +139,8 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default:false
   },
-  verified: { type: Boolean, default: false }
+  verified: { type: Boolean, default: false },
+  isAdmin:{ type: Boolean, default: false }
 });
 userSchema.plugin(passportLocalMongoose);
 const User = mongoose.model("User", userSchema);
@@ -188,8 +189,7 @@ passport.use(new LocalStrategy(
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "https://parisbeautyandhairstudio.herokuapp.com/facebookLoggedin",
-    // callbackURL: "/facebookLoggedin",
+    callbackURL: (SERVER)?"https://parisbeautyandhairstudio.herokuapp.com/facebookLoggedin":"/facebookLoggedin",
     enableProof: true,
     profileFields: ["birthday", "email", "first_name", 'picture.type(large)', "last_name"]
   },
@@ -237,8 +237,7 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
     clientID: CLIENT_ID,
     clientSecret: CLIENT_SECRETE,
-    callbackURL: "https://parisbeautyandhairstudio.herokuapp.com/googleLoggedin",
-    // callbackURL: "/googleLoggedin",
+    callbackURL: (SERVER)?"https://parisbeautyandhairstudio.herokuapp.com/googleLoggedin":"/googleLoggedin",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
   function(accessToken, refreshToken, profile, cb) {
@@ -282,6 +281,11 @@ passport.use(new GoogleStrategy({
 ));
 
 
+app.route("/")
+  .get(function(req, res) {
+    res.render("cover");
+  });
+
 app.route("/home")
   .get(function(req, res) {
     if(req.isAuthenticated()){
@@ -298,22 +302,6 @@ app.route("/home")
       });
     }
   });
-
-app.route("/cart")
-  .get(function(req, res) {
-    res.render("cart", {
-      body: new Body("Bag", "", ""),
-      user:req.user,
-    });
-  });
-
-app.route("/shop")
-  .get(function(req, res) {
-    res.render("products", {
-      body: new Body("Shop", "", "")
-    });
-  });
-
 
 app.route("/account")
   .get(function(req, res) {
@@ -438,79 +426,17 @@ app.route("/myAppointments")
     }
   });
 
-app.route("/book")
-  .get(function(req, res) {
-    res.render("booking", {
-      body: new Body("Book", "", "")
-    });
-  });
-
-
-app.route("/addStyle")
-  .get(function(req, res) {
-    res.render("addStyle", {
-      body: new Body("Add Style", "", "")
-    });
-  })
-  .post(function(req, res) {
-    var baseStyle = req.body.baseStyleName;
-    var options = JSON.parse(req.body.options);
-
-    const style = new Style({
-      baseStyle: baseStyle,
-      options: options
-    });
-
-    style.save(function(err, savedDoc) {
-      if (!err) {
-        if (savedDoc) {
-          console.log(savedDoc);
-          res.render("addStyle", {
-            body: new Body("Add Style", "", "Saved Style Succesfully")
-          });
-        }
-
-      } else {
-        res.render("addStyle", {
-          body: new Body("Add Style", err, "")
-        });
-      }
-    })
-  })
-
 
 app.route("/getStyles")
   .get(function(req, res) {
     Style.find({}, function(err, foundOBJ) {
-      // console.log(foundOBJ);
       if (foundOBJ) {
         res.send(foundOBJ);
       }
     })
   })
 
-app.route("/stylists")
-  .get(function(req, res) {
-    Stylist.find({}, function(err, foundOBJ) {
-      // console.log(foundOBJ);
-      if (foundOBJ) {
-        res.send(foundOBJ);
-      }
-    })
-  })
-  .post(function(req, res) {
-    const stylist = new Stylist({
-      username: new Date().getTime() + "susan@gmail.com",
-      name: "Susan",
-      photoURL: "https://lh3.googleusercontent.com/-3biAz13t9EA/Xc2ZBrgL4XI/AAAAAAAACfw/NYsnpIKzfBcU3cryHfmDrSXt5np5OqqqQCEwYBhgLKtQDAL1OcqxlfPshAeKxbMyutm8vJ4y3nqxfPM5PCHgxyG1CjVMyj_r08Be4k5jFkk0-lPhJq9iKZba0i3S6zQIDYlTLHmZXt-02ixvkgP8MwE5XT0-c7t_s1TkSEyeuTzQBr8G0pT6XixkQmZv0ZB69bUJV6eH4pmT_u2LbUJe9duvoA8YXdxV6Ly3m9WXy7AgP_S0lfkPuTVr6thiBcfNElUyUUYJlzi1JtyRGdCFA_LSZn7UnNgYh82JuJe0pklResLBvSc7aCq42jt481KABPp8uzbkXmcK2hUGyNkw71FKuOptme3Axb_Dm9bov6Xp2WFjr-GhnZIue-Kgo5qbNM93khCkrjt58UJSFIMkaVfx67sEDZreUIQaKGF-Ms5VUwDynF3KNDjsWZThnCdW-yOcIwgg7b_NYEYJo7bnzmyhNdFW6P_Zm7hwkmD6nBQtaVX6Z1pxsvehFnCIaNBUlweDpPznYv974yXERmf3r0Jcf5fnwcQqyemtv4rENzG-lTXpgOh6kkityosOwojIeCrcvzaLoTSogVzbLq2VXp0Y8f8lw0nQklcLjSJ0BSU8BJnhlm5XTCWt7rgBhAUyaNi94jR7nIqeyJSUncqnJHKEYWVnJMK3cgoEG/w138-h140-p/2019-11-14.png",
-    })
 
-    stylist.save(function(err, savedDoc) {
-      if (!err) {
-        res.send(savedDoc);
-      }
-    })
-  })
 
 app.route("/appt")
   .get(function(req, res) {
@@ -573,43 +499,6 @@ app.route("/appt")
       }
     })
   })
-
-app.route("/email")
-  .get(function(req,res){
-    const transporter = nodemailer.createTransport({
-      service: SERVICE,
-      auth: {
-        user: USER,
-        pass: PASS,
-      }
-    });
-
-    let content = 'BEGIN:VCALENDAR\r\nPRODID:-//ACME/DesktopCalendar//EN\r\nMETHOD:REQUEST\r\n...';
-
-    let message = {
-        from: MAILER,
-        to: 'planetavis@yahoo.com',
-        subject: 'Appointment iCal',
-        text: 'Please see the attached appointment',
-        icalEvent: {
-            filename: 'invitation.ics',
-            method: 'request',
-            content: content
-        }
-    };
-
-    transporter.sendMail(message, function(error, info){
-      if (error) {
-        console.log(error);
-        res.send(error)
-      } else {
-        console.log('Email sent: ' + info.response);
-        res.send("Success")
-      }
-    });
-      // res.render("email");
-  });
-
 
 app.route("/confirmAppointment")
 .post(function(req,res){
@@ -712,11 +601,203 @@ app.route("/officialHours")
   });
 
 
-app.route("/")
-  .get(function(req, res) {
-    res.render("cover");
-  });
 
+  // unused routes
+  /*
+  app.route("/book")
+    .get(function(req, res) {
+      res.render("booking", {
+        body: new Body("Book", "", ""),
+        purchase: initialPurchase(),
+        user: req.user
+      });
+    });
+    app.route("/cart")
+      .get(function(req, res) {
+        res.render("cart", {
+          body: new Body("Bag", "", ""),
+          purchase: initialPurchase(),
+          user:req.user,
+        });
+      });
+    app.route("/shop")
+      .get(function(req, res) {
+        res.render("products", {
+          body: new Body("Shop", "", ""),
+          purchase: initialPurchase(),
+          user: req.user,
+        });
+      });
+    app.route("/email")
+      .get(function(req,res){
+        const transporter = nodemailer.createTransport({
+          service: SERVICE,
+          auth: {
+            user: USER,
+            pass: PASS,
+          }
+        });
+
+        let content = 'BEGIN:VCALENDAR\r\nPRODID:-//ACME/DesktopCalendar//EN\r\nMETHOD:REQUEST\r\n...';
+
+        let message = {
+            from: MAILER,
+            to: 'planetavis@yahoo.com',
+            subject: 'Appointment iCal',
+            text: 'Please see the attached appointment',
+            icalEvent: {
+                filename: 'invitation.ics',
+                method: 'request',
+                content: content
+            }
+        };
+
+        transporter.sendMail(message, function(error, info){
+          if (error) {
+            console.log(error);
+            res.send(error)
+          } else {
+            console.log('Email sent: ' + info.response);
+            res.send("Success")
+          }
+        });
+          // res.render("email");
+      });
+
+  */
+
+/********* ADMIN ACTIONS **************/
+app.route("/addStyle")
+  .get(function(req, res) {
+      res.redirect("/adminComsole")
+  })
+  .post(function(req, res) {
+    var baseStyle = req.body.baseStyleName;
+    var options = JSON.parse(req.body.options);
+
+    const style = new Style({
+      baseStyle: baseStyle,
+      options: options
+    });
+
+    style.save(function(err, savedDoc) {
+        if (!err) {
+          if (savedDoc) {
+            console.log(savedDoc);
+            res.render("adminConsole", {
+              body: new Body("Console", "", savedDoc.baseStyle+" Style saved Succesfully"),
+              user: req.user,
+            });
+          }
+
+        } else {
+          res.render("adminConsole", {
+            body: new Body("Console", err, "")
+          });
+        }
+      });
+  })
+
+app.route("/stylists")
+  .get(function(req, res) {
+    Stylist.find({}, function(err, foundOBJ) {
+      // console.log(foundOBJ);
+      if (foundOBJ) {
+        res.send(foundOBJ);
+      }
+    })
+  })
+  .post(function(req, res) {
+    const stylist = new Stylist({
+      username: req.body.username,
+      name: req.body.fUllName,
+    })
+
+    if(stylist.username && stylist.name){
+      stylist.save(function(err, savedDoc) {
+        if (!err) {
+          res.render("adminConsole",{
+              body: new Body("Console","","Stylist "+ savedDoc.name +" was Added Successfully")
+          });
+        }else{
+          res.render("adminConsole",{
+              body: new Body("Console","Failed to create Stylist","")
+          });
+        }
+      });
+    }else{
+      res.render("adminConsole",{
+          body: new Body("Console","Nothing Was submited","")
+      });
+    }
+  })
+
+app.route("/adminConsole")
+  .get(function(req,res){
+    if(req.user){
+      if(req.user.isAdmin){
+        res.render("adminConsole", {
+          body: new Body("Console", "",""),
+          user: req.user,
+        })
+      }else{
+        res.render("home", {
+          body:new Body("Home","Admin Privilage is Required for Access",""),
+          purchase: initialPurchase(),
+          user: req.user
+        })
+      }
+    }else{
+      res.render("home", {
+        body:new Body("Home","Unknown User",""),
+        purchase: initialPurchase(),
+        user: req.user
+      })
+    }
+  })
+
+app.route("/admin")
+.post(function(req,res){
+  if(req.user){
+    if(req.user.isAdmin){
+      let username = req.body.username;
+      User.find({username:username},function(err,item){
+    let user = item[0];
+
+    User.updateOne({username:username},{isAdmin:true},function(e,r){
+      if(!e){
+        if(r.n > 0){
+          res.render("adminConsole",{
+              body: new Body("Console","","Successfully made " +username+ " an admin."),
+              user:req.user,
+          });
+        }else{
+          res.render("adminConsole",{
+              body: new Body("Console","Role assignment failed",""),
+              user:req.user,
+          });
+        }
+      }else{
+        console.log(e);
+        res.render("adminConsole",{
+            body: new Body("Console", e.message,""),
+            user:req.user,
+        });
+      }
+    });
+  });
+    }else{
+      let err = new Error("Admin Privilages Required for this action");
+      console.log(err);
+      res.send(err.message);
+    }
+  }else{
+    let err = new Error("Anonymous User");
+    console.log(err);
+    res.send(err.message);
+  }
+
+})
 
 /************ Stripe Payment **************/
 app.route("/payment")
@@ -755,7 +836,7 @@ app.post("/create-payment-intent", async function (req, res){
 });
 
 app.route("/orderPricings")
-.post(function (req,res){
+  .post(function (req,res){
   // console.log("Geting Pricings");
   // console.log(req.body);
   Style.findOne({baseStyle:req.body.style.baseStyle}, function(err,style){
@@ -797,7 +878,8 @@ app.route("/login")
       // console.log("Unauthorized Access, Please Login");
       res.render("login", {
         body: new Body("Login", "", ""),
-        login:null
+        login: null,
+        user: req.user,
       });
     }
   })
@@ -843,10 +925,6 @@ app.route("/facebookLoggedin")
       })(req, res, next);
     });
 
-
-
-
-
 app.route("/googleLoggedin")
     .get(function(req, res, next) {
       passport.authenticate('google', function(err, user, info) {
@@ -861,7 +939,6 @@ app.route("/googleLoggedin")
       })(req, res, next);
     });
 
-
 app.route("/logout")
   .get(function(req, res) {
     req.logout();
@@ -873,7 +950,6 @@ app.route("/logout")
       user:null,
     });
   });
-
 
 app.route("/register")
   .get(function(req, res) {
@@ -962,8 +1038,13 @@ app.route("/deleteAccess")
     })
   })
 
+
+
+
+
 app.listen(process.env.PORT || 3000, function() {
   console.log("Paris Hair and Beauty Studio is Live");
+  console.log(process.env.PORT);
 });
 
 /************** helper functions *******************/
@@ -1160,7 +1241,6 @@ function tax(amt){
   // console.log(tax);
   return Math.round(tax);
 }
-
 function apptSelfDestruct(apptID){
   // console.log("Appointment ID is: " +apptID);
   setTimeout(function(){
@@ -1180,7 +1260,6 @@ function apptSelfDestruct(apptID){
     });
   },(1000 * 60 * 5));
 }
-
 function sendBookingDetails(appt){
   console.log("Sending email to: "+ appt.clientUsername);
   const transporter = nodemailer.createTransport({

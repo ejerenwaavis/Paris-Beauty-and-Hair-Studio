@@ -1,10 +1,17 @@
+
+
 function addOption(evt) {
   let element = $("#option-container");
-  let options = getOptions();
-  let newHTML = generateOPtionTextFields(options);
-  if(newHTML){
-    element.html(newHTML);
-  }
+  let options = new Promise(function(resolve,reject){
+    opts = getOptions();
+    resolve(opts);
+  });
+  options.then(function(opts){
+    let newHTML = generateOPtionTextFields(opts);
+    if(newHTML){
+      element.html(newHTML);
+    }
+  })
 }
 
 
@@ -57,7 +64,7 @@ function generateEmptyOPtionTextField() {
     '<div class="col-12 col-sm-6">' +
     '<div class="input-group ">' +
     '<a class="btn btn-outline-secondary "><i class="far fa-clock"></i></a>' +
-    '<input type="number" name="duration" class="form-control" id="price">' +
+    '<input type="number" value=240 name="duration" class="form-control" id="price">' +
     '<a onclick="addOption()" class="btn btn-outline-secondary" id="button-addon2">+</a>' +
     '</div>' +
     '</div>  </div>  </div>   </div>';
@@ -74,16 +81,26 @@ function sendForm(evt){
 
 function getOptions() {
   let arrayOfOptions = $("#option-container").find(":input").serializeArray();
-  console.log(arrayOfOptions);
+  // console.log(arrayOfOptions);
   let options = [];
-  for (var i = 0; i < arrayOfOptions.length; i++) {
+  let stop = false;
+
+  while(!stop){
     let option = {
       name: arrayOfOptions.shift().value,
       price: arrayOfOptions.shift().value,
       duration: arrayOfOptions.shift().value
     }
-    options.push(option);
+    console.log(option);
+    if(option.name && option.price && option.duration){
+      options.push(option);
+    }
+    if(arrayOfOptions.length === 0){
+      stop == true;
+      break;
+    }
   }
+
   console.log(options);
   return options;
 }
