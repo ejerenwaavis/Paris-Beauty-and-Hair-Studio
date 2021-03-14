@@ -80,8 +80,9 @@ h5.sub-header.bordered,
   border-width: thin;
 }
 
-.border-faded-end{
-   border-color: blue; /*linear-gradient(0deg, rgba(246, 243, 243, 0.8), rgba(246, 243, 243, 0.94)); */
+.border-faded-end {
+  border-color: blue;
+  /*linear-gradient(0deg, rgba(246, 243, 243, 0.8), rgba(246, 243, 243, 0.94)); */
 }
 
 .bg-accent {
@@ -119,7 +120,7 @@ h5.sub-header.bordered,
   transition: 0.6s;
 }
 
-.bg-fb{
+.bg-fb {
   background-color: #45619D;
 }
 
@@ -153,6 +154,24 @@ h5.sub-header.bordered,
   background-color: #fefefe;
 }
 
+.nav-pills a.nav-link {
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
+  background-color: #f5f5f5;
+  color: inherit;
+}
+
+.nav-pills a.nav-link.active {
+  border-left: solid #cb2975;
+  background-color: #fefefe;
+  color: #cb2975
+}
+
+.nav-pills a.nav-link.disabled {
+  background: none;
+  color: #efefef;
+}
+
 .nav-tabs a.nav-link.active {
   color: #cb2975;
 }
@@ -184,7 +203,7 @@ h5.sub-header.bordered,
   font-weight: bold;
 }
 
-.text-small{
+.text-small {
   font-weight: 400;
   font-size: initial;
 }
@@ -193,10 +212,11 @@ h5.sub-header.bordered,
   font-weight: 500;
 }
 
-.text-muted-feint{
+.text-muted-feint {
   color: #e0e0e0;
 }
-.border-muted-feint{
+
+.border-muted-feint {
   border-color: #e0e0e0;
 }
 
@@ -244,6 +264,7 @@ a {
   /* padding: 0.6em 2.3em; */
   transition: 0.7s;
 }
+
 .btn-accent:hover {
   background: none;
   border: 1px solid #cb2975;
@@ -310,7 +331,7 @@ a.btn-compliment:hover {
   transition: 0.7s;
 }
 
-.col.active{
+.col.active {
   background-color: #cb2975;
   color: #fff;
   transition: 0.7s;
@@ -324,8 +345,6 @@ a.btn-compliment:hover {
   background-size: cover;
   /* background: linear-gradient(30deg, rgba(227,135,178,0.9), rgba(230,75,140,0.9)); */
 }
-
-
 
 .dotted-divider {
   /* border-width: 7px; */
@@ -384,7 +403,6 @@ a.btn-compliment:hover {
   margin-left: 1%;
   margin-right: 1%;
 }
-
 
 .img-services {
   /* height: 26.8em; */
@@ -548,7 +566,7 @@ a.btn-compliment:hover {
   margin-bottom: 1rem;
 }
 
-.border-muted{
+.border-muted {
   border: solid 1px #999;
 }
 
@@ -625,42 +643,37 @@ img.cover {
   z-index: 1;
 }
 
-.btn-sylist{
+.btn-sylist {
   height: auto;
   width: auto;
   border-color: #cb2975;
-  border-width: thin;;
+  border-width: thin;
+  ;
 }
 
-
-
 /* calendar controls */
-.calendar{
+.calendar {
   min-width: 280px;
   overflow-x: hidden;
 }
-.month-display{
+
+.month-display {
   min-width: 280px;
 }
 
-.calendar .col{
+.calendar .col {
   padding: 0.85rem 0;
 }
 
-.calendar .col:hover{
+.calendar .col:hover {
   background-color: #cb2975;
   color: white;
   transition: 0.5s;
   border-radius: 0.3rem;
   cursor: pointer;
-
 }
 
-
-
-
-
-.calendar-header .col:hover{
+.calendar-header .col:hover {
   background: inherit;
   color: inherit;
   cursor: default;
@@ -668,42 +681,38 @@ img.cover {
 
 .calendar-header .sunday:hover,
 .calendar .sunday:hover,
-.calendar .date-muted:hover{
+.calendar .date-muted:hover {
   background: inherit;
   color: #e6e6e6;
   cursor: not-allowed;
-
 }
 
-.date-muted, .sunday{
+.date-muted, .sunday {
   color: #e6e6e6;
 }
 
-.time{
+.time {
   height: 15em;
   overflow-y: auto;
 }
 
-.today{
+.today {
   border-style: solid;
   border-width: thin;
   border-color: #cb2975;
   border-radius: 0.3rem;
-
 }
 
-.transition{
+.transition {
   transition: all 1s;
 }
 
-.transition-2{
+.transition-2 {
   transition: all 2s;
 }
 
-
-
 /********* SignIn CSS************/
-.google-icon{
+.google-icon {
   background: #fff;
   height: 32px;
   margin: 1.2px;
@@ -711,14 +720,22 @@ img.cover {
   border-radius: 1.5px;
 }
 
-.userIcon{
+.userIcon {
   height: 1.4em;
-border-radius: 50%;
+  border-radius: 50%;
 }
-#form-signin{
+
+#form-signin {
   width: 100%;
 }
 
-.appointments-nav a{
+.appointments-nav a {
   color: inherit;
+}
+
+/************** New Home Designs *************/
+.img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

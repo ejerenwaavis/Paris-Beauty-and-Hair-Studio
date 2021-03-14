@@ -1,10 +1,32 @@
 <footer class="mt-3 pt-5 bg-paris-mark-dark  text-center">
   <div class="container d-block d-md-none pt-3 pb-5">
 
-    <a href="#"  onclick="loadStyles()" data-bs-toggle="modal" data-bs-target="#booking-form-modal" class="btn btn-block mb-2 d-block btn-outline-accent"> BOOK</a>
+    <a href="#" onclick="loadStyles()" data-bs-toggle="modal" data-bs-target="#booking-form-modal" class="btn btn-block mb-2 d-block btn-outline-accent"> BOOK</a>
     <a href="#" data-bs-toggle="modal" data-bs-target="#signIn" class="btn btn-block mb-2 d-block btn-outline-accent"> SIGNIN</a>
-    <a  class="btn btn-block mb-2 d-block btn-outline-accent"> CONTACT US</a>
-    <a  class="btn btn-block mb-2 d-block btn-outline-accent"> TERMS</a>
+    <a class="btn btn-block mb-2 d-block btn-outline-accent" data-bs-toggle="collapse" href="#contact-collapse" role="button" aria-expanded="false" aria-controls="contact-collapse"> CONTACT US</a>
+
+    <div class="collapse" id="contact-collapse">
+      <div class="card card-body mt-3 mb-3">
+        <div class="d-block mb-3">
+          <span class="text-accent text-bold">
+            <i class="fas fa-xs fa-phone me-2"></i> give us a call
+          </span>
+          <a href="tel:+1 (404) 263-6395" class="mb-2 d-block">+1 (404) 263-6395</a>
+        </div>
+
+
+        <div class="d-block">
+          <span class="text-accent text-bold">
+            <i class="fas fa-xs fa-envelope me-2"></i> send us an email
+          </span>
+          <div class="text-break text-center" style="width:100%;">
+            <a class="mb-2 d-block" href="mailto:parisbeautyhairstudio7@gmail.com">parisbeautyhairstudio7@gmail.com</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a class="btn btn-block mb-2 d-block btn-outline-accent"> TERMS</a>
 
     <hr />
 
