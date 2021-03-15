@@ -157,13 +157,13 @@ h5.sub-header.bordered,
 .nav-pills a.nav-link {
   padding-left: 1.2rem;
   padding-right: 1.2rem;
-  background-color: #f5f5f5;
+  /* background-color: #f5f5f5; */
   color: inherit;
 }
 
 .nav-pills a.nav-link.active {
   border-left: solid #cb2975;
-  background-color: #fefefe;
+  background-color: #e4e4e4;
   color: #cb2975
 }
 

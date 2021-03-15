@@ -76,11 +76,19 @@
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
           <li><a class="dropdown-item" href="/account">My Account</a></li>
           <li><a class="dropdown-item" href="/myAppointments">My Appointments</a></li>
-          <li><a class="dropdown-item" href="/logout">Sign Out</a></li>
-          <% if(user.isAdmin){%>
+
+          <% if(user.isStylist || user.isAdmin){%>
             <hr class="my-1">
+          <%}%>
+
+          <% if(user.isStylist){%>
+            <li><a class="dropdown-item " href="/mySchedule">My Schedule</a></li>
+          <%}%>
+          <% if(user.isAdmin){%>
             <li><a class="dropdown-item " href="/adminConsole">Admin Console</a></li>
           <%}%>
+          <hr class="my-1">
+          <li><a class="dropdown-item" href="/logout">Sign Out</a></li>
         </ul>
       </div>
 

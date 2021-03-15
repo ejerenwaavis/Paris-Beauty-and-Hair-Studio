@@ -140,7 +140,8 @@ const userSchema = new mongoose.Schema({
     default:false
   },
   verified: { type: Boolean, default: false },
-  isAdmin:{ type: Boolean, default: false }
+  isAdmin:{ type: Boolean, default: false },
+  isStylist:{ type: Boolean, default: false }
 });
 userSchema.plugin(passportLocalMongoose);
 const User = mongoose.model("User", userSchema);
@@ -212,17 +213,38 @@ passport.use(new FacebookStrategy({
             verified: false
           });
 
-          newUser.save()
-            .then(function() {
-              console.log("New FB user created ---> "+newUser.username);
-              // console.log(newUser);
-              return cb(user);
-            })
-            .catch(function(err) {
-              console.log("failed to create user");
-              console.log(err);
-              return cb(new Error(err));
-            });
+          Stylist.exists({username:newUser.username}, function(err,exists){
+            if(!err){
+              if(exists){
+                console.log("new user is a stylist");
+                newUser.isStylist = true;
+              }else{
+                console.log("user is not a stylist");
+              }
+              newUser.save()
+                .then(function() {
+                  return cb(null,user);
+                })
+                .catch(function(err) {
+                  console.log("failed to create user");
+                  console.log(err);
+                  return cb(new Error(err));
+                });
+              }else{
+                newUser.save()
+                  .then(function() {
+                    return cb(null,user);
+                  })
+                  .catch(function(err) {
+                    console.log("failed to create user");
+                    console.log(err);
+                    return cb(new Error(err));
+                  });
+              }
+          })
+
+
+
         }
       }else{
           console.log("***********Internal error*************");
@@ -260,16 +282,39 @@ passport.use(new GoogleStrategy({
             lastName: userProfile.family_name,
             photoURL: userProfile.picture,
             verified: false
+          });
+
+          Stylist.exists({username:newUser.username}, function(err,exists){
+            if(!err){
+              if(exists){
+                console.log("new user is a stylist");
+                newUser.isStylist = true;
+              }else{
+                console.log("user is not a stylist");
+              }
+              newUser.save()
+                .then(function() {
+                  return cb(null,user);
+                })
+                .catch(function(err) {
+                  console.log("failed to create user");
+                  console.log(err);
+                  return cb(new Error(err));
+                });
+              }else{
+                newUser.save()
+                  .then(function() {
+                    return cb(null,user);
+                  })
+                  .catch(function(err) {
+                    console.log("failed to create user");
+                    console.log(err);
+                    return cb(new Error(err));
+                  });
+              }
           })
-          newUser.save()
-            .then(function() {
-              return cb(null,user);
-            })
-            .catch(function(err) {
-              console.log("failed to create user");
-              console.log(err);
-              return cb(new Error(err));
-            });
+
+
         }
       } else {
         console.log("***********Internal error*************");
@@ -405,7 +450,9 @@ app.route("/myAppointments")
             inactiveAppts.push(appt);
           }
         }
-        // console.log(activeAppts);
+        activeAppts.sort(compareApptsSevere);
+        inactiveAppts.sort(compareApptsSevere);
+        unconfirmedAppts.sort(compareApptsSevere);
         res.render("myAppointments", {
           body: new Body("My Appointments", "", ""),
           purchase: initialPurchase(),
@@ -425,6 +472,63 @@ app.route("/myAppointments")
       });
     }
   });
+
+
+  app.route("/mySchedule")
+    .get(function(req,res){
+      if(req.user && req.user.isStylist){
+
+        Stylist.findOne({username:req.user.username}, function(err,stylist){
+          if(!err){
+            if(stylist){
+              Appointment.find({stylist:stylist.name}, function(err,foundAppts){
+                let activeAppts = [];
+                let inactiveAppts = [];
+                let today = new Date();
+                for(appt of foundAppts){
+                  if(appt.date.getTime() > today.getTime()){
+                    if(appt.confirmed){
+                      activeAppts.push(appt);
+                    }
+                  }else{
+                    inactiveAppts.push(appt);
+                  }
+                }
+                // console.log(activeAppts);
+                activeAppts.sort(compareApptsSevere);
+                inactiveAppts.sort(compareApptsSevere);
+                res.render("mySchedule", {
+                  body: new Body("My Schedule", "", ""),
+                  purchase: initialPurchase(),
+                  activeAppts:activeAppts,
+                  inactiveAppts:inactiveAppts,
+                  user:req.user,
+                });
+              });
+            }
+          }else{
+            console.log("Could not find Stylist");
+            //render scedule page with error
+            res.render("mySchedule", {
+              body: new Body("My Schedule", "Could not fetch your appointments for you", ""),
+              purchase: initialPurchase(),
+              activeAppts:activeAppts,
+              inactiveAppts:inactiveAppts,
+              user:req.user,
+            });
+          }
+        })
+
+
+      }else{
+        res.render("login", {
+          body: new Body("Login", "You are not Logged In, Please sign in to see your account", ""),
+          purchase: initialPurchase(),
+          login:null,
+          user:req.user,
+        });
+      }
+    });
 
 
 app.route("/getStyles")
@@ -716,8 +820,31 @@ app.route("/stylists")
     if(stylist.username && stylist.name){
       stylist.save(function(err, savedDoc) {
         if (!err) {
-          res.render("adminConsole",{
-              body: new Body("Console","","Stylist "+ savedDoc.name +" was Added Successfully")
+          User.exists({_id:stylist.username}, function(err,exists){
+            if(exists){
+              User.updateOne({_id:stylist.username},{isStylist:true}, function(err,status){
+                if(!err){
+                    if(status.n>0){
+                      console.log("User updated");
+                      res.render("adminConsole",{
+                          body: new Body("Console","","Stylist "+ savedDoc.name +" was Added Successfully")
+                      });
+                    }else{
+                      res.render("adminConsole",{
+                          body: new Body("Console","","Could Not Update User")
+                      });
+                    }
+                  }else{
+                    res.render("adminConsole",{
+                        body: new Body("Console","Stylist saved with errors - Error occured while updating user","")
+                    });
+                  }
+                });
+              }else{
+                res.render("adminConsole",{
+                    body: new Body("Console","Stylist saved with warning - User Not registered Yet","")
+                });
+              }
           });
         }else{
           res.render("adminConsole",{
@@ -798,6 +925,9 @@ app.route("/admin")
   }
 
 })
+
+
+
 
 /************ Stripe Payment **************/
 app.route("/payment")
@@ -883,8 +1013,7 @@ app.route("/login")
       });
     }
   })
-
-.post(function(req, res, next) {
+  .post(function(req, res, next) {
   passport.authenticate('local', function(err, user, info) {
     console.log(user);
     // console.log(info);
@@ -930,7 +1059,11 @@ app.route("/googleLoggedin")
       passport.authenticate('google', function(err, user, info) {
         if (err) { return next(err); }
         // Redirect if it fails
-        if (!user) { return res.redirect('/login'); }
+        if (!user) { return res.render('login', {
+          body: new Body("Login", "", "Account Created successfully, Please log in again to continue"),
+          login: null,
+          user: req.user,
+        } ); }
         req.logIn(user, function(err) {
           if (err) { return next(err); }
           // Redirect if it succeeds
@@ -1097,6 +1230,15 @@ function compareAppts(a,b){
   }
   return comparison;
 }
+function compareApptsSevere(a,b){
+  let comparison = 0;
+  if (a.date.getTime() > b.date.getTime()) {
+    comparison = 1;
+  } else if (a.date.getTime() < b.date.getTime()) {
+    comparison = -1;
+  }
+  return comparison;
+}
 function compareTimes(a,b){
   let comparison = 0;
   if (a.hrs > b.hrs) {
@@ -1206,13 +1348,24 @@ function getAvailableTimes(todaysAppts,duration){
     return availableTimes;
 }
 function getApptStopTime(apptStartTime, duration){
-  let stopHrs = Number(apptStartTime.hrs) + Math.floor((duration/60));
-  let stopMins = Number(apptStartTime.mins) + (duration%60);
-  if(stopMins > 59){
-    stopHrs =+ Math.floor(stopMins/60)
-    stopMins = stopMins%60;
+  let stopHrs;
+  let stopMins;
+  if(duration < 60){
+    stopMins = Number(appt.startTime.mins) + duration;
+    if(stopMins > 59){
+      stopHrs =  Number(appt.startTime.hrs) + Math.floor(stopMins/60);
+      stopMins = stopMins%60;
+    }
+    return {hrs:stopHrs, mins:stopMins}
+  }else{
+    stopHrs = Number(apptStartTime.hrs) + Math.floor((duration/60));
+    stopMins = Number(apptStartTime.mins) + (duration%60);
+    if(stopMins > 59){
+      stopHrs =+ Math.floor(stopMins/60);
+      stopMins = stopMins%60;
+    }
+    return {hrs:stopHrs, mins:stopMins}
   }
-  return {hrs:stopHrs, mins:stopMins}
 }
 function getApptDuration(appt){
   let start = (appt.startTime.hrs * 60) + appt.startTime.mins;

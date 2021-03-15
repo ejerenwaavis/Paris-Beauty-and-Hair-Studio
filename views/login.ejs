@@ -9,6 +9,26 @@
 
   <div class="container col-10 col-sm-8 col-md-8 col-lg-5 my-5 text-center pt-4">
     <div class="row justify-content-center">
+
+      <div class="col-12 col-sm-10 col-md-8">
+        <%if (body.message){%>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <!-- <strong>Holy guacamole!</strong>  -->
+          <small>
+            <%= body.message%>
+          </small>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <%}else if(body.error){%>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <!-- <strong>Holy guacamole!</strong>  -->
+          <small>
+            <%= body.error%>
+          </small>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <%}%>
+      </div>
       <div class="col-12 col-sm-10 col-md-8 mb-2">
         <a href="/auth/google" class="text-left  w-100 btn btn-lg btn-primary btn-block p-0 m-0">
           <div class="row g-0 align-items-center">
@@ -52,23 +72,7 @@
       </div>
       <div class="col-12 col-sm-10 col-md-8">
 
-        <%if (body.message){%>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-          <!-- <strong>Holy guacamole!</strong>  -->
-          <small>
-            <%= body.message%>
-          </small>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <%}else if(body.error){%>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <!-- <strong>Holy guacamole!</strong>  -->
-          <small>
-            <%= body.error%>
-          </small>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <%}%>
+
 
       <form class="form-signin" action="/login" method="post" id="form-signin">
         <label for="inputEmail" class="sr-only">Email address</label>
