@@ -1177,7 +1177,7 @@ app.route("/deleteAccess")
 
 app.listen(process.env.PORT || 3000, function() {
   console.log("Paris Hair and Beauty Studio is Live");
-  console.log(process.env.PORT);
+  console.log("PORT: "+process.env.PORT);
 });
 
 /************** helper functions *******************/
