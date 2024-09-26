@@ -1,71 +1,87 @@
-a{
+a {
   text-decoration: none;
 }
 
-body{
+body {
   color: #555;
-  font-size: 1.2rem;
+  font-size: 1.0rem;
 }
 
 .font-rozha {
   font-family: 'Rozha One', serif;
-
 }
-
-
 
 h1.font-rozha {
-  font-weight: bolder;
-}
-
-.card-title{
-  color: #777;
-  font-family: 'Rozha One', serif;
-  font-size: 1.6rem;
   font-weight: bold;
 }
-.jumbo{
+
+.card-title {
+  color: #777;
+  font-family: 'Rozha One', serif;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.jumbo {
   font-family: 'Rozha One', serif;
   font-size: 3.2rem;
   font-weight: bold;
 }
 
-.header{
+.header {
   font-family: 'Rozha One', serif;
-  font-size: 2.7rem;
+  font-size: 2.0rem;
   font-weight: bold;
 }
 
-.sub-header{
+.sub-header {
   color: #777;
   font-family: 'Rozha One', serif;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: bold;
 }
 
-.cart-item-title{
-  color: #777;
-  /* font-family: 'Rozha One', serif; */
-  font-size: 1.8rem;
-  font-weight: bold;
-}
-
-.cart-sub-header{
-  color: #777;
-  /* font-family: 'Rozha One', serif; */
-  font-size: 1.2rem;
+.sub-header-alt {
+  font-size: 1.25rem;
   font-weight: 700;
+}
+
+.cart-item-title {
+  color: #777;
+  /* font-family: 'Rozha One', serif; */
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.cart-sub-header {
+  color: #777;
+  /* font-family: 'Rozha One', serif; */
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.sub-footer-text {
+  font-size: 0.8rem;
 }
 
 h5.sub-header.bordered,
 .card-title.bordered,
-.bordered{
+.bordered {
   border-color: #cb2975;
   border-left-style: solid;
   border-width: 8px;
   padding-left: 10px;
 }
 
+.border-accent {
+  border-color: #cb2975;
+  border-style: solid;
+  border-width: thin;
+}
+
+.border-faded-end{
+   border-color: blue; /*linear-gradient(0deg, rgba(246, 243, 243, 0.8), rgba(246, 243, 243, 0.94)); */
+}
 
 .bg-accent {
   background-color: #cb2975;
@@ -87,15 +103,23 @@ h5.sub-header.bordered,
   box-shadow: 0.8px 0.8px 20px 2px #cb2975 inset;
 }
 
-.bg-paris-mark{
+.bg-paris-mark {
   /* background:  url("/img/logo/paris-mark-gray-25.png"); */
   /* background-image: url("/img/logo/paris-mark-gray-25-x40.png"),url("/img/logo/paris-mark-gray-25-x50.png"); */
-  background: linear-gradient(0deg, rgba(246,243,243,0.8), rgba(246,243,243,0.94)), url("/img/logo/paris-mark-gray-25-x300.png");
+  background: linear-gradient(0deg, rgba(246, 243, 243, 0.8), rgba(246, 243, 243, 0.94)), url("/img/logo/paris-mark-gray-25-x300.png");
+}
 
+.bg-paris-mark-dark {
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.7), rgba(230, 230, 230, 0.94)), url("/img/logo/paris-mark-gray-7-x300.png");
+}
+
+.bg-overlay-dark {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 0.3), rgba(120, 120, 120, 0.94));
+  transition: 0.6s;
 }
 
 .logo {
-  height: 60px;
+  height: 40px;
   width: auto;
 }
 
@@ -104,15 +128,75 @@ h5.sub-header.bordered,
   width: auto;
 }
 
+/* NAVBAR MANIPULATION */
 .navbar-lg {
   height: 5em;
 }
 
+.navbar-bg-dark {
+  background-color: #f5f5f5;
+}
+
+.navbar a.nav-link {
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
+  background-color: #f5f5f5;
+}
+
+.navbar a.nav-link.active {
+  /* border-top: solid #cb2975 thick; */
+  background-color: #fefefe;
+}
+
+.nav-tabs a.nav-link.active {
+  color: #cb2975;
+}
+
+.navbar a.nav-link:hover {
+  background-color: #fff;
+  /* border-top: solid thick #cb2975; */
+}
+
+.nav-bl {
+  border-left-color: #fff;
+  border-left-style: solid;
+  border-left-width: 4px;
+}
+
+.nav-br {
+  border-right-color: #fff;
+  border-right-style: solid;
+  border-right-width: 4px;
+}
+
+.nav-bb {
+  border-bottom-color: #cb2975;
+  border-bottom-style: solid;
+  border-bottom-width: thick;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-small{
+  font-weight: 400;
+  font-size: initial;
+}
+
+.text-mid-bold {
+  font-weight: 500;
+}
+
 .text-accent,
+.text-accent.spinner-border,
+.text-accent strong,
+.text-accent span,
 i.text-accent,
 button .text-accent,
 a.text-accent,
 span.a,
+span.text-accent,
 a {
   color: #cb2975;
 }
@@ -131,6 +215,20 @@ a {
   border: 1px solid #cb2975;
   padding: 0.6em 2.3em;
   transition: 0.7s;
+}
+
+.btn-accent {
+  background: #cb2975;
+  color: #fff;
+  /* border: 1px solid ; */
+  /* padding: 0.6em 2.3em; */
+  transition: 0.7s;
+}
+.btn-accent:hover {
+  background: none;
+  border: 1px solid #cb2975;
+  /* padding: 0.6em 2.3em; */
+  /* transition: 0.7s; */
 }
 
 .btn-outline-accent:hover {
@@ -168,12 +266,12 @@ a.btn-outline-compliment:hover {
   transition: 0.7s;
 }
 
- .btn-compliment {
+.btn-compliment {
   background: #555555;
   color: white;
   transition: 0.7s;
   padding: 0.6em 2.3em;
-  }
+}
 
 a.btn-compliment:hover {
   background-color: #cb2975;
@@ -184,76 +282,102 @@ a.btn-compliment:hover {
   transition: 0.7s;
 }
 
+.col.active{
+  background-color: #cb2975;
+  color: #fff;
+  transition: 0.7s;
+}
+
 .image-display-container {
   height: 37em;
-  background-image: url("/img/cover page-1.jpg");
+  background-image: url("/img/main-2-lg.jpg");
   background-position: 33%;
   background-repeat: no-repeat;
   background-size: cover;
   /* background: linear-gradient(30deg, rgba(227,135,178,0.9), rgba(230,75,140,0.9)); */
 }
 
-.dotted-divider{
+
+
+.dotted-divider {
   /* border-width: 7px; */
   /* border-radius: 25%; */
-    border-style: dotted;
-    border-color: #d1bcad;
-    /* border-top: 0; */
-    width: 5%;
-    margin: 3% auto;
+  border-style: dotted;
+  border-color: #d1bcad;
+  /* border-top: 0; */
+  width: 5%;
+  margin: 3% auto;
 }
 
-
 .line-icon {
-    text-align: center;
+  text-align: center;
 }
 
 /* Joined both selectors, since were pretty much the same */
 .line-icon::before,
 .line-icon::after {
-    /* Styles kept */
-    width: 4rem;
-    height: 0rem;
+  /* Styles kept */
+  width: 2rem;
+  height: 0rem;
+  /* Changed to border-top (instead of border) to simulate a line better */
+  border-top: 0.1rem solid #ccc;
+  /* Styles added */
+  display: inline-block;
+  content: '';
+  /* Use padding to vertical align the line */
+  /* Use padding in em for a responsive icon height */
+  padding-top: 0.1em;
+  /* Use margins to give the lines some spacement around the icon */
+  /* Use margins in % for a responsive spacement */
+  margin-left: 1%;
+  margin-right: 1%;
+}
 
-    /* Changed to border-top (instead of border) to simulate a line better */
-    border-top: 0.1rem solid #ccc;
+.line-icon-longer {
+  text-align: center;
+}
 
-    /* Styles added */
-    display: inline-block;
-    content: '';
-
-    /* Use padding to vertical align the line */
-    /* Use padding in em for a responsive icon height */
-    padding-top: 0.1em;
-
-    /* Use margins to give the lines some spacement around the icon */
-    /* Use margins in % for a responsive spacement */
-    margin-left: 1%;
-    margin-right: 1%;
+/* Joined both selectors, since were pretty much the same */
+.line-icon-longer::before,
+.line-icon-longer::after {
+  /* Styles kept */
+  width: 6rem;
+  height: 0rem;
+  /* Changed to border-top (instead of border) to simulate a line better */
+  border-top: 0.1rem solid #ccc;
+  /* Styles added */
+  display: inline-block;
+  content: '';
+  /* Use padding to vertical align the line */
+  /* Use padding in em for a responsive icon height */
+  padding-top: 0.1em;
+  /* Use margins to give the lines some spacement around the icon */
+  /* Use margins in % for a responsive spacement */
+  margin-left: 1%;
+  margin-right: 1%;
 }
 
 
-.img-services{
+.img-services {
   /* height: 26.8em; */
   /* height: 430px; */
   width: auto;
 }
 
-.card-body{
+.card-body.card-img-overlay {
+  color: white;
+}
+
+.card-body {
   padding: 3rem 2em;
 }
 
-.styles-card-image{
-  height: 15rem;
-  width: auto;
+.styles-card-image {
+  /* object-fit: cover; */
+  /* width: ; */
 }
 
-
-
-
 /* Testimonials CSSS */
-
-
 .testimonials {
   overflow: hidden;
   position: relative;
@@ -303,92 +427,258 @@ a.btn-compliment:hover {
   .testimonials {
     max-height: 700px;
   }
+
   .icon-overlay {
     height: 300px;
     top: calc(50% - 150px);
   }
+
   .carousel-controls .control {
     width: 25px;
     height: 25px;
     top: inherit;
   }
+
   .prev {
     left: 0;
   }
+
   .next {
     right: 0;
   }
+
   .control i {
     font-size: .7rem;
   }
+
   .testimonials .message {
     font-size: 1rem;
   }
+
   .testimonials h2 {
     font-size: 1.5rem;
   }
 }
 
-.testimonial-pane{
+.testimonial-pane {
   height: 20em;
-  overflow-y:auto;
+  overflow-y: auto;
 }
 
-.img-circle-container{
-  height: 5rem;
-  width: 5rem;
+.img-circle-container {
   border-radius: 50%;
+  height: 5rem;
   overflow: hidden;
-
+  width: 5rem;
 }
 
-.img-circle{
+.img-thumbnail {
+  border-radius: 5px;
+  height: 6rem;
+  width: 6rem;
+}
+
+.img-circle {
   max-width: 100%;
   max-height: 100%;
   height: auto;
 }
 
-.text-instagram{
+.text-instagram {
   color: brown;
 }
-.text-facebook{
+
+.text-facebook {
   color: #1457a3;
 }
-.text-twitter{
+
+.text-twitter {
   color: #5192dd;
 }
 
 .abs-center-x {
-     position: sticky;
-    left: 50%;
-    transform: translateX(-50%);
+  position: sticky;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-
-.vw100{
-  width:100vw;
+.vw100 {
+  width: 100vw;
 }
 
-.accordion-body{
+.accordion-body {
   overflow-x: hidden;
 }
 
-.accordion-border{
+.accordion-border {
   border-bottom-style: solid;
   border-bottom-width: thin;
   border-bottom-color: #e4e4e4;
-
 }
 
-
-.row.accordion-border{
+.row.accordion-border {
   margin-bottom: 1rem;
 }
 
-.details-pane-heading{
+.details-pane-heading {
   font-size: 1.1rem;
 }
 
-.payment-options{
-  font-size:1.7rem;
+.payment-options {
+  font-size: 1.7rem;
+}
+
+.footer-logo {
+  height: 80px;
+  width: auto;
+}
+
+.product-img-container {
+  height: 35em;
+  background-color: grey;
+  overflow: hidden;
+  padding: 0;
+  object-position: 50% 50%;
+}
+
+img.cover {
+  object-fit: cover;
+}
+
+.product-display-img {
+  height: 100%;
+  /* object-fit: scale-down; */
+  object-position: 50%;
+  /* background-color: grey; */
+}
+
+.products-home-image {
+  /* background: url("/img/main-lg.jpg"); */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #f9d3f8;
+}
+
+.mt-n1 {
+  margin-top: -0.25rem !important;
+}
+
+.mt-n2 {
+  margin-top: -0.50rem !important;
+}
+
+.mt-n3 {
+  margin-top: -0.75rem !important;
+}
+
+.mt-n4 {
+  margin-top: -1rem !important;
+}
+
+.mt-n5 {
+  margin-top: -1.25rem !important;
+}
+
+.mt-n10 {
+  margin-top: -3rem !important;
+}
+
+.mt-n20 {
+  margin-top: -6rem !important;
+}
+
+.loadingSign {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6));
+  transition: 0.6s;
+  z-index: 1;
+}
+
+.btn-sylist{
+  height: auto;
+  width: auto;
+  border-color: #cb2975;
+  border-width: thin;;
+}
+
+
+
+/* calendar controls */
+.calendar{
+  min-width: 280px;
+  overflow-x: hidden;
+}
+.month-display{
+  min-width: 280px;
+}
+
+.calendar .col{
+  padding: 0.85rem 0;
+}
+
+.calendar .col:hover{
+  background-color: #cb2975;
+  color: white;
+  transition: 0.5s;
+  border-radius: 0.3rem;
+  cursor: pointer;
+
+}
+
+
+
+
+
+.calendar-header .col:hover{
+  background: inherit;
+  color: inherit;
+  cursor: default;
+}
+
+.calendar-header .sunday:hover,
+.calendar .sunday:hover,
+.calendar .date-muted:hover{
+  background: inherit;
+  color: #e6e6e6;
+  cursor: not-allowed;
+
+}
+
+.date-muted, .sunday{
+  color: #e6e6e6;
+}
+
+.time{
+  height: 15em;
+  overflow-y: auto;
+}
+
+.today{
+  border-style: solid;
+  border-width: thin;
+  border-color: #cb2975;
+  border-radius: 0.3rem;
+
+}
+
+.transition{
+  transition: all 1s;
+}
+
+.transition-2{
+  transition: all 2s;
+}
+
+
+
+/********* SignIn CSS************/
+.google-icon{
+  background: #fff;
+  height: 32px;
+  margin: 1.2px;
+  padding: 5px;
+  border-radius: 1.5px;
+}
+
+#form-signin{
+  width: 100%;
 }

@@ -1,0 +1,73 @@
+<%- include ("partials/header-home.ejs")  %>
+
+
+
+
+<div class="container my-3 py-5">
+
+
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <% if(body.message){ %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <strong>Success!</strong> The style was Succesfully added.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <%}else if(body.error){%>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>Success!</strong> The style was Succesfully added.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <%}%>
+
+      <form action="/formHandler" method="POST">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Style Name</label>
+          <input type="email" name="baseStyle" class="form-control" id="baseStyle" aria-describedby="emailHelp">
+        </div>
+        <label for="" class="form-label">Options</label>
+        <div class="option-container" id="option-container">
+
+
+
+          <div class="mb-3  row">
+            <div class="col-xs-12 col-md-7  mb-3 mb-sm-3 mb-md-0 mb-lg-0">
+              <input type="text" name="option" class="form-control">
+            </div>
+            <div class=" col-xs-12 col-md-5 ">
+              <div class="row gx-2">
+                <div class="col-12 col-sm-6 mb-3 mb-sm-0 mb-md-0 mb-lg-0">
+                  <div class="input-group">
+                    <a class="btn btn-outline-secondary">$</a>
+                    <input type="number" name="price" class="form-control" id="price">
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <div class="input-group ">
+                    <a class="btn btn-outline-secondary "><i class="far fa-clock"></i></a>
+                    <input type="number" name="duration" class="form-control" id="price">
+                    <a onclick="addOption()" class="btn btn-outline-secondary" id="button-addon2">+</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <a type="" onclick="sendForm(this)" class="btn btn-primary w-100">Submit</a>
+      </form>
+      <form hidden name="mainForm" id="mainForm" class="" action="/addStyle" method="post">
+        <input type="text" name="baseStyleName" id="styleName" value="">
+        <textarea name="options" id="options" rows="8" cols="80"></textarea>
+      </form>
+
+    </div>
+  </div>
+
+</div>
+
+
+<%- include ("partials/footer.ejs") %>
+      <script type="text/javascript" src="/js/addStyle.js"></script>
