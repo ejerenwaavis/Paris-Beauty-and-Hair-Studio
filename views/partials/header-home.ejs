@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="">
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -7,6 +7,7 @@
   <meta name="description" content="Paris Hair and beauty Website">
   <meta name="author" content="Avis Ejerenwa">
   <title> <%=(body)?body.title + " ·":"" %> Paris Beauty and Hair Studio</title>
+  <base href="/" >
 
   <!-- Icon -->
   <link rel='icon' href='img/logo/favicon-alt.png' type='image/x-icon' />
@@ -22,9 +23,18 @@
   <!-- Font Awesone -->
   <script src="https://kit.fontawesome.com/5f30a8a83b.js" crossorigin="anonymous"></script>
 
+  <!-- Stripe Implemetation -->
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+  <script src="js/stripeClient.js" defer></script>
+
+
   <!-- Custom styles for this template -->
+  <link rel="stylesheet" href="css/stripe.css" />
   <link href="css/carousel.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
+
+
 </head>
 
 <body class="">
@@ -39,21 +49,93 @@
 
 
   <!-- Original Code -->
-  <nav class="nav sticky-top justify-content-center bg-light text-center py-3">
-    <div class="navbar-expand-md">
-      <a class=" d-md-none btn btn-outline-accent rounded-pill py-2" href="#"> BOOK A SERVICE</a>
-      <a class="d-md-none align-middle" href="/cart" ><i class="fas fa-shopping-cart ms-3"></i></a>
-      <a class="d-md-none align-middle" href="/account" ><i class="fas fa-user ms-3"></i></a>
-      <button class="navbar-toggler align-middle ms-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav2" aria-controls="navbarNav2" aria-expanded="false" aria-label="Toggle navigation">
-        <i class="fas fa-bars "></i>
-      </button>
-      <div class="collapse navbar-collapse " id="navbarNav2">
-        <a class="nav-link"  href="/home#services"><i class="fas fa-cut"></i> Services </a>
-        <a class="nav-link" href="/home#styles"><i class="fas fa-gift"> </i> Hair Styles</a>
-        <a class="nav-link btn btn-outline-accent rounded-pill d-none d-md-block" href="/book">BOOK A SERVICE</a>
-        <a class="nav-link d-none d-md-block" href="/cart" ><i class="fas fa-shopping-cart ms-2 d-none d-md-block"></i></a>
-        <a class="nav-link d-none d-md-block" href="/account"><i class="fas fa-user "></i></a>
+  <nav class="navbar navbar-bg-dark py-0 sticky-top navbar-expand">
+    <div class="container d-flex justify-content-center">
+      <a href="/home" class="nav-link nav-bl <%=(body.title === 'Home')? 'active':''  %> d-none d-sm-inline-block">
+        <i class="fas fa-md fa-home me-1 "></i>
+        <span class="d-none ">
+          HOME
+        </span>
+      </a>
+      <!-- <a href="/shop" class="nav-link <%=(body.title === 'Shop')? 'active':'' %> nav-bl nav-br">
+        <i class="fas fa-md fa-shopping-cart me-1 d-none d-md-inline-block"></i>
+        SHOP
+      </a> -->
+      <a  class="nav-link nav-bl nav-br " onclick="loadStyles()" data-bs-toggle="modal" data-bs-target="#booking-form-modal">
+        <i class="fas fa-md fa-calendar-alt me-1 d-none d-md-inline-block"></i>
+        BOOK
+      </a>
+      <%if(user){%>
+
+      <div class="dropdown">
+        <a class="nav-link nav-br dropdown-toggle <%=(body.title === 'Account')? 'active':'' %>" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="<%=user.photoURL%>" class="userIcon" alt="">
+          <%=user.firstName%>
+        </a>
+
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <li><a class="dropdown-item" href="/account">My Account</a></li>
+          <li><a class="dropdown-item" href="/myAppointments">My Appointments</a></li>
+
+          <% if(user.isStylist || user.isAdmin){%>
+            <hr class="my-1">
+          <%}%>
+
+          <% if(user.isStylist){%>
+            <li><a class="dropdown-item " href="/mySchedule">My Schedule</a></li>
+          <%}%>
+          <% if(user.isAdmin){%>
+            <li><a class="dropdown-item " href="/adminConsole">Admin Console</a></li>
+          <%}%>
+          <hr class="my-1">
+          <li><a class="dropdown-item" href="/logout">Sign Out</a></li>
+        </ul>
+      </div>
+
+      <%}else{%>
+
+      <a href="" data-bs-toggle="modal" data-bs-target="#signIn" class="nav-link <%=(body.title === 'SignIn')? 'active':'' %> nav-br">
+        <i class="fas fa-md fa-user me-1 d-none d-md-inline-block"></i>
+        <span class="">
+          SIGNIN
+        </span>
+      </a>
+      <%}%>
+      <!-- <a href="/cart" class=" <%=(body.title === 'Bag')? 'active':'' %> nav-link nav-br">
+      <i class="fas fa-md fa-shopping-bag"></i>
+      </a> -->
+    </div>
+  </nav>
+
+  <!-- Booking Form -->
+  <div class="modal fade" id="booking-form-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="booking-form" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-accent text-white">
+          <h5 class="modal-title d-block m-auto" id="reviewLabel">Booking</h5>
+          <a type="button" onclick="location.reload();" class="text-white" data-bs-dismiss="modal" aria-label="Close"><i class="far fa-lg fa-times-circle"></i></a>
+        </div>
+        <div class="modal-body">
+          <%- include ("modal-bookingForm.ejs")  %>
+        </div>
 
       </div>
     </div>
-  </nav>
+  </div>
+
+
+  <!-- Sign in Modal -->
+  <div class="modal fade" id="signIn" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="signIn" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-accent text-white">
+          <h5 class="modal-title d-block m-auto" id="">Sign In</h5>
+          <a type="button" class="text-white" data-bs-dismiss="modal" aria-label="Close"><i class="far fa-lg fa-times-circle"></i></a>
+        </div>
+        <div class="modal-body">
+          <%- include ("modal-login.ejs")  %>
+        </div>
+
+      </div>
+    </div>
+  </div>

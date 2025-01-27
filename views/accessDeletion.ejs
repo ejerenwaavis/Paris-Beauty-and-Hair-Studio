@@ -1,0 +1,27 @@
+
+<%- include("partials/header.ejs")%>
+
+<section class="d-block pt-5 text-center">
+  <a href="/home">
+  <img src="img/logo/paris-primary-sm.png" class="logo" alt="">
+</a>
+<!-- <p class="pt-5">Login</p> -->
+<div class="container col-10 col-sm-8 col-md-8 col-lg-6 my-5 text-center pt-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-8 mb-2">
+      <h4 class="sub-header">We hate to see you go.</h4>
+      <small>
+        The following account will be deleted from our databse including purchase orders and history
+      </small>
+    </div>
+
+    <div class="col-12 col-sm-10 col-md-8">
+      <form class="form-signin" action="/deleteAccess" method="post" id="form-signin">
+        <input  type="email" id="username" disabled name="username" class="form-control mb-3 text-center" placeholder="Email address" required autofocus value=<%=user.username %>>
+        <button class="btn rounded-pill btn-outline-danger w-100 mb-3" type="submit">Delete Account</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+</section>

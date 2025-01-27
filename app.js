@@ -1,5 +1,13 @@
-require("dotenv").config();
+const SERVER = !(process.execPath.includes("C:"));//process.env.PORT;
+if (!SERVER){
+  // console.error(SERVER);
+  require("dotenv").config();
+}
 
+
+/*********Handling Server / Local Enviromnemnt sensitive variables************/
+const APP_DIRECTORY = !(SERVER) ? "" : ((process.env.APP_DIRECTORY) ? (process.env.APP_DIRECTORY) : "");
+const PUBLIC_FOLDER = (SERVER) ? "./" : "../";
 
 const express = require("express");
 const app = express();
@@ -52,7 +60,7 @@ app.route("/")
 
 
 
-app.listen(process.env.PORT || 3000, function() {
+app.listen(process.env.PORT || 4000, function() {
   console.log("Paris Hair and Beauty Studio is Live");
 });
 

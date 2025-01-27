@@ -1,0 +1,518 @@
+<%- include ("partials/header-home.ejs")  %>
+
+
+<div class="p-5 image-display-container shadow">
+
+  <%if (body.message){%>
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <!-- <strong>Holy guacamole!</strong>  -->
+    <%= body.message%>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <%}else if(body.error){%>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <!-- <strong>Holy guacamole!</strong>  -->
+      <%= body.error%>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <%}%>
+
+  <div class="container py-5">
+    <div class="row  mt-lg-5 jumbo-container">
+      <div class="col-12 ms-lg-5 ps-lg-5">
+        <h1 class=" jumbo text-compliment">
+          Alpharetta's #1 <br class="d-none d-sm-block" /> Beauty Spot!
+        </h1>
+        <p class="lead">
+          Braids, Locks, Extension, Treatment and lots more, <br> Just name it and we got you covered!
+        </p>
+        <a class="btn rounded-pill btn-outline-accent" href="" onclick="loadStyles()" data-bs-toggle="modal" data-bs-target="#booking-form-modal">
+          BOOK A SERVICE
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<section class="new-services">
+  <div class="text-center mt-5 ">
+    <div class='line-container'>
+      <div class='line-icon'><img src="img/logo/paris-mark-alt.png" class="icon" alt=""></div>
+    </div>
+    <h4 class="mb-0 header  text-uppercase">
+      Services
+    </h4>
+    <!-- <hr class="dotted-divider mt-1 mb-1" /> -->
+    <div class='line-container'>
+      <div class='line-icon lead'>
+        How can we serve you today?
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!--
+<section class="py-5" id="services">
+  <div class="container">
+  <div class="text-center mt-5 ">
+    <div class='line-container'>
+      <div class='line-icon'><img src="img/logo/paris-mark-alt.png" class="icon" alt=""></div>
+    </div>
+    <h4 class="mb-0 header  text-uppercase">
+      Services
+    </h4>
+    <div class='line-container'>
+      <div class='line-icon lead'>
+        How can we serve you today?
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class=" mt-0 py-5">
+
+    <div class="album py-5">
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-md-6 col-sm-12 product-img-container">
+            <img src="img/products/dryer.jpg" class="product-display-img" alt="">
+          </div>
+          <div class="col-md-6 col-sm-12 bg-light  text-center d-flex align-items-center">
+            <div class="py-5 px-5 mb-4">
+
+              <h5 class="sub-header ">
+                The worlds Coolest Dryer
+              </h5>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nulla malesuada pellentesque elit eget gravida cum sociis natoque.
+              </p>
+              <button type="button" name="button" class="btn rounded-pill  btn-outline-accent">BUY NOW</button>
+
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row mb-5">
+          <div class="col-md-6 col-sm-12 order-xs-1 order-sm-1 order-md-1 order-lg-2 product-img-container ">
+            <img src="img/products/lotion.jpg" class="product-display-img" alt="">
+          </div>
+          <div class="col-md-6 col-sm-12 bg-light order-xs-2 order-sm-2  order-md-2 order-lg-1 text-center d-flex align-items-center">
+            <div class="py-5 px-5 mb-4">
+
+              <h5 class="sub-header">
+                Best Moisturizing Skin Lotion
+              </h5>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nulla malesuada pellentesque elit eget gravida cum sociis natoque.
+              </p>
+              <button type="button" name="button" class="btn rounded-pill  btn-outline-accent">BUY NOW</button>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-5">
+          <div class="col-md-6 col-sm-12 product-img-container">
+            <img src="img/products/drops.jpg" class="product-display-img" alt="">
+          </div>
+          <div class="col-md-6 col-sm-12 bg-light  text-center d-flex align-items-center">
+            <div class="py-5 px-5 mb-4">
+
+              <h5 class="sub-header ">
+                Anti Cracking Potion
+              </h5>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nulla malesuada pellentesque elit eget gravida cum sociis natoque.
+              </p>
+              <button type="button" name="button" class="btn rounded-pill  btn-outline-accent">BUY NOW</button>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class=" mt-1 pb-5 ">
+      <div class="container ">
+        <div class="row align-items-center justify-content-center">
+          <div class="col-md-12 col-lg-6 text-center ">
+            <a href="#" class="btn rounded-pill text-uppercase btn-outline-accent">
+              See All Services
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+-->
+
+<!-- Styles Display -->
+<section id="styles" class="bg-paris-mark py-5">
+  <div class="container">
+      <div class="text-center mt-5">
+    <!-- <hr class="dotted-divider mt-4 mb-3" /> -->
+    <div class='line-container'>
+      <div class='line-icon'><img src="img/logo/paris-mark-alt.png" class="icon" alt=""></div>
+    </div>
+    <h1 class="mb-0 header header-border text-uppercase">
+      Style Up!
+    </h1>
+    <div class='line-container'>
+      <div class='line-icon lead'>
+        Define your looks<span class="d-none d-sm-inline">, pick from a variety of our unique styles </span> to match your person.
+      </div>
+    </div>
+  </div>
+  <div class="container my-3 py-5">
+    <div class="row g-3">
+      <div class="col-sm-3">
+        <div onmouseover="showCardBody(this)" onmouseout="hideCardBody(this)" class="card h-100">
+          <img src="img/services/blow.jpg" class="card-img-top styles-card-image" alt="...">
+          <div class="card-body px-3 d-none bg-overlay-dark card-img-overlay d-flex align-items-end">
+            <div class="">
+              <h6 class="card-title bordered  text-white">Blow</h6>
+              <p class="card-text d-none d-lg-inline">Single line explanation of the style.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div onmouseover="showCardBody(this)" onmouseout="hideCardBody(this)" class="card h-100">
+          <img src="img/services/skin.jpg" class="card-img-top styles-card-image" alt="...">
+          <div class="card-body px-3 d-none bg-overlay-dark card-img-overlay d-flex align-items-end">
+            <div class="">
+              <h5 class="card-title bordered  text-white">Skin Care </h5>
+              <p class="card-text d-none d-lg-inline">Single line explanation of the style.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div onmouseover="showCardBody(this)" onmouseout="hideCardBody(this)" class="card h-100">
+          <img src="img/services/pony.jpg" class="card-img-top styles-card-image" alt="...">
+          <div class="card-body px-3 d-none bg-overlay-dark card-img-overlay d-flex align-items-end">
+            <div class="">
+              <h5 class="card-title bordered  text-white">Pony Tail</h5>
+              <p class="card-text d-none d-lg-inline">Single line explanation of the style.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div onmouseover="showCardBody(this)" onmouseout="hideCardBody(this)" class="card h-100">
+          <img src="img/services/facials.jpg" class="card-img-top styles-card-image" alt="...">
+          <div class="card-body px-3 d-none bg-overlay-dark card-img-overlay d-flex align-items-end">
+            <div class="">
+              <h5 class="card-title bordered  text-white">Eye Bags</h5>
+              <p class="card-text d-none d-lg-inline">Single line explanation of the style.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="text-center mb-4">
+    <a href="#" class="btn rounded-pill text-uppercase btn-outline-accent">
+      See All Styles
+      <!-- <i class="fas ps-2 fa-long-arrow-alt-right"></i> -->
+    </a>
+  </div>
+</div>
+
+</section>
+
+<!-- Testimonials -->
+<section id="testimonials" class=" py-5">
+  <div class="text-center mt-5">
+    <!-- <hr class="dotted-divider mt-4 mb-3" /> -->
+    <div class='line-container'>
+      <div class='line-icon '><img src="img/logo/paris-mark-alt.png" class="icon" alt=""></div>
+    </div>
+    <h1 class="mb-0 header header-border text-uppercase">
+      Word On the Streets!
+    </h1>
+    <div class='line-container'>
+      <div class='line-icon lead '>
+        See what people are saying about us.
+      </div>
+    </div>
+
+    <div class="container testimonial-pane mt-5 py-3">
+      <div class="row justify-content-center">
+
+        <!-- New Item -->
+        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 py-4">
+          <div class="img-circle-container bg-light shadow-sm m-auto">
+            <img src="img/logo/paris-mark-alt.png" class="img-circle" alt="">
+          </div>
+          <div class='line-container mt-1 '>
+            <div class='line-icon'>
+              <i class="customer-name">
+                <b>Clients Name</b>
+              </i>
+            </div>
+          </div>
+          <p class="mt-1">
+            Simply an Awesome place to make your hair.
+          </p>
+          <!-- <br> -->
+          <div class="row justify-content-center">
+            <div class="col-2">
+              <a href="#" class="text-facebook  fab  fa-facebook"></a>
+            </div>
+            <div class="col-2">
+              <a href="#" class="text-instagram fab  fa-instagram"></a>
+            </div>
+
+            <div class="col-2">
+              <a href="#" class="text-twitter fab  fa-twitter"></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- New Item -->
+        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 py-4">
+          <div class="img-circle-container bg-light shadow-sm m-auto">
+            <img src="img/logo/paris-mark-alt.png" class="img-circle" alt="">
+          </div>
+          <div class='line-container mt-1 '>
+            <div class='line-icon'>
+              <i class="customer-name">
+                <b>Clients Name</b>
+              </i>
+            </div>
+          </div>
+          <p class="mt-1">
+            Simply an Awesome place to make your hair.
+          </p>
+          <!-- <br> -->
+          <div class="row justify-content-center">
+            <div class="col-2">
+              <a href="#" class="text-facebook  fab  fa-facebook"></a>
+            </div>
+            <div class="col-2">
+              <a href="#" class="text-instagram fab  fa-instagram"></a>
+            </div>
+
+            <div class="col-2">
+              <a href="#" class="text-twitter fab  fa-twitter"></a>
+            </div>
+          </div>
+        </div>
+        <!-- New Item -->
+        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 py-4">
+          <div class="img-circle-container bg-light shadow-sm m-auto">
+            <img src="img/logo/paris-mark-alt.png" class="img-circle" alt="">
+          </div>
+          <div class='line-container mt-1 '>
+            <div class='line-icon'>
+              <i class="customer-name">
+                <b>Clients Name</b>
+              </i>
+            </div>
+          </div>
+          <p class="mt-1">
+            Simply an Awesome place to make your hair.
+          </p>
+          <!-- <br> -->
+          <div class="row justify-content-center">
+            <div class="col-2">
+              <a href="#" class="text-facebook  fab  fa-facebook"></a>
+            </div>
+            <div class="col-2">
+              <a href="#" class="text-instagram fab  fa-instagram"></a>
+            </div>
+
+            <div class="col-2">
+              <a href="#" class="text-twitter fab  fa-twitter"></a>
+            </div>
+          </div>
+        </div>
+        <!-- New Item -->
+        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 py-4">
+          <div class="img-circle-container bg-light shadow-sm m-auto">
+            <img src="img/logo/paris-mark-alt.png" class="img-circle" alt="">
+          </div>
+          <div class='line-container mt-1 '>
+            <div class='line-icon'>
+              <i class="customer-name">
+                <b>Clients Name</b>
+              </i>
+            </div>
+          </div>
+          <p class="mt-1">
+            Simply an Awesome place to make your hair.
+          </p>
+          <!-- <br> -->
+          <div class="row justify-content-center">
+            <div class="col-2">
+              <a href="#" class="text-facebook  fab  fa-facebook"></a>
+            </div>
+            <div class="col-2">
+              <a href="#" class="text-instagram fab  fa-instagram"></a>
+            </div>
+
+            <div class="col-2">
+              <a href="#" class="text-twitter fab  fa-twitter"></a>
+            </div>
+          </div>
+        </div>
+        <!-- New Item -->
+        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 py-4">
+          <div class="img-circle-container bg-light shadow-sm m-auto">
+            <img src="img/logo/paris-mark-alt.png" class="img-circle" alt="">
+          </div>
+          <div class='line-container mt-1 '>
+            <div class='line-icon'>
+              <i class="customer-name">
+                <b>Clients Name</b>
+              </i>
+            </div>
+          </div>
+          <p class="mt-1">
+            Simply an Awesome place to make your hair.
+          </p>
+          <!-- <br> -->
+          <div class="row justify-content-center">
+            <div class="col-2">
+              <a href="#" class="text-facebook  fab  fa-facebook"></a>
+            </div>
+            <div class="col-2">
+              <a href="#" class="text-instagram fab  fa-instagram"></a>
+            </div>
+
+            <div class="col-2">
+              <a href="#" class="text-twitter fab  fa-twitter"></a>
+            </div>
+          </div>
+        </div>
+        <!-- New Item -->
+        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 py-4">
+          <div class="img-circle-container bg-light shadow-sm m-auto">
+            <img src="img/logo/paris-mark-alt.png" class="img-circle" alt="">
+          </div>
+          <div class='line-container mt-1 '>
+            <div class='line-icon'>
+              <i class="customer-name">
+                <b>Clients Name</b>
+              </i>
+            </div>
+          </div>
+          <p class="mt-1">
+            Simply an Awesome place to make your hair.
+          </p>
+          <!-- <br> -->
+          <div class="row justify-content-center">
+            <div class="col-2">
+              <a href="#" class="text-facebook  fab  fa-facebook"></a>
+            </div>
+            <div class="col-2">
+              <a href="#" class="text-instagram fab  fa-instagram"></a>
+            </div>
+
+            <div class="col-2">
+              <a href="#" class="text-twitter fab  fa-twitter"></a>
+            </div>
+          </div>
+        </div>
+        <!-- New Item -->
+        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 py-4">
+          <div class="img-circle-container bg-light shadow-sm m-auto">
+            <img src="img/logo/paris-mark-alt.png" class="img-circle" alt="">
+          </div>
+          <div class='line-container mt-1 '>
+            <div class='line-icon'>
+              <i class="customer-name">
+                <b>Clients Name</b>
+              </i>
+            </div>
+          </div>
+          <p class="mt-1">
+            Simply an Awesome place to make your hair.
+          </p>
+          <!-- <br> -->
+          <div class="row justify-content-center">
+            <div class="col-2">
+              <a href="#" class="text-facebook  fab  fa-facebook"></a>
+            </div>
+            <div class="col-2">
+              <a href="#" class="text-instagram fab  fa-instagram"></a>
+            </div>
+
+            <div class="col-2">
+              <a href="#" class="text-twitter fab  fa-twitter"></a>
+            </div>
+          </div>
+        </div>
+        <!-- New Item -->
+        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 py-4">
+          <div class="img-circle-container bg-light shadow-sm m-auto">
+            <img src="img/logo/paris-mark-alt.png" class="img-circle" alt="">
+          </div>
+          <div class='line-container mt-1 '>
+            <div class='line-icon'>
+              <i class="customer-name">
+                <b>Clients Name</b>
+              </i>
+            </div>
+          </div>
+          <p class="mt-1">
+            Simply an Awesome place to make your hair.
+          </p>
+          <!-- <br> -->
+          <div class="row justify-content-center">
+            <div class="col-2">
+              <a href="#" class="text-facebook  fab  fa-facebook"></a>
+            </div>
+            <div class="col-2">
+              <a href="#" class="text-instagram fab  fa-instagram"></a>
+            </div>
+
+            <div class="col-2">
+              <a href="#" class="text-twitter fab  fa-twitter"></a>
+            </div>
+          </div>
+        </div>
+        <!-- New Item -->
+        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 py-4">
+          <div class="img-circle-container bg-light shadow-sm m-auto">
+            <img src="img/logo/paris-mark-alt.png" class="img-circle" alt="">
+          </div>
+          <div class='line-container mt-1 '>
+            <div class='line-icon'>
+              <i class="customer-name">
+                <b>Clients Name</b>
+              </i>
+            </div>
+          </div>
+          <p class="mt-1">
+            Simply an Awesome place to make your hair.
+          </p>
+          <!-- <br> -->
+          <div class="row justify-content-center">
+            <div class="col-2">
+              <a href="#" class="text-facebook  fab  fa-facebook"></a>
+            </div>
+            <div class="col-2">
+              <a href="#" class="text-instagram fab  fa-instagram"></a>
+            </div>
+
+            <div class="col-2">
+              <a href="#" class="text-twitter fab  fa-twitter"></a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+</section>
+
+<%- include ("partials/footer.ejs") %>
