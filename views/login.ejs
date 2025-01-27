@@ -2,8 +2,8 @@
 
 
 <section class="d-block pt-5 text-center">
-  <a href="/home">
-    <img src="img/logo/paris-primary-sm.png" class="logo" alt="">
+  <a href="<%=(body)?body.domain:'' %>/home">
+    <img src="<%=(body)?body.domain:'' %>/img/logo/paris-primary-sm.png" class="logo" alt="">
   </a>
 
 
@@ -30,10 +30,10 @@
         <%}%>
       </div>
       <div class="col-12 col-sm-10 col-md-8 mb-2">
-        <a href="/auth/google" class="text-left  w-100 btn btn-lg btn-primary btn-block p-0 m-0">
+        <a href="<%=(body)?body.domain:'' %>/auth/google" class="text-left  w-100 btn btn-lg btn-primary btn-block p-0 m-0">
           <div class="row g-0 align-items-center">
             <div class="col-2 text-start">
-              <img src="img/google-icon-2.png" class="google-icon" alt="">
+              <img src="<%=(body)?body.domain:'' %>/img/google-icon-2.png" class="google-icon" alt="">
             </div>
             <div class="col-8 ">
               <small class=""> Sign in with Google</small>
@@ -46,11 +46,11 @@
       </div>
 
       <div class="col-12 col-sm-10 col-md-8 mb-2">
-        <a href="/auth/facebook" class="text-left  w-100 btn btn-lg bg-fb text-white btn-block p-0 m-0">
+        <a href="<%=(body)?body.domain:'' %>/auth/facebook" class="text-left  w-100 btn btn-lg bg-fb text-white btn-block p-0 m-0">
           <div class="row g-0 align-items-center">
             <div class="col-2 text-start ">
               <!-- <i class="fab fa-facebook-square"></i> -->
-              <img src="img/fb_icon.png" class="google-icon" alt="">
+              <img src="<%=(body)?body.domain:'' %>/img/fb_icon.png" class="google-icon" alt="">
             </div>
             <div class="col-8 ">
               <small class=""> Sign in with Facebook</small>
@@ -74,7 +74,7 @@
 
 
 
-      <form class="form-signin" action="/login" method="post" id="form-signin">
+      <form class="form-signin" action="<%=(body)?body.domain:'' %>/login" method="post" id="form-signin">
         <label for="inputEmail" class="sr-only">Email address</label>
         <input value="<%=(login)?login:'' %>" type="email" id="username" name="username" class="form-control" placeholder="Email address" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
@@ -88,7 +88,7 @@
       </form>
     </div>
   </div>
-  Don't have an account? Register <a href="/register" class="d-inline">here </a>
+  Don't have an account? Register <a href="<%=(body)?body.domain:'' %>/register" class="d-inline">here </a>
 </div>
 </section>
 

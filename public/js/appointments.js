@@ -1,5 +1,8 @@
 let confirmApptID;
 
+var domain = $("#domain").attr('domain');
+
+
 function openPayementPanel(evt){
   $("#successConfirmed").hide();
   blockConfirmPanel();
@@ -12,7 +15,7 @@ function openPayementPanel(evt){
   $("#confirmCheckOutOption").text(appt.style.option);
 
   let pricings;
-  $.post("/orderPricings",appt, function(res){
+  $.post(domain+"/orderPricings",appt, function(res){
     // console.log(res);
     pricings = res;
     if(pricings){
@@ -36,7 +39,7 @@ function showConfirmPanel(){
 }
 
 function createConfirmPaymentIntent(purchase){
-  $.post("/create-payment-intent", {body: purchase })
+  $.post(domain+"/create-payment-intent", {body: purchase })
     .then(function(result) {
       return result;
     })

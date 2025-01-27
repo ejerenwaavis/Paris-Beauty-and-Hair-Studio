@@ -67,7 +67,7 @@ function loading(isLoading) {
 
 
 function createPaymentIntent(purchase){
-  $.post("/create-payment-intent", {body: purchase })
+  $.post(domain+"/create-payment-intent", {body: purchase })
     .then(function(result) {
       return result;
     })

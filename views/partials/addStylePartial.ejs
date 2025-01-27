@@ -6,7 +6,7 @@
     <div class="col-12">
 
 
-      <form action="/formHandler" method="POST">
+      <form action="<%=(body)?body.domain:'' %>/formHandler" method="POST">
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Style Name</label>
           <input type="text" name="baseStyle" class="form-control" id="baseStyle" aria-describedby="emailHelp">
@@ -44,7 +44,7 @@
 
         <a type="" onclick="sendForm(this)" class="btn btn-outline-accent rounded-pill w-100">Submit</a>
       </form>
-      <form hidden name="mainForm" id="mainForm" class="" action="/addStyle" method="post">
+      <form hidden name="mainForm" id="mainForm" class="" action="<%=(body)?body.domain:'' %>/addStyle" method="post">
         <input type="text" name="baseStyleName" id="styleName" value="">
         <textarea name="options" id="options" rows="8" cols="80"></textarea>
       </form>
@@ -53,4 +53,4 @@
   </div>
 
 </div>
-      <script type="text/javascript" src="/js/addStyle.js"></script>
+      <script type="text/javascript" src="<%=(body)?body.domain:'' %>/js/addStyle.js"></script>

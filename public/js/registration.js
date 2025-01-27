@@ -5,6 +5,8 @@ $(function(){
 });
 
 
+var domain = $("#domain").attr('domain');
+
 function submitRegistrationForm(evt){
   // sf = $("#registrationForm").serializeArray();
   // form = {
@@ -22,7 +24,7 @@ function submitRegistrationForm(evt){
 function validateEmail(element){
   let username = element.value;
   if(username){
-    $.post("/usernameExist", {username:username}, function(exists){
+    $.post(domain+"/usernameExist", {username:username}, function(exists){
       if(exists){
         $("#username").addClass("border-danger");
         $("#usernameError").text("this email is already in Use");

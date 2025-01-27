@@ -8,3 +8,6 @@ function hideCardBody(evt){
   let cardBody = $(evt).find(".card-body")[0];
   $(cardBody).addClass("d-none");
 }
+
+
+var domain = $("#domain").attr('domain');

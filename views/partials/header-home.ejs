@@ -10,7 +10,7 @@
   <base href="/" >
 
   <!-- Icon -->
-  <link rel='icon' href='img/logo/favicon-alt.png' type='image/x-icon' />
+  <link rel="icon" href="<%=(body)?body.domain:'' %>/img/logo/favicon-alt.png" type="image/x-icon" />
 
 
   <!-- font -->
@@ -26,24 +26,24 @@
   <!-- Stripe Implemetation -->
   <script src="https://js.stripe.com/v3/"></script>
   <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
-  <script src="js/stripeClient.js" defer></script>
+  <script src="<%=(body)?body.domain:'' %>/js/stripeClient.js" defer></script>
 
 
   <!-- Custom styles for this template -->
-  <link rel="stylesheet" href="css/stripe.css" />
-  <link href="css/carousel.css" rel="stylesheet">
-  <link href="css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="<%=(body)?body.domain:'' %>/css/stripe.css" />
+  <link href="<%=(body)?body.domain:'' %>/css/carousel.css" rel="stylesheet">
+  <link href="<%=(body)?body.domain:'' %>/css/style.css" rel="stylesheet">
 
 
 </head>
 
 <body class="">
-
+<span class="hidden d-none" id="domain" domain="<%=(body)?body.domain:'' %>"> <%=(body)?body.domain:'' %> </span>
 
   <div class="logo text-center m-2">
 
-    <a class="" href="/home">
-      <img src="img/logo/paris-primary-md.png" alt="PARIS HAIR & BEAUTY LOGO" class="logo" />
+    <a class="" href="<%=(body)?body.domain:'' %>/home">
+      <img src="<%=(body)?body.domain:'' %>/img/logo/paris-primary-md.png" alt="PARIS HAIR & BEAUTY LOGO" class="logo" />
     </a>
   </div>
 
@@ -51,7 +51,7 @@
   <!-- Original Code -->
   <nav class="navbar navbar-bg-dark py-0 sticky-top navbar-expand">
     <div class="container d-flex justify-content-center">
-      <a href="/home" class="nav-link nav-bl <%=(body.title === 'Home')? 'active':''  %> d-none d-sm-inline-block">
+      <a href="<%=(body)?body.domain:'' %>/home" class="nav-link nav-bl <%=(body.title === 'Home')? 'active':''  %> d-none d-sm-inline-block">
         <i class="fas fa-md fa-home me-1 "></i>
         <span class="d-none ">
           HOME
@@ -74,21 +74,21 @@
         </a>
 
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-          <li><a class="dropdown-item" href="/account">My Account</a></li>
-          <li><a class="dropdown-item" href="/myAppointments">My Appointments</a></li>
+          <li><a class="dropdown-item" href="<%=(body)?body.domain:'' %>/account">My Account</a></li>
+          <li><a class="dropdown-item" href="<%=(body)?body.domain:'' %>/myAppointments">My Appointments</a></li>
 
           <% if(user.isStylist || user.isAdmin){%>
             <hr class="my-1">
           <%}%>
 
           <% if(user.isStylist){%>
-            <li><a class="dropdown-item " href="/mySchedule">My Schedule</a></li>
+            <li><a class="dropdown-item " href="<%=(body)?body.domain:'' %>/mySchedule">My Schedule</a></li>
           <%}%>
           <% if(user.isAdmin){%>
-            <li><a class="dropdown-item " href="/adminConsole">Admin Console</a></li>
+            <li><a class="dropdown-item " href="<%=(body)?body.domain:'' %>/adminConsole">Admin Console</a></li>
           <%}%>
           <hr class="my-1">
-          <li><a class="dropdown-item" href="/logout">Sign Out</a></li>
+          <li><a class="dropdown-item" href="<%=(body)?body.domain:'' %>/logout">Sign Out</a></li>
         </ul>
       </div>
 

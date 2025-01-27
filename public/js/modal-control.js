@@ -7,7 +7,7 @@ let selectedOption;
 let purchaseData;
 let apptID;
 let clientDetails = false;
-$.get("/officialHours", function(hours) {
+$.get(domain+"/officialHours", function(hours) {
   officialHours = hours;
 });
 
@@ -22,7 +22,7 @@ function loadStyles() {
   resetForm();
   let htmlSelectOptions = '<option value="null" selected>Select Base Style</option>';
 
-  $.get("/getStyles", function(data) {
+  $.get(domain+"/getStyles", function(data) {
     if (data) {
       for (style of data) {
         htmlSelectOptions += '<option value="' + style.baseStyle + '">' + style.baseStyle + '</option>'
@@ -116,7 +116,7 @@ function showStylistSection() {
   if ($(this).val() !== "null") {
     let stylistsHtml = '';
     let i = 0;
-    $.get("/stylists", function(stylists) {
+    $.get(domain+"/stylists", function(stylists) {
       if (stylists) {
         for (stylist of stylists) {
           stylistsHtml += '<div class="col text-center">' +
@@ -223,7 +223,7 @@ function selectTime(evt) {
 function showCalendar(year, month, duration) {
   blockBookingPannel();
   // console.log("getting dates");
-  $.get("/days/" + $('#stylist').val() + "/" + year + "/" + month + "/" + duration, function(days) {
+  $.get(domain+"/days/" + $('#stylist').val() + "/" + year + "/" + month + "/" + duration, function(days) {
     daysArray = days
     let i = 0; // max = days.length
     let today = new Date();
@@ -395,13 +395,13 @@ function checkOut() {
     clientName: $("#clientName").val()
   };
   let pricings;
-  $.post("/orderPricings", body, function(res) {
+  $.post(domain+"/orderPricings", body, function(res) {
     console.log(res);
     pricings = res;
     console.log(pricings);
 
 
-    $.post("/appt", body, function(data) {
+    $.post(domain+"/appt", body, function(data) {
       // console.log(data);
       if (data.status === "success") {
 
@@ -584,7 +584,7 @@ function showNextTab() {
       setProgress();
       if (bookingStage == 2) {
         // console.log("on page 2");
-        $.get("/officialHours", function(hours) {
+        $.get(domain+"/officialHours", function(hours) {
           officialHours = hours;
         });
         showCalendar(new Date().getFullYear(), new Date().getMonth(), selectedOption.duration);

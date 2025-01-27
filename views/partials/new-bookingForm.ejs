@@ -15,7 +15,7 @@ add to cart or book now
 
 <div class="container">
 
-  <form class=" py-5" action="/book" method="post">
+  <form class=" py-5" action="<%=(body)?body.domain:'' %>/book" method="post">
     <div class="row mb-3 justify-content-center">
       <div class="col">
         <select class="form-select ">
