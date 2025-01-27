@@ -1234,11 +1234,46 @@ app.route(APP_DIRECTORY+"/deleteAccess")
 
 
 
+app.use((req, res, next) => {
+  // If you're behind a proxy like Heroku or Nginx,
+  // you may want to use x-forwarded-proto and trust proxy:
+  // app.set('trust proxy', true);
+  // const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+
+  const protocol = req.protocol;
+  const host = req.get('host');       // e.g. "localhost:3000" or "example.com"
+  const url = req.originalUrl;        // e.g. "/some/nonexistent/path"
+
+  // Construct a troubleshooting message
+  const debugMessage = `
+    <h1>404 - Not Found</h1>
+    <p>Sorry, we couldn't find the resource you requested.</p>
+    <p><strong>Requested URL:</strong> ${protocol}://${host}${url}</p>
+    <p><strong>Host (Domain):</strong> ${host}</p>
+    <p><strong>Protocol:</strong> ${protocol}</p>
+  `;
+
+  // Respond with status 404 and the debug info
+  res.status(404).send(debugMessage);
+});
+
+
+
 
 app.listen(PORT, function() {  
   console.log("Paris Hair and Beauty Studio is Live");
   console.log("PORT: "+ PORT);
 });
+
+
+
+
+
+
+
+
+
+
 
 /************** helper functions *******************/
 function Body(title, error, message) {
