@@ -269,7 +269,7 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
     clientID: CLIENT_ID,
     clientSecret: CLIENT_SECRETE,
-    callbackURL: (SERVER)?"https://parisbeautyandhairstudio.herokuapp.com/googleLoggedin":"/googleLoggedin",
+    callbackURL: (SERVER)?"https://parisbeautyandhairstudio.com/googleLoggedin":"/googleLoggedin",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
   function(accessToken, refreshToken, profile, cb) {
@@ -1040,31 +1040,79 @@ app.route(APP_DIRECTORY+"/login")
   })(req, res, next);
 });
 
-app.get('/auth/google', passport.authenticate('google', {
-  // scope: ['profile']
-  scope: [
+// app.get('/auth/google', passport.authenticate('google', {
+//   // scope: ['profile']
+//   scope: [
+//         'https://www.googleapis.com/auth/userinfo.profile',
+//         'https://www.googleapis.com/auth/userinfo.email'
+//     ]
+// }));
+
+
+app.get('/auth/google', (req, res, next) => {
+  // Detect host/protocol (for example, behind a proxy we might use x-forwarded-proto)
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+  const host = req.get('host') + APP_DIRECTORY; // e.g. "localhost:3000" or "example.com"
+
+  // Construct the callback URL dynamically:
+  const callbackURL = `${protocol}://${host}/googleLoggedin`;
+  console.log("Dynamic Call Back URL --> ", callbackURL);
+  
+  passport.authenticate('google', {
+    scope: [
         'https://www.googleapis.com/auth/userinfo.profile',
         'https://www.googleapis.com/auth/userinfo.email'
-    ]
-}));
+    ],
+    callbackURL, // pass the dynamically built callback
+  })(req, res, next);
+});
 
-app.get('/auth/facebook', passport.authenticate('facebook',{ scope: 'email'}));
-app.route(APP_DIRECTORY+"/facebookLoggedin")
-    .get(function(req, res, next) {
-      passport.authenticate('facebook', function(err, user, info) {
-        if (err) {
-          console.log(err);
-          return next(err);
-        }
-        // Redirect if it fails
-        if (!user) { console.log(err); return res.redirect('/login'); }
-        req.logIn(user, function(err) {
-          if (err) { return next(err); }
-          // Redirect if it succeeds
-          return res.redirect('/home');
-        });
-      })(req, res, next);
+
+
+app.get('/auth/facebook', (req, res, next) => {
+  // Detect host/protocol (similar to your Google code).
+  // If you're behind a proxy, consider x-forwarded-proto.
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+  const host = req.get('host') + APP_DIRECTORY; // e.g. "example.com/myapp"
+
+  // Construct the callback URL dynamically:
+  const callbackURL = `${protocol}://${host}/facebookLoggedin`;
+  console.log("Dynamic Call Back URL --> ", callbackURL);
+
+  passport.authenticate('facebook', {
+    scope: ['email'],
+    callbackURL  // pass the dynamically built callback to Facebook
+  })(req, res, next);
+});
+
+
+app.get('/facebookLoggedin', (req, res, next) => {
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+  const host = req.get('host') + APP_DIRECTORY;
+  const callbackURL = `${protocol}://${host}/facebookLoggedin`;
+  console.log("Handling Facebook callback at --> ", callbackURL);
+
+  passport.authenticate('facebook', {
+    callbackURL  // again, so Passport sets the redirect_uri parameter
+  }, (err, user, info) => {
+    if (err) {
+      console.log(err);
+      return next(err);
+    }
+    if (!user) {
+      console.log("No user returned");
+      return res.redirect('/login');
+    }
+    // Log the user in
+    req.logIn(user, function(loginErr) {
+      if (loginErr) {
+        return next(loginErr);
+      }
+      // Redirect if it succeeds
+      return res.redirect('/home');
     });
+  })(req, res, next);
+});
 
 app.route(APP_DIRECTORY+"/googleLoggedin")
     .get(function(req, res, next) {
