@@ -1,4 +1,13 @@
-require("dotenv").config();
+const SERVER = !(process.execPath.includes("C:"));//process.env.PORT;
+if (!SERVER){
+  // console.error(SERVER);
+  require("dotenv").config();
+}
+
+
+/*********Handling Server / Local Enviromnemnt sensitive variables************/
+const APP_DIRECTORY = !(SERVER) ? "" : ((process.env.APP_DIRECTORY) ? (process.env.APP_DIRECTORY) : "");
+const PUBLIC_FOLDER = (SERVER) ? "./" : "../";
 
 /**************** SYSTEM VAIRAIBLES ******************/
 const MONGOPASSWORD = process.env.MONGOPASSWORD;
@@ -19,7 +28,6 @@ const SECRETE = process.env.SECRETE;
 const SALTROUNDS = Number(process.env.SALTROUNDS);
 const FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID
 const FACEBOOK_APP_SECRET = process.env.FACEBOOK_APP_SECRET
-const SERVER = process.env.PORT;
 
 
 /************* Module Invocations *********************/
@@ -326,12 +334,12 @@ passport.use(new GoogleStrategy({
 ));
 
 
-app.route("/")
+app.route(APP_DIRECTORY+"/")
   .get(function(req, res) {
     res.render("cover");
   });
 
-app.route("/home")
+app.route(APP_DIRECTORY+"/home")
   .get(function(req, res) {
     if(req.isAuthenticated()){
       res.render("home", {
@@ -348,7 +356,7 @@ app.route("/home")
     }
   });
 
-app.route("/account")
+app.route(APP_DIRECTORY+"/account")
   .get(function(req, res) {
     if(req.user){
       // console.log("finding appts for --> "+ req.user.username);
@@ -429,7 +437,7 @@ app.route("/account")
     });
   })
 
-app.route("/myAppointments")
+app.route(APP_DIRECTORY+"/myAppointments")
   .get(function(req,res){
     if(req.user){
       // console.log("finding appts for --> "+ req.user.username);
@@ -474,7 +482,7 @@ app.route("/myAppointments")
   });
 
 
-  app.route("/mySchedule")
+  app.route(APP_DIRECTORY+"/mySchedule")
     .get(function(req,res){
       if(req.user && req.user.isStylist){
 
@@ -531,7 +539,7 @@ app.route("/myAppointments")
     });
 
 
-app.route("/getStyles")
+app.route(APP_DIRECTORY+"/getStyles")
   .get(function(req, res) {
     Style.find({}, function(err, foundOBJ) {
       if (foundOBJ) {
@@ -542,7 +550,7 @@ app.route("/getStyles")
 
 
 
-app.route("/appt")
+app.route(APP_DIRECTORY+"/appt")
   .get(function(req, res) {
     Appointment.find(function(err, foundOBJ) {
       res.send(foundOBJ);
@@ -604,7 +612,7 @@ app.route("/appt")
     })
   })
 
-app.route("/confirmAppointment")
+app.route(APP_DIRECTORY+"/confirmAppointment")
 .post(function(req,res){
   let id = req.body.id;
   let expireyDate = null;
@@ -633,7 +641,7 @@ app.route("/confirmAppointment")
   });
 })
 
-app.route("/days/:stylist/:year/:dateMonth/:duration")
+app.route(APP_DIRECTORY+"/days/:stylist/:year/:dateMonth/:duration")
   .get(function(req, res) {
     const stylist = req.params.stylist;
     const dateMonth = req.params.dateMonth;
@@ -699,7 +707,7 @@ app.route("/days/:stylist/:year/:dateMonth/:duration")
     })
   });
 
-app.route("/officialHours")
+app.route(APP_DIRECTORY+"/officialHours")
   .get(function(req,res){
     res.send({start:OPENTIME, stop:CLOSETIME});
   });
@@ -708,7 +716,7 @@ app.route("/officialHours")
 
   // unused routes
   /*
-  app.route("/book")
+  app.route(APP_DIRECTORY+"/book")
     .get(function(req, res) {
       res.render("booking", {
         body: new Body("Book", "", ""),
@@ -716,7 +724,7 @@ app.route("/officialHours")
         user: req.user
       });
     });
-    app.route("/cart")
+    app.route(APP_DIRECTORY+"/cart")
       .get(function(req, res) {
         res.render("cart", {
           body: new Body("Bag", "", ""),
@@ -724,7 +732,7 @@ app.route("/officialHours")
           user:req.user,
         });
       });
-    app.route("/shop")
+    app.route(APP_DIRECTORY+"/shop")
       .get(function(req, res) {
         res.render("products", {
           body: new Body("Shop", "", ""),
@@ -732,7 +740,7 @@ app.route("/officialHours")
           user: req.user,
         });
       });
-    app.route("/email")
+    app.route(APP_DIRECTORY+"/email")
       .get(function(req,res){
         const transporter = nodemailer.createTransport({
           service: SERVICE,
@@ -771,7 +779,7 @@ app.route("/officialHours")
   */
 
 /********* ADMIN ACTIONS **************/
-app.route("/addStyle")
+app.route(APP_DIRECTORY+"/addStyle")
   .get(function(req, res) {
       res.redirect("/adminComsole")
   })
@@ -802,7 +810,7 @@ app.route("/addStyle")
       });
   })
 
-app.route("/stylists")
+app.route(APP_DIRECTORY+"/stylists")
   .get(function(req, res) {
     Stylist.find({}, function(err, foundOBJ) {
       // console.log(foundOBJ);
@@ -859,7 +867,7 @@ app.route("/stylists")
     }
   })
 
-app.route("/adminConsole")
+app.route(APP_DIRECTORY+"/adminConsole")
   .get(function(req,res){
     if(req.user){
       if(req.user.isAdmin){
@@ -883,7 +891,7 @@ app.route("/adminConsole")
     }
   })
 
-app.route("/admin")
+app.route(APP_DIRECTORY+"/admin")
 .post(function(req,res){
   if(req.user){
     if(req.user.isAdmin){
@@ -930,7 +938,7 @@ app.route("/admin")
 
 
 /************ Stripe Payment **************/
-app.route("/payment")
+app.route(APP_DIRECTORY+"/payment")
   .get(function(req,res){
     res.render("payment");
   })
@@ -965,7 +973,7 @@ app.post("/create-payment-intent", async function (req, res){
   });
 });
 
-app.route("/orderPricings")
+app.route(APP_DIRECTORY+"/orderPricings")
   .post(function (req,res){
   // console.log("Geting Pricings");
   // console.log(req.body);
@@ -999,7 +1007,7 @@ app.route("/orderPricings")
 
 
 /****************** Authentication *******************/
-app.route("/login")
+app.route(APP_DIRECTORY+"/login")
   .get(function(req, res) {
     if(req.isAuthenticated()){
       // console.log("Authenticated Request");
@@ -1037,7 +1045,7 @@ app.get('/auth/google', passport.authenticate('google', {
 }));
 
 app.get('/auth/facebook', passport.authenticate('facebook',{ scope: 'email'}));
-app.route("/facebookLoggedin")
+app.route(APP_DIRECTORY+"/facebookLoggedin")
     .get(function(req, res, next) {
       passport.authenticate('facebook', function(err, user, info) {
         if (err) {
@@ -1054,7 +1062,7 @@ app.route("/facebookLoggedin")
       })(req, res, next);
     });
 
-app.route("/googleLoggedin")
+app.route(APP_DIRECTORY+"/googleLoggedin")
     .get(function(req, res, next) {
       passport.authenticate('google', function(err, user, info) {
         if (err) { return next(err); }
@@ -1072,7 +1080,7 @@ app.route("/googleLoggedin")
       })(req, res, next);
     });
 
-app.route("/logout")
+app.route(APP_DIRECTORY+"/logout")
   .get(function(req, res) {
     req.logout();
     console.log("Logged Out");
@@ -1084,7 +1092,7 @@ app.route("/logout")
     });
   });
 
-app.route("/register")
+app.route(APP_DIRECTORY+"/register")
   .get(function(req, res) {
     if(req.isAuthenticated()){
       // console.log("Authenticated Request");
@@ -1148,7 +1156,7 @@ app.route("/register")
 
   })
 
-app.route("/usernameExist")
+app.route(APP_DIRECTORY+"/usernameExist")
     .post(function(req,res){
       // console.log("username to search ---> "+req.body.username);
       User.exists({_id:req.body.username}, function(err,exists){
@@ -1156,7 +1164,7 @@ app.route("/usernameExist")
       })
     })
 
-app.route("/deleteAccess")
+app.route(APP_DIRECTORY+"/deleteAccess")
   .get(function(req,res){
     let provider = req.params.provider;
     if(provider === provider){
@@ -1175,7 +1183,9 @@ app.route("/deleteAccess")
 
 
 
-app.listen(process.env.PORT || 3000, function() {
+app.listen(process.env.PORT || 4000, function() {
+  console.log(uri);
+  
   console.log("Paris Hair and Beauty Studio is Live");
   console.log("PORT: "+process.env.PORT);
 });
@@ -1185,7 +1195,9 @@ function Body(title, error, message) {
   this.title = title;
   this.error = error;
   this.message = message;
+  this.domain =  APP_DIRECTORY
 }
+
 function initialPurchase(){
   return {
     baseStyle:"PlaceHolder",
