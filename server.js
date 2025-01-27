@@ -552,7 +552,7 @@ app.get(APP_DIRECTORY+"/getStyles", async (req, res) => {
     res.send(foundOBJ);
   } catch (err) {
     // console.error(err);
-    res.status(500).send("Error fetching styles");
+    res.status(500).send("Error fetching styles", err);
   }
 });
 
