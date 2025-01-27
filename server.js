@@ -9,6 +9,8 @@ if (!SERVER){
 const APP_DIRECTORY = !(SERVER) ? "" : ((process.env.APP_DIRECTORY) ? (process.env.APP_DIRECTORY) : "");
 const PUBLIC_FOLDER = (SERVER) ? "./" : "../";
 
+const PORT = process.env.PORT || 4000;
+
 /**************** SYSTEM VAIRAIBLES ******************/
 const MONGOPASSWORD = process.env.MONGOPASSWORD;
 const MONGOUSER = process.env.MONGOUSER;
@@ -539,14 +541,16 @@ app.route(APP_DIRECTORY+"/myAppointments")
     });
 
 
-app.route(APP_DIRECTORY+"/getStyles")
-  .get(function(req, res) {
-    Style.find({}, function(err, foundOBJ) {
-      if (foundOBJ) {
-        res.send(foundOBJ);
-      }
-    })
-  })
+app.get(APP_DIRECTORY+"/getStyles", async (req, res) => {
+  try {
+    const foundOBJ = await Style.find({});
+    // console.log(foundOBJ);
+    res.send(foundOBJ);
+  } catch (err) {
+    // console.error(err);
+    res.status(500).send("Error fetching styles");
+  }
+});
 
 
 
@@ -1183,11 +1187,9 @@ app.route(APP_DIRECTORY+"/deleteAccess")
 
 
 
-app.listen(process.env.PORT || 4000, function() {
-  console.log(uri);
-  
+app.listen(PORT, function() {  
   console.log("Paris Hair and Beauty Studio is Live");
-  console.log("PORT: "+process.env.PORT);
+  console.log("PORT: "+ PORT);
 });
 
 /************** helper functions *******************/
