@@ -8,6 +8,7 @@ if (!SERVER){
 /*********Handling Server / Local Enviromnemnt sensitive variables************/
 const APP_DIRECTORY = !(SERVER) ? "" : ((process.env.APP_DIRECTORY) ? (process.env.APP_DIRECTORY) : "");
 const PUBLIC_FOLDER = (SERVER) ? "./" : "../";
+const path = require("path");
 
 const PORT = process.env.PORT || 4000;
 
@@ -60,9 +61,12 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-app.use(express.static("public"));
-app.use(express.static("."));
+
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
+
+// app.use(express.static(path.join(__dirname, ".")));
+
 
 //Authentication & Session Management Config
 app.use(session({
